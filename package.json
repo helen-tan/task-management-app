@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/helen-tan/task-management-app/issues"
   },
-  "homepage": "https://github.com/helen-tan/task-management-app#readme"
+  "homepage": "https://github.com/helen-tan/task-management-app#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1"
+  }
 }
