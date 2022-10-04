@@ -4,7 +4,8 @@
   "description": "A task management app that emulates the Kanban approach",
   "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js"
   },
   "repository": {
     "type": "git",
