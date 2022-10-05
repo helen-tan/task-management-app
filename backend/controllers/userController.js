@@ -51,7 +51,7 @@ const loginUser = (req, res) => {
             res.status(400)
             throw new Error('Incorrect username or password')
         } else {
-            if(username === results[0].username && password === results[0].password) {
+            if (username === results[0].username && password === results[0].password) {
                 console.log(results);
                 res.status(200).send({
                     success: true,
@@ -75,9 +75,20 @@ const loginUser = (req, res) => {
 // @route   /api/users
 // @access  Public
 const getAllUsers = (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'This route will display all users'
+    let sql = 'select * from users'
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(400)
+            throw new Error('Could not get all users')
+        } else {
+            res.status(200).send({
+                success: true,
+                count: results.length,
+                data: results
+            })
+        }
+
     })
 }
 
