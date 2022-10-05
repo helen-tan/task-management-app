@@ -1,9 +1,10 @@
 const db = require('../config/database')
+const bcrypt = require('bcryptjs') // for hashing passswords
 
 // @desc    Create a user (Register a user)
 // @route   /api/users
 // @access  Public
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
     const { username, email, password } = req.body
 
     // validation
@@ -12,14 +13,20 @@ const createUser = (req, res) => {
         throw new Error('Please include all fields')
     }
 
+    // TODO: Find if user aldy exists
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     let sql = 
     `insert into users (username, email, password, is_active)
-    values ('${username}', '${email}', '${password}', true)`
+    values ('${username}', '${email}', '${hashedPassword}', true)`
 
     const new_user = {
         username: username,
         email: email,
-        password: password
+        password: hashedPassword
     }
 
     db.query(sql, (err, results) => {
