@@ -1,3 +1,5 @@
+const db = require('../config/database')
+
 // @desc    Create a user (Register a user)
 // @route   /api/users
 // @access  Public
