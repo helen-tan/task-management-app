@@ -12,9 +12,28 @@ const createUser = (req, res) => {
         throw new Error('Please include all fields')
     }
 
-    res.status(201).json({
-        success: true,
-        message: 'Create new user route'
+    let sql = 
+    `insert into users (username, email, password, is_active)
+    values ('${username}', '${email}', '${password}', true)`
+
+    const new_user = {
+        username: username,
+        email: email,
+        password: password
+    }
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(400)
+            throw new Error('Unable to create user')
+        } else {
+            res.status(201).send({
+                success: true,
+                message: 'User created successfully',
+                data: new_user
+            })
+            console.log(new_user)
+        }
     })
 }
 
@@ -35,6 +54,7 @@ const loginUser = (req, res) => {
             if(username === results[0].username && password === results[0].password) {
                 console.log(results);
                 res.status(200).send({
+                    success: true,
                     message: 'Login successful',
                     data: results
                 });
