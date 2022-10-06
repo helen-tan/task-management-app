@@ -1,18 +1,23 @@
 const db = require('../config/database')
 const bcrypt = require('bcryptjs') // for hashing passswords
 const jwt = require('jsonwebtoken')
+const  catchAsyncErrors  = require('../middleware/catchAsyncErrors')
 
 // @desc    Create a user (Register a user)
 // @route   /api/users
 // @access  Public
-const createUser = async (req, res) => {
+const createUser = catchAsyncErrors(async (req, res) => {
     const { username, email, password, groupz } = req.body
 
-    // validation
+    // validation - check for empty inputs
     if (!username || !email || !password) {
         res.status(400)
         throw new Error('Please include all fields')
     }
+
+    // Regex to validate user input
+
+
 
     // TODO: Find if user aldy exists
 
@@ -33,8 +38,12 @@ const createUser = async (req, res) => {
 
     db.query(insert_sql, (err, results) => {
         if (err) {
-            res.status(400)
-            throw new Error('Unable to create user')
+            // res.status(400)
+            // throw new Error('Unable to create user')
+            res.status(200).send({
+                success: false,
+                message: err.code
+            })
         } else {
             res.status(201).send({
                 success: true,
@@ -45,12 +54,12 @@ const createUser = async (req, res) => {
             console.log(new_user)
         }
     })
-}
+})
 
 // @desc    Login
 // @route   /api/users/login
 // @access  Public
-const loginUser = async (req, res) => {
+const loginUser = catchAsyncErrors(async (req, res) => {
     const {username, password} = req.body // get username & pw from body of sent req
 
     // query database for the user with these login credentials
@@ -86,7 +95,7 @@ const loginUser = async (req, res) => {
             }
         }
     })
-}
+})
 
 // JWT: Generate Token
 const generateToken = (username) => {
