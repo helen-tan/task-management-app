@@ -43,7 +43,6 @@ const createUser = async (req, res) => {
             console.log(new_user)
         }
     })
-    
 }
 
 // @desc    Login
@@ -71,7 +70,7 @@ const loginUser = async (req, res) => {
                         data: results
                     });
                 } else {
-                    res.status(400).send({
+                    res.status(401).send({
                         success: false,
                         message: 'Username and password do not match'
                     })
