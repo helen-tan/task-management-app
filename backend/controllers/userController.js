@@ -1,5 +1,6 @@
 const db = require('../config/database')
 const bcrypt = require('bcryptjs') // for hashing passswords
+const jwt = require('jsonwebtoken')
 
 // @desc    Create a user (Register a user)
 // @route   /api/users
@@ -38,7 +39,8 @@ const createUser = async (req, res) => {
             res.status(201).send({
                 success: true,
                 message: 'User created successfully',
-                data: new_user
+                data: new_user,
+                token: generateToken(username)
             })
             console.log(new_user)
         }
@@ -67,7 +69,8 @@ const loginUser = async (req, res) => {
                     res.status(200).send({
                         success: true,
                         message: 'Login successful',
-                        data: results
+                        data: results,
+                        token: generateToken(username)
                     });
                 } else {
                     res.status(401).send({
@@ -82,6 +85,13 @@ const loginUser = async (req, res) => {
                 })
             }
         }
+    })
+}
+
+// JWT: Generate Token
+const generateToken = (username) => {
+    return jwt.sign({ username }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
     })
 }
 
