@@ -20,7 +20,16 @@ const createUser = catchAsyncErrors(async (req, res) => {
     }
 
     // Regex to validate user input
+    const usernameRegexp = /^[a-zA-Z0-9]{5,}$/                             // only alphanumeric no special chars, min 5 chars 
+    const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/    // Valid email string 
+    const passwordRegexp = /^[a-zA-Z0-9\W|_]{8,10}$/                       // alphanumeric with special chars, 8-10 chars
 
+    if (!username.match(usernameRegexp) || !email.match(emailRegexp) || !password.match(passwordRegexp)) {
+        return res.status(400).send({
+            success: false,
+            message: 'Please give a valid username, email or password input'
+        })
+    }
 
     // Hash password
     const salt = await bcrypt.genSalt(10)
