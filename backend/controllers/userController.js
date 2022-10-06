@@ -1,7 +1,7 @@
 const db = require('../config/database')
 const bcrypt = require('bcryptjs') // for hashing passswords
 const jwt = require('jsonwebtoken')
-const  catchAsyncErrors  = require('../middleware/catchAsyncErrors')
+const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 
 // @desc    Create a user (Register a user)
 // @route   /api/users
@@ -11,15 +11,16 @@ const createUser = catchAsyncErrors(async (req, res) => {
 
     // validation - check for empty inputs
     if (!username || !email || !password) {
-        res.status(400)
-        throw new Error('Please include all fields')
+        // res.status(400)
+        // throw new Error('Please include all fields')
+        return res.status(400).send({
+            success: false,
+            message: 'Please include all fields'
+        })
     }
 
     // Regex to validate user input
 
-
-
-    // TODO: Find if user aldy exists
 
     // Hash password
     const salt = await bcrypt.genSalt(10)
@@ -40,7 +41,7 @@ const createUser = catchAsyncErrors(async (req, res) => {
         if (err) {
             // res.status(400)
             // throw new Error('Unable to create user')
-            res.status(200).send({
+            res.status(400).send({
                 success: false,
                 message: err.code
             })
