@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs') // for hashing passswords
 // @route   /api/users
 // @access  Public
 const createUser = async (req, res) => {
-    const { username, email, password } = req.body
+    const { username, email, password, groupz } = req.body
 
     // validation
     if (!username || !email || !password) {
@@ -13,23 +13,22 @@ const createUser = async (req, res) => {
         throw new Error('Please include all fields')
     }
 
-    // TODO: Find if user aldy exists
-
     // Hash password
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    let sql = 
-    `insert into users (username, email, password, is_active)
-    values ('${username}', '${email}', '${hashedPassword}', true)`
+    let insert_sql = 
+    `insert into users (username, email, password, is_active, groupz)
+    values ('${username}', '${email}', '${hashedPassword}', true, '${groupz}')`
 
     const new_user = {
         username: username,
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
+        groupz: groupz
     }
 
-    db.query(sql, (err, results) => {
+    db.query(insert_sql, (err, results) => {
         if (err) {
             res.status(400)
             throw new Error('Unable to create user')
@@ -67,10 +66,12 @@ const loginUser = (req, res) => {
                 });
             } else if (!username || !password) {
                 res.status(400).send({
+                    success: false,
                     message: 'Please enter your login credentials',
                 });
             } else {
                 res.status(400).send({
+                    success: false,
                     message: 'Invalid username or password',
                 });
             }
