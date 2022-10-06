@@ -122,8 +122,12 @@ const getAllUsers = (req, res) => {
 
     db.query(sql, (err, results) => {
         if (err) {
-            res.status(400)
-            throw new Error('Could not get all users')
+            //res.status(400)
+            //throw new Error('Could not get all users')
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
         } else {
             res.status(200).send({
                 success: true,
