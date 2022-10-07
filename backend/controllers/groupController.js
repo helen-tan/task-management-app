@@ -63,26 +63,24 @@ const checkGroup = catchAsyncErrors(async (req, res) => {
         } else {
             user_groups = results[0].groupz
             // check if the array contains group_name
-            user_groups.forEach(group => {
-                if (group === group_name) inGroup = true
-            })
+            inGroup = user_groups.includes(group_name)
+
+            // Send the response
+            if (inGroup) {
+                res.status(200).send({
+                    success: true,
+                    inGroup: true,
+                    message: `This user '${username}' is in the group '${group_name}'`
+                })
+            } else {
+                res.status(200).send({
+                    success: true,
+                    inGroup: false,
+                    message: `This user '${username}' is NOT in the group '${group_name}'`
+                })
+            }
         }
     })
-
-    // Send the response
-    if (inGroup) {
-        res.status(200).send({
-            success: true,
-            inGroup: true,
-            message: `This user '${username}' is in the group '${group_name}'`
-        })
-    } else {
-        res.status(200).send({
-            success: true,
-            inGroup: false,
-            message: `This user '${username}' is NOT in the group '${group_name}'`
-        })
-    }
 })
 
 module.exports = {
