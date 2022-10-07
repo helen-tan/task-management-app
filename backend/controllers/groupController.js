@@ -54,8 +54,7 @@ const checkGroup = catchAsyncErrors(async (req, res) => {
     let user_groups // E.g. ['dev', 'qa']
     let inGroup = false
 
-    sql = `select * from users where username = '${username}'`
-    db.query(sql, (err, results) => {
+    db.query('select * from users where username = ?', [username], (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,
