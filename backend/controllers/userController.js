@@ -82,6 +82,14 @@ const loginUser = catchAsyncErrors(async (req, res) => {
             throw new Error('An error occured')
         } else {
             if (results.length > 0) {
+                // Validation - Check that the is_active property is true first, otherwise prevent login
+                if (!results[0].is_active) {
+                    return res.status(403).send({
+                        success: false,
+                        message: 'Account is inactive. Please contact your administrator'
+                    })
+                }
+                // If user is active, begin authenticating
                 const comparison = await bcrypt.compare(password, results[0].password)
 
                 if (comparison) {
