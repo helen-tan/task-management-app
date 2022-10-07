@@ -35,10 +35,6 @@ const createUser = catchAsyncErrors(async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    // let insert_sql =
-    //     `insert into users (username, email, password, is_active, groupz)
-    // values ('${username}', '${email}', '${hashedPassword}', true, '${groupz}')`
-
     const new_user = {
         username: username,
         email: email,
@@ -78,9 +74,7 @@ const loginUser = catchAsyncErrors(async (req, res) => {
     const { username, password } = req.body // get username & pw from body of sent req
 
     // query database for the user with these login credentials
-    let sql = `select * from users where username='${username}'`
-
-    db.query(sql, async (err, results) => {
+    db.query('select * from users where username = ? ', [username], async (err, results) => {
         console.log(results)
         if (err) {
             res.status(400)
