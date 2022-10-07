@@ -4,9 +4,9 @@ const { createUser, loginUser, getAllUsers, getUser } = require('../controllers/
 const { protect } = require('../middleware/authMiddleware')
 
 
-router.post('/', createUser)
+router.post('/', protect, createUser)
 router.get('/login', loginUser)
-router.get('/', getAllUsers)
+router.get('/', protect, getAllUsers)
 router.get('/me', protect, getUser)
 
 

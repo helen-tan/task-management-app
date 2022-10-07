@@ -139,11 +139,11 @@ const getAllUsers = (req, res) => {
     })
 }
 
-// @desc    Get current users
+// @desc    Get current logged-in user data
 // @route   /api/users/me
 // @access  Private
 const getUser = catchAsyncErrors(async (req, res) => {
-    // req.username to be set from authMiddleware
+    // req.username was set from authMiddleware
     let sql = `select * from users where username='${req.username}'`
 
     db.query(sql, (err, results) => {
@@ -159,9 +159,6 @@ const getUser = catchAsyncErrors(async (req, res) => {
             })
         }
     })
-
-    //res.status(200).json(req.user)
-    //res.status(200).json({message: 'This works.. but...'})
 })
 
 module.exports = {
