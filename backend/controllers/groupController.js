@@ -46,6 +46,49 @@ const createGroup = catchAsyncErrors(async (req, res) => {
     })
 })
 
+// @desc    Check if user is in a group
+// @route   /api/groups/checkGroup
+// @access  Private
+const checkGroup = catchAsyncErrors(async (req, res) => {
+    const { username, group_name } = req.body
+
+    // get user from the db using unique username, and get his/her groups
+    let user_groups // E.g. ['dev', 'qa']
+    let inGroup = false
+
+    sql = `select * from users where username = '${username}'`
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            user_groups = results[0].groupz
+            // check if the array contains group_name
+            user_groups.forEach(group => {
+                if (group === group_name) inGroup = true
+            })
+        }
+    })
+
+    // Send the response
+    if (inGroup) {
+        res.status(200).send({
+            success: true,
+            inGroup: true,
+            message: `This user '${username}' is in the group '${group_name}'`
+        })
+    } else {
+        res.status(200).send({
+            success: true,
+            inGroup: false,
+            message: `This user '${username}' is NOT in the group '${group_name}'`
+        })
+    }
+})
+
 module.exports = {
-    createGroup
+    createGroup,
+    checkGroup
 }
