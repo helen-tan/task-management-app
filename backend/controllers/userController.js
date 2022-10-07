@@ -35,8 +35,8 @@ const createUser = catchAsyncErrors(async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    let insert_sql = 
-    `insert into users (username, email, password, is_active, groupz)
+    let insert_sql =
+        `insert into users (username, email, password, is_active, groupz)
     values ('${username}', '${email}', '${hashedPassword}', true, '${groupz}')`
 
     const new_user = {
@@ -70,7 +70,7 @@ const createUser = catchAsyncErrors(async (req, res) => {
 // @route   /api/users/login
 // @access  Public
 const loginUser = catchAsyncErrors(async (req, res) => {
-    const {username, password} = req.body // get username & pw from body of sent req
+    const { username, password } = req.body // get username & pw from body of sent req
 
     // query database for the user with these login credentials
     let sql = `select * from users where username='${username}'`
@@ -139,8 +139,34 @@ const getAllUsers = (req, res) => {
     })
 }
 
+// @desc    Get current users
+// @route   /api/users/me
+// @access  Private
+const getUser = catchAsyncErrors(async (req, res) => {
+    // req.username to be set from authMiddleware
+    let sql = `select * from users where username='${req.username}'`
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                data: results
+            })
+        }
+    })
+
+    //res.status(200).json(req.user)
+    //res.status(200).json({message: 'This works.. but...'})
+})
+
 module.exports = {
     createUser,
     loginUser,
-    getAllUsers
+    getAllUsers,
+    getUser
 }
