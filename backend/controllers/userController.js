@@ -35,9 +35,9 @@ const createUser = catchAsyncErrors(async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    let insert_sql =
-        `insert into users (username, email, password, is_active, groupz)
-    values ('${username}', '${email}', '${hashedPassword}', true, '${groupz}')`
+    // let insert_sql =
+    //     `insert into users (username, email, password, is_active, groupz)
+    // values ('${username}', '${email}', '${hashedPassword}', true, '${groupz}')`
 
     const new_user = {
         username: username,
@@ -46,7 +46,12 @@ const createUser = catchAsyncErrors(async (req, res) => {
         groupz: groupz
     }
 
-    db.query(insert_sql, (err, results) => {
+    db.query('insert into users (username, email, password, is_active, groupz) values (?, ?, ?, true, ?)', [
+        username,
+        email,
+        hashedPassword,
+        groupz
+    ], (err, results) => {
         if (err) {
             // res.status(400)
             // throw new Error('Unable to create user')
