@@ -5,7 +5,7 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 
 // @desc    Create a user (Register a user)
 // @route   /api/users
-// @access  Public
+// @access  Private
 const createUser = catchAsyncErrors(async (req, res) => {
     const { username, email, password, groupz } = req.body
 
@@ -116,7 +116,7 @@ const generateToken = (username) => {
 
 // @desc    Get all users
 // @route   /api/users
-// @access  Public
+// @access  Private
 const getAllUsers = (req, res) => {
     let sql = 'select * from users'
 

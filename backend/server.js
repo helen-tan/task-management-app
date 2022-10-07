@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000
 
 // Route imports
 const userRoutes = require('./routes/userRoutes')
+const groupRoutes = require('./routes/groupRoutes')
 
 const app = express()
 
@@ -17,6 +18,8 @@ app.get('/', (req, res) => {
     res.status(200).send({message: 'Welcome to the Task Management API'})
 })
 app.use('/api/users', userRoutes)
+app.use('/api/groups', groupRoutes)
+
 
 // Error Handler middleware
 app.use(errorHandler)
