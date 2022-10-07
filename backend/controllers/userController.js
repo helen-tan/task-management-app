@@ -151,9 +151,9 @@ const getAllUsers = (req, res) => {
 // @access  Private
 const getUser = catchAsyncErrors(async (req, res) => {
     // req.username was set from authMiddleware
-    let sql = `select * from users where username='${req.username}'`
+    //let sql = `select * from users where username='${req.username}'`
 
-    db.query(sql, (err, results) => {
+    db.query('select * from users where username = ?', [req.username], (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,
