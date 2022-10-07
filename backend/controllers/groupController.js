@@ -25,11 +25,9 @@ const createGroup = catchAsyncErrors(async (req, res) => {
         })
     }
 
-    let sql = `insert into groupz (group_name) values ('${group_name}')`
-
     new_group = { group_name }
 
-    db.query(sql, (err, results) => {
+    db.query('insert into groupz (group_name) values (?)', [group_name], (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,
