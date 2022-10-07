@@ -83,7 +83,32 @@ const checkGroup = catchAsyncErrors(async (req, res) => {
     })
 })
 
+
+// @desc    Get all groups
+// @route   /api/groups
+// @access  Private
+const getAllGroups = catchAsyncErrors(async (req, res) => {
+    let sql = 'select * from groupz'
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                count: results.length,
+                data: results
+            })
+        }
+
+    })
+})
+
 module.exports = {
     createGroup,
-    checkGroup
+    checkGroup,
+    getAllGroups
 }
