@@ -176,13 +176,13 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     const username = req.params.username
   
     // User who can update is the admin and the user themselves - if not admin or the owner, restrict access
-    if (loggedInUser !== 'admin' && (loggedInUser !== username)) {
+    if (loggedInUser !== 'admin' && loggedInUser !== username) {
         return res.status(401).send({
             success: false,
             message: 'You are not authorized to access this'
         })
     }
-    // TODO: Handle empty or inputs that don't need updating
+    // TODO?: Handle empty or inputs that don't need updating
 
     // User inputs
     let { email, password, is_active, groupz } = req.body
