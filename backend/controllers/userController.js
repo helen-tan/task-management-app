@@ -147,11 +147,24 @@ const getAllUsers = (req, res) => {
 }
 
 // @desc    Get current logged-in user data
-// @route   /api/user/me
+// @route   /api/user/:username
 // @access  Private
 const getUser = catchAsyncErrors(async (req, res) => {
     // req.username was set from authMiddleware
-    db.query('select * from users where username = ?', [req.username], (err, results) => {
+    // Get logged in user (from unique username in jwt token authMiddleware)
+    const loggedInUser = req.username
+    // Get user whose details are to be viewed (from the params)
+    const username = req.params.username
+  
+    // Users who can view is the admin and the user themselves - if not admin or the owner, restrict access
+    if (loggedInUser !== 'admin' && loggedInUser !== username) {
+        return res.status(401).send({
+            success: false,
+            message: 'You are not authorized to access this'
+        })
+    }
+
+    db.query('select * from users where username = ?', [username], (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,
