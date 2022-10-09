@@ -36,4 +36,87 @@ const protect = catchAsyncErrors(async (req, res, next) => {
     next()
 })
 
-module.exports = { protect }
+// Handling user roles
+const authorizeUser = (groupname) => {
+    return catchAsyncErrors(async (req, res, next) => {
+        const username = req.username // If user is logged in, then req would have req.username
+        //console.log(username)
+        // Check if user's groups contain 'admin'
+        let isAdmin = false
+        console.log(`start ${isAdmin}`)
+
+        db.query('select * from users where username = ?', [username], (err, results) => {
+            if (err) {
+                return res.status(400).send({
+                    success: false,
+                    message: err.code
+                })
+            } else {
+                user_groups = results[0].groupz
+                // check if the array contains groupname
+                isAdmin = user_groups.includes(groupname)
+                console.log(`else ${isAdmin}`)
+            }
+        })
+
+        console.log(`bottom ${isAdmin}`) // DOES NOT WAIT FOR QUERY TO FINISH BEFORE EXECUTING
+        if(!isAdmin) {
+            return res.status(403).send({
+                message: 'Not authorized to access this resource'
+            }) 
+        } 
+        next()
+    })
+}
+
+// ANOTHER METHOD
+
+// Handling user roles
+const authorizeUser2 = (groupname) => {
+    return (req, res, next) => {
+        const username = req.username // If user is logged in, then req would have req.username
+        //console.log(username)
+        // Check if user's groups contain 'admin'
+        let isAdmin = checkGroup(username, groupname) // checkGroup not getting anything!!!!!!!!!!
+        console.log(`In authorizeUser ${isAdmin}`)
+        if(!isAdmin) {
+            return res.status(403).send({
+                message: 'Not authorized to access this resource'
+            }) 
+        } 
+        next()
+    }
+}
+
+const checkGroup = (username, groupname) => {
+
+    catchAsyncErrors(async (req, res) => {
+        // get user from the db using unique username, and get his/her groups
+        console.log(username)
+        let user_groups // E.g. ['dev', 'qa']
+        let inGroup = false
+    
+        db.query('select * from users where username = ?', [username], (err, results) => {
+            if (err) {
+                return res.status(400).send({
+                    success: false,
+                    message: err.code
+                })
+            } else {
+                user_groups = results[0].groupz
+                // check if the array contains groupname
+                inGroup = user_groups.includes(groupname)
+                console.log(`In checkGroup1 ${inGroup}`)
+            }
+        })
+        // Send the response
+        console.log(`In checkGroup2 ${inGroup}`)
+        return inGroup ? true : false
+    })
+}
+    
+
+module.exports = { 
+    protect,
+    authorizeUser
+ }
