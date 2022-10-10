@@ -1,9 +1,23 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Components
+import Header from "./components/shared/Header";
+import Home from "./components/pages/Home";
+import Footer from "./components/shared/Footer";
+
 function App() {
   return (
-    <div className="bg-purple-500">
-     <h1 className="text-xl">Task Management App</h1>
-     <button className="btn">Click</button>
-    </div>
+    <>
+      <Router>
+        <div className="container">
+        <Header />
+          <Routes>
+            <Route path='/' element={<Home/> }/>
+          </Routes>
+        <Footer />
+        </div>
+      </Router>
+    </>
   );
 }
 
