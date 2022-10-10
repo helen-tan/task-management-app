@@ -40,26 +40,12 @@ const protect = catchAsyncErrors(async (req, res, next) => {
 const authorizeUser = (groupname) => {
     return catchAsyncErrors(async (req, res, next) => {
         const username = req.username // If user is logged in, then req would have req.username
-        //console.log(username)
+        console.log(`Logged In user is ${username}`)
+
         // Check if user's groups contain 'admin'
-        let isAdmin = false
-        console.log(`start ${isAdmin}`)
-
-        db.query('select * from users where username = ?', [username], (err, results) => {
-            if (err) {
-                return res.status(400).send({
-                    success: false,
-                    message: err.code
-                })
-            } else {
-                user_groups = results[0].groupz
-                // check if the array contains groupname
-                isAdmin = user_groups.includes(groupname)
-                console.log(`else ${isAdmin}`)
-            }
-        })
-
-        console.log(`bottom ${isAdmin}`) // DOES NOT WAIT FOR QUERY TO FINISH BEFORE EXECUTING
+        let isAdmin = await checkGroup(username, groupname)
+        //console.log(`isAdmin is ${isAdmin}`)
+    
         if(!isAdmin) {
             return res.status(403).send({
                 message: 'Not authorized to access this resource'
@@ -69,9 +55,30 @@ const authorizeUser = (groupname) => {
     })
 }
 
-// ANOTHER METHOD
+const checkGroup = (username, groupname) => {
+    return new Promise((resolve, reject) => {
+        db.query('select * from users where username = ?', [username], (err, results) => {
+            if (err) {
+                reject(false)
+            } else {
+                let user_groups = results[0].groupz
+                // check if the array contains groupname
+                if (user_groups.includes(groupname)) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            }
+        })
+    })
+}
 
-// Handling user roles
+
+
+
+
+// ANOTHER METHOD
+/*
 const authorizeUser2 = (groupname) => {
     return (req, res, next) => {
         const username = req.username // If user is logged in, then req would have req.username
@@ -88,7 +95,7 @@ const authorizeUser2 = (groupname) => {
     }
 }
 
-const checkGroup = (username, groupname) => {
+const checkGroup2 = (username, groupname) => {
 
     catchAsyncErrors(async (req, res) => {
         // get user from the db using unique username, and get his/her groups
@@ -114,9 +121,11 @@ const checkGroup = (username, groupname) => {
         return inGroup ? true : false
     })
 }
+*/
     
 
 module.exports = { 
     protect,
-    authorizeUser
+    authorizeUser,
+    checkGroup
  }
