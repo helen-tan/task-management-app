@@ -2,6 +2,7 @@ const db = require('../config/database')
 const bcrypt = require('bcryptjs') // for hashing passswords
 const jwt = require('jsonwebtoken')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
+const { checkGroup } = require('../middleware/authMiddleware')
 
 // @desc    Create a user (Register a user)
 // @route   /api/users
@@ -188,8 +189,11 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     // Get user whose info is to be changed (from the params)
     const username = req.params.username
   
-    // User who can update is the admin and the user themselves - if not admin or the owner, restrict access
-    if (loggedInUser !== 'admin' && loggedInUser !== username) {
+    // User who can update is the admin and the user themselves - if not admin or the owner, restrict access 
+    // To check admin, check if user is in "admin" group
+    const isAdmin = await checkGroup(loggedInUser, 'admin')
+
+    if (!isAdmin && loggedInUser !== username) {
         return res.status(401).send({
             success: false,
             message: 'You are not authorized to access this'
