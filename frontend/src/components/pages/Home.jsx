@@ -5,10 +5,13 @@ function Home() {
   return (
     <>
     <section className="flex flex-col justify-center items-center text-3xl mb-5">
-        <h1 className='flex font-bold'>
-          <FaSignInAlt /> Login
+        <h1 className='font-bold'>
+          Welcome to the Task Management System
         </h1>
-        <p className='text-slate-400'>Please login to the task management system</p>
+        <div className='flex items-center text-slate-400 mt-3'>
+          <FaSignInAlt />
+          <p className='ml-3'>Please login to continue</p>
+        </div>
       </section>
 
       <section className='form'>
