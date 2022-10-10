@@ -1,6 +1,6 @@
 function App() {
   return (
-    <div>
+    <div className="text-3xl font-bold underline">
      Task Management App
     </div>
   );
