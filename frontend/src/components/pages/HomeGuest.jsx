@@ -17,6 +17,10 @@ function HomeGuest(props) {
       })
       if (response.data) {
         console.log(response.data)
+        // persist jwt token & username in local storage
+        localStorage.setItem("token", response.data.token)
+        localStorage.setItem("username", response.data.data[0].username)
+  
         props.setLoggedIn(true)
       } else {
         console.log('There was an error')

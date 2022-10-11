@@ -9,7 +9,7 @@ import Home from "./components/pages/Home";
 import UserManagement from "./components/pages/UserManagement";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState()
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("token")))
 
   return (
     <>
