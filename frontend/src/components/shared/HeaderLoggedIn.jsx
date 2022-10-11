@@ -10,10 +10,11 @@ function HeaderLoggedIn(props) {
     }
 
   return (
-    <div>
+    <div className="w-4/12 flex justify-evenly items-center">
         <Link to='/users'>
             User Management
         </Link>
+        <p><strong>Hi, {localStorage.getItem("username")}</strong></p>
         <button onClick={handleLogout} className="btn btn-sm">
             Logout
         </button>
