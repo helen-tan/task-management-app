@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function Footer() {
   return (
-    <footer className="text-center border-t-2 border-slate-200 text-slate-400 py-3">
+    <footer className="text-center border-t-2 border-slate-200 text-slate-400 py-5 mt-14" >
       <p>
         <Link to="/" className="mx-1">Home</Link> |
         <Link to="/users" className="mx-1">User Management</Link>
