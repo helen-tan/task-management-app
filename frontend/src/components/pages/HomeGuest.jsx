@@ -18,10 +18,12 @@ function HomeGuest() {
       if (response.data) {
         console.log(response.data)
       } else {
-        console.log('Incorrect username or password')
+        console.log('There was an error')
       }
     } catch (err) {
-      console.log("There was an error")
+      if(err.response) {
+        console.log(err.response.data) // Error msg set in backend
+      }
     }
   }
 
