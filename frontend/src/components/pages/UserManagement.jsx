@@ -1,8 +1,11 @@
 import React from 'react'
+import Page from '../utils/Page'
 
 function UserManagement() {
   return (
-    <div>UserManagement</div>
+    <Page title="User Management">
+        UserManagement
+    </Page>
   )
 }
 

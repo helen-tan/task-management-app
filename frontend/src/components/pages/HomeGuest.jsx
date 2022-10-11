@@ -1,10 +1,11 @@
 import React from 'react'
 import { FaSignInAlt } from 'react-icons/fa'
+import Page from '../utils/Page'
 
 function HomeGuest() {
   return (
-    <>
-    <section className="flex flex-col justify-center items-center text-3xl mb-5">
+    <Page title="Welcome!">
+      <section className="flex flex-col justify-center items-center text-3xl mb-5">
         <h1 className='font-bold'>
           Welcome to the Task Management System
         </h1>
@@ -38,7 +39,7 @@ function HomeGuest() {
           </div>
         </form>
       </section>
-    </>
+    </Page>
 
   )
 }
