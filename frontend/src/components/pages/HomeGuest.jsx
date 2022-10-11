@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { FaSignInAlt } from 'react-icons/fa'
 import Page from '../utils/Page'
 import Axios from 'axios'
 
-function HomeGuest() {
+function HomeGuest(props) {
   const [username, setUsername] = useState()
   const [password, setPassword] = useState()
 
@@ -17,6 +17,7 @@ function HomeGuest() {
       })
       if (response.data) {
         console.log(response.data)
+        props.setLoggedIn(true)
       } else {
         console.log('There was an error')
       }
