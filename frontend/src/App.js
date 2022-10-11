@@ -17,7 +17,7 @@ function App() {
         <div className="container">
         <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
           <Routes>
-            <Route path='/' element={<HomeGuest setLoggedIn={setLoggedIn}/>} />
+            <Route path='/' element={ loggedIn ? <Home /> : <HomeGuest setLoggedIn={setLoggedIn}/>} />
             <Route path='/users' element={<UserManagement/>} /> 
           </Routes>
         <Footer />
