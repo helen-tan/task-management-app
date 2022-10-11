@@ -8,7 +8,7 @@ function Footer() {
         <Link to="/" className="mx-1">Home</Link> |
         <Link to="/users" className="mx-1">User Management</Link>
       </p>
-      <p className="m-0">Copyright &copy; 2020 <Link to="/" className="text-slate-400">Task Management System</Link>. All rights reserved.</p>
+      <p className="m-0">Copyright &copy; {new Date().getFullYear()} <Link to="/" className="text-slate-400">Task Management System</Link>. All rights reserved.</p>
     </footer>
   )
 }
