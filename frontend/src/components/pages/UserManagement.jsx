@@ -9,7 +9,9 @@ function UserManagement() {
             <BackButton url='/'/>
         </div>
         
-        <h1 className='text-2xl'><strong>User Management</strong></h1>
+        <h1 className='text-3xl mb-10 '><strong>User Management</strong></h1>
+
+        <h2 className='text-2xl text-start ml-5'><strong>Create a New User</strong></h2>
     </Page>
   )
 }
