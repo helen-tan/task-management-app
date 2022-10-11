@@ -1,6 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv').config()
 const { errorHandler } = require('./middleware/errorMiddleware')
+const cors = require('cors')
 const PORT = process.env.PORT || 5000
 
 // Route imports
@@ -12,6 +13,7 @@ const app = express()
 // Middlewares
 app.use(express.json()) // allow to send raw json
 app.use(express.urlencoded({ extended: false })) // accept urlencoded form
+app.use(cors({ origin: "http://localhost:3000" }))
 
 // Routes
 app.get('/', (req, res) => {
