@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { FaSignOutAlt } from 'react-icons/fa'
 
 function HeaderLoggedIn(props) {
     const handleLogout = () => {
@@ -15,8 +16,8 @@ function HeaderLoggedIn(props) {
             User Management
         </Link>
         <p><strong>Hi, {localStorage.getItem("username")}</strong></p>
-        <button onClick={handleLogout} className="btn btn-sm">
-            Logout
+        <button onClick={handleLogout} className="btn btn-sm gap-2">
+            <FaSignOutAlt/> Logout
         </button>
     </div>
   )

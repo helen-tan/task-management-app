@@ -4,7 +4,7 @@ import Page from '../utils/Page'
 function UserManagement() {
   return (
     <Page title="User Management">
-        UserManagement
+        <h1 className='text-2xl'><strong>User Management</strong></h1>
     </Page>
   )
 }
