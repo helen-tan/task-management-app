@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/shared/Header";
 import HomeGuest from "./components/pages/HomeGuest";
 import Footer from "./components/shared/Footer";
-import Home from "./components/pages/Home"
+import Home from "./components/pages/Home";
+import UserManagement from "./components/pages/UserManagement";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <div className="container">
         <Header />
           <Routes>
-            <Route path='/' element={<HomeGuest/> }/>
+            <Route path='/' element={<HomeGuest/>} />
+            <Route path='/users' element={<UserManagement/>} /> 
           </Routes>
         <Footer />
         </div>
