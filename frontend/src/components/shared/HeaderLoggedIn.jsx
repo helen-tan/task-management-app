@@ -24,7 +24,7 @@ function HeaderLoggedIn(props) {
             User Management
         </Link>)}
 
-        <Link to='/profile'>
+        <Link to={`/profile/${sessionStorage.getItem("username")}`}>
             <strong>{sessionStorage.getItem("username")}</strong>
         </Link>
         
