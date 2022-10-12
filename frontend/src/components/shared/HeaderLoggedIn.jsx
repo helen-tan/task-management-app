@@ -6,21 +6,20 @@ function HeaderLoggedIn(props) {
     const handleLogout = () => {
         props.setLoggedIn(false)
         // Clear out logged in user's details from local storage
-        localStorage.removeItem("token")
-        localStorage.removeItem("username")
+        sessionStorage.clear()
     }
 
   return (
     <div className="w-4/12 flex justify-evenly items-center">
 
-        {(props.isAdmin === "true") &&
+        {(props.isAdmin === "true") && (
         <Link to='/usermanagement'>
             User Management
-        </Link>}
+        </Link>)}
 
         <p>
             <Link to='/profile'>
-                <strong>Hi, {localStorage.getItem("username")}</strong>
+                <strong>Hi, {sessionStorage.getItem("username")}</strong>
             </Link>
         </p>
         <button onClick={handleLogout} className="btn btn-sm gap-2">
