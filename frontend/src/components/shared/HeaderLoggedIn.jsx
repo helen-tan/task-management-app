@@ -12,9 +12,12 @@ function HeaderLoggedIn(props) {
 
   return (
     <div className="w-4/12 flex justify-evenly items-center">
+
+        {(props.isAdmin === "true") &&
         <Link to='/usermanagement'>
             User Management
-        </Link>
+        </Link>}
+
         <p>
             <Link to='/profile'>
                 <strong>Hi, {localStorage.getItem("username")}</strong>
