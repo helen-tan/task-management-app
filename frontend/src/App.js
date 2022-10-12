@@ -9,7 +9,6 @@ import Dashboard from "./components/pages/Dashboard";
 import UserManagement from "./components/pages/UserManagement";
 import Profile from "./components/pages/Profile";
 import PrivateRoute from "./components/utils/PrivateRoute";
-import AdminRoute from "./components/utils/AdminRoute";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(Boolean(sessionStorage.getItem("token")))
