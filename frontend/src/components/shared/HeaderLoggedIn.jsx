@@ -12,7 +12,7 @@ function HeaderLoggedIn(props) {
 
   return (
     <div className="w-4/12 flex justify-evenly items-center">
-        <Link to='/users'>
+        <Link to='/usermanagement'>
             User Management
         </Link>
         <p><strong>Hi, {localStorage.getItem("username")}</strong></p>
