@@ -9,6 +9,7 @@ import Home from "./components/pages/Home";
 import UserManagement from "./components/pages/UserManagement";
 import Profile from "./components/pages/Profile";
 import PrivateRoute from "./components/utils/PrivateRoute";
+import AdminRoute from "./components/utils/AdminRoute";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("token")))
@@ -22,10 +23,13 @@ function App() {
          
           {/* Routes that require login */}
           <Route path='/' element={<PrivateRoute />}>
-            <Route path='/usermanagement' element={<UserManagement/>} /> 
             <Route path='/profile' element={<Profile/>} /> 
           </Route>
 
+          {/* Admin-only routes (logged in)*/}
+          <Route path='/' element={<AdminRoute />}>
+            <Route path='/usermanagement' element={<UserManagement/>} /> 
+          </Route>
           
         </Routes>
       <Footer />
