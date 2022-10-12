@@ -12,13 +12,13 @@ import PrivateRoute from "./components/utils/PrivateRoute";
 import AdminRoute from "./components/utils/AdminRoute";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("token")))
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("admin"))
+  const [loggedIn, setLoggedIn] = useState(Boolean(sessionStorage.getItem("token")))
+  const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("admin"))
 
   return (
     <Router>
       <div className="container">
-      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin}/>
+      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin} />
         <Routes>
           <Route path='/' element={ loggedIn ? <Home /> : <HomeGuest setLoggedIn={setLoggedIn}/>} />
          

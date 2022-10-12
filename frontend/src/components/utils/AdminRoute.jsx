@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom'
+import { useState } from 'react'
 
 const AdminRoute = () => {
-    const admin = localStorage.getItem('admin') 
+    const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem('admin')) 
 
-    return (admin === "true") ? <Outlet /> : <Navigate to='/' /> 
+    return (isAdmin === "true") ? <Outlet /> : <Navigate to='/' /> 
     {/*navigate to 404 page in future? */}
 }
 

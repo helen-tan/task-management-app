@@ -20,9 +20,9 @@ function HomeGuest(props) {
         const admin = response.data.data[0].groupz.includes("admin") ? true : false
       
         // persist jwt token, username & admin user status in local storage
-        localStorage.setItem("token", response.data.token)
-        localStorage.setItem("username", response.data.data[0].username)
-        localStorage.setItem("admin", admin)
+        sessionStorage.setItem("token", response.data.token)
+        sessionStorage.setItem("username", response.data.data[0].username)
+        sessionStorage.setItem("admin", admin)
   
         props.setLoggedIn(true)
       } else {
