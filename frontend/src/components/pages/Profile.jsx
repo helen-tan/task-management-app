@@ -1,9 +1,15 @@
 import Page from "../utils/Page"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import Axios from "axios"
 
 function Profile() {
+    const [profileData, setProfileData] = useState({
+        username: "...",
+        email: "...",
+        groups: ["..."]
+    })
+
     const params = useParams() // Get URL dynamic params
 
     useEffect(() => {
@@ -17,6 +23,12 @@ function Profile() {
             try {
                 const response = await Axios.get(`http://localhost:5000/api/users/${params.username}`, config)
                 console.log(response.data)
+
+                setProfileData({
+                    username: response.data.data[0].username,
+                    email: response.data.data[0].email,
+                    groups: response.data.data[0].groupz
+                })
             } catch(err) {
                 console.log("There was a problem")
             }
@@ -26,7 +38,9 @@ function Profile() {
 
   return (
     <Page title='Profile'>
-        <h2>Profile</h2>
+        <h2>{profileData.username}</h2>
+        <div>{profileData.email}</div>
+        <div>{profileData.groups}</div>
 
     </Page>
   )
