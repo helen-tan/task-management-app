@@ -38,6 +38,12 @@ function Profile() {
         fetchUserData()
     }, [])
 
+    // Update user details (email, groups)
+    const handleClick = (e) => {
+        e.preventDefault()
+        console.log('TBC')
+    }
+
     return (
         <Page title='Profile'>
             <div className="flex justify-start mb-5 ml-5">
@@ -48,16 +54,20 @@ function Profile() {
                 <div className="w-3/4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-4xl text-left p-4"><strong>{profileData.username}</strong></h2>
-                        <button  className="btn btn-sm gap-2">
+                        <button onClick={handleClick} className="btn btn-sm gap-2">
                             <BsPencilSquare/> Edit
                         </button>
                     </div>
-                    <hr />
-                    <div className="text-left my-4">
-                        <span className="font-semibold">Email:</span> {profileData.email}
+                    <div className="h-px bg-gray-200"></div>
+                    <div className="text-left my-4 flex gap-2">
+                        <h3 className="font-semibold">Email:</h3> 
+                        <p>{profileData.email}</p>
                     </div>
-                    <div className="text-left my-4">
-                        <span className="font-semibold">Groups:</span> {profileData.groups}
+                    <div className="text-left my-4 flex gap-2">
+                        <h3 className="font-semibold">Groups:</h3> 
+                        {profileData.groups.map((group) => (
+                            <div className="badge badge-primary">{group}</div>
+                        ))}
                     </div>
                 </div>
             </div>
