@@ -7,6 +7,7 @@ import HomeGuest from "./components/pages/HomeGuest";
 import Footer from "./components/shared/Footer";
 import Home from "./components/pages/Home";
 import UserManagement from "./components/pages/UserManagement";
+import Profile from "./components/pages/Profile";
 import PrivateRoute from "./components/utils/PrivateRoute";
 
 function App() {
@@ -22,7 +23,9 @@ function App() {
           {/* Routes that require login */}
           <Route path='/' element={<PrivateRoute />}>
             <Route path='/usermanagement' element={<UserManagement/>} /> 
+            <Route path='/profile' element={<Profile/>} /> 
           </Route>
+
           
         </Routes>
       <Footer />

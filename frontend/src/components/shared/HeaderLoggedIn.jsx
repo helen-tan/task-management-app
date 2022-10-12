@@ -15,7 +15,11 @@ function HeaderLoggedIn(props) {
         <Link to='/usermanagement'>
             User Management
         </Link>
-        <p><strong>Hi, {localStorage.getItem("username")}</strong></p>
+        <p>
+            <Link to='/profile'>
+                <strong>Hi, {localStorage.getItem("username")}</strong>
+            </Link>
+        </p>
         <button onClick={handleLogout} className="btn btn-sm gap-2">
             <FaSignOutAlt/> Logout
         </button>
