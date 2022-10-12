@@ -1,8 +1,16 @@
-import React from 'react'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Page from '../utils/Page'
 import BackButton from '../utils/BackButton'
 
 function UserManagement() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    // Prevent non-admin users from accessing. Redirect to dashboard
+    if (sessionStorage.getItem("admin") === "false") navigate('/dashboard')
+  }, [navigate])
+
   return (
     <Page title="User Management">
         <div className="flex justify-start mb-5 ml-5">
