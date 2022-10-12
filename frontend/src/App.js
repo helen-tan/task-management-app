@@ -3,9 +3,9 @@ import { useState } from 'react'
 
 // Components
 import Header from "./components/shared/Header";
-import HomeGuest from "./components/pages/HomeGuest";
+import Login from "./components/pages/Login";
 import Footer from "./components/shared/Footer";
-import Home from "./components/pages/Home";
+import Dashboard from "./components/pages/Dashboard";
 import UserManagement from "./components/pages/UserManagement";
 import Profile from "./components/pages/Profile";
 import PrivateRoute from "./components/utils/PrivateRoute";
@@ -18,22 +18,21 @@ function App() {
   return (
     <Router>
       <div className="container">
-      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin} />
+        <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin} />
+
         <Routes>
-          <Route path='/' element={ loggedIn ? <Home /> : <HomeGuest setLoggedIn={setLoggedIn}/>} />
-         
-          {/* Routes that require login */}
-          <Route path='/' element={<PrivateRoute />}>
-            <Route path='/profile' element={<Profile/>} /> 
+          {/* Public Routes */}
+          <Route path='/' element={<Login setLoggedIn={setLoggedIn} />} />
+
+          {/* Protected Routes */}
+          <Route element={<PrivateRoute />}>
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/usermanagement' element={<UserManagement />} />
           </Route>
 
-          {/* Admin-only routes (logged in)*/}
-          <Route path='/' element={<AdminRoute />}>
-            <Route path='/usermanagement' element={<UserManagement/>} /> 
-          </Route>
-          
         </Routes>
-      <Footer />
+        <Footer />
       </div>
     </Router>
   );

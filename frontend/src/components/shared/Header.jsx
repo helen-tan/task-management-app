@@ -10,7 +10,7 @@ function Header(props) {
         <h4>
         <Link to='/' className='px-5'>TMS System</Link>
         </h4>
-        {(props.loggedIn) && <HeaderLoggedIn setLoggedIn={props.setLoggedIn} isAdmin={props.isAdmin}/> }
+        {(props.loggedIn) && <HeaderLoggedIn setLoggedIn={props.setLoggedIn} /> }
       </div>
     </header>
   )
