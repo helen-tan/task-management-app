@@ -1,6 +1,7 @@
 import Page from "../utils/Page"
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import BackButton from "../utils/BackButton"
 import Axios from "axios"
 
 function Profile() {
@@ -38,6 +39,9 @@ function Profile() {
 
   return (
     <Page title='Profile'>
+        <div className="flex justify-start mb-5 ml-5">
+            <BackButton url='/dashboard'/>
+        </div>
         <h2>{profileData.username}</h2>
         <div>{profileData.email}</div>
         <div>{profileData.groups}</div>

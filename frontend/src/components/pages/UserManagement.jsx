@@ -14,7 +14,7 @@ function UserManagement() {
   return (
     <Page title="User Management">
         <div className="flex justify-start mb-5 ml-5">
-            <BackButton url='/'/>
+            <BackButton url='/dashboard'/>
         </div>
         
         <h1 className='text-3xl mb-10 '><strong>User Management</strong></h1>
