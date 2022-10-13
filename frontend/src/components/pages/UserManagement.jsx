@@ -5,12 +5,11 @@ import Page from '../utils/Page'
 import BackButton from '../utils/BackButton'
 
 function UserManagement() {
-  const [isAdmin, setIsAdmin] = useState()
 
   const navigate = useNavigate()
 
-  // Send request to check if the user is in the group "admin"
-  async function checkIfAdmin() {
+  // Send request to check if the user is in the group "admin" + check username
+  async function authenticate() {
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
       headers: {
@@ -18,14 +17,26 @@ function UserManagement() {
       }
     }
     try {
-      const response = await Axios.post(`http://localhost:5000/api/groups/checkGroup`, {
-        username: sessionStorage.getItem("username"),
-        group_name: "admin"
-      }, config)
+      const response = await Axios.get(`http://localhost:5000/api/users/authuser`, config)
 
       if (response.data) {
-        //console.log(response.data.inGroup)
-        response.data.inGroup ? setIsAdmin(true) : setIsAdmin(false)
+        console.log(response.data)
+        const username = sessionStorage.getItem("username")
+        const admin = response.data.isAdmin
+        const loggedInUser = response.data.loggedInUser
+
+        console.log(username === loggedInUser)
+
+        // Check if logged in user = username in sessionStorage - If not log user out
+        if (username !== loggedInUser) {
+          sessionStorage.clear()
+          navigate("/") 
+        }
+
+        // Check if user is an admin - Prevent non-admin users from accessing. Redirect to dashboard
+        if (!admin) {
+          navigate("/dashboard") 
+        }
       }
     } catch (err) {
       console.log("There was a problem")
@@ -35,14 +46,9 @@ function UserManagement() {
 
 
   useEffect(() => {
-    // Prevent non-admin users from accessing. Redirect to dashboard
-    //if (sessionStorage.getItem("admin") === "false") navigate('/dashboard') // CANNOT STORE admin status in sessionStorage
-   
-    checkIfAdmin()
-
-    // Prevent non-admin users from accessing. Redirect to dashboard
-    if (isAdmin === false) navigate('/dashboard')
-  }, [navigate])
+    authenticate()
+    
+  }, [authenticate])
 
   return (
     <Page title="User Management">
