@@ -6,7 +6,7 @@ import Header from "./components/shared/Header";
 import Login from "./components/pages/Login";
 import Footer from "./components/shared/Footer";
 import Dashboard from "./components/pages/Dashboard";
-import UserManagement from "./components/pages/UserManagement";
+import UserManagement from "./components/admin/UserManagement";
 import Profile from "./components/pages/Profile";
 import PrivateRoute from "./components/utils/PrivateRoute";
 
