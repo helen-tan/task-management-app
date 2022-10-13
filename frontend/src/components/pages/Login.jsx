@@ -25,7 +25,7 @@ function Login(props) {
         // persist jwt token, username & admin user status in local storage
         sessionStorage.setItem("token", response.data.token)
         sessionStorage.setItem("username", response.data.data[0].username)
-        sessionStorage.setItem("admin", admin)
+        sessionStorage.setItem("admin", admin) // CANNOT DO THIS
   
         props.setLoggedIn(true)
         navigate('/dashboard')
