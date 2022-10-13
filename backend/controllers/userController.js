@@ -156,7 +156,7 @@ const getUser = catchAsyncErrors(async (req, res) => {
     const loggedInUser = req.username
     // Get user whose details are to be viewed (from the params)
     const username = req.params.username
-  
+
     // Users who can view is the admin and the user themselves - if not admin or the owner, restrict access
     if (loggedInUser !== 'admin' && loggedInUser !== username) {
         return res.status(401).send({
@@ -188,7 +188,7 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     const loggedInUser = req.username
     // Get user whose info is to be changed (from the params)
     const username = req.params.username
-  
+
     // User who can update is the admin and the user themselves - if not admin or the owner, restrict access 
     // To check admin, check if user is in "admin" group
     const isAdmin = await checkGroup(loggedInUser, 'admin')
@@ -203,7 +203,7 @@ const updateUser = catchAsyncErrors(async (req, res) => {
 
     // User inputs
     let { email, password, is_active, groupz } = req.body
-    
+
     // Validation - Regex to validate user input
     const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/    // Valid email string 
     const passwordRegexp = /^[a-zA-Z0-9\W|_]{8,10}$/                       // alphanumeric with special chars, 8-10 chars
@@ -226,15 +226,15 @@ const updateUser = catchAsyncErrors(async (req, res) => {
 
     let updated_user = {
         username: username,
-        email : email,
+        email: email,
         password: hashedPassword,
-        is_active : is_active,
+        is_active: is_active,
         groupz: groupz
     }
 
     // update user
     db.query('update users set email = ?, password = ?, is_active = ?, groupz = ? where username = ?', [
-        email, 
+        email,
         hashedPassword,
         is_active,
         groupz,
@@ -253,7 +253,23 @@ const updateUser = catchAsyncErrors(async (req, res) => {
             })
         }
     })
-    
+
+})
+
+// @desc    Authenticate user (Returns if user is an admin & the loggedIn user)
+// @route   /api/users/authuser
+// @access  Private
+const authUser = catchAsyncErrors(async (req, res) => {
+    // Get logged in user (from unique username in jwt token)
+    const loggedInUser = req.username
+    // To check admin, check if user is in "admin" group
+    const isAdmin = await checkGroup(loggedInUser, 'admin')
+    //console.log(isAdmin)
+
+    res.status(200).send({ 
+        isAdmin: isAdmin,
+        loggedInUser: loggedInUser
+    })
 })
 
 module.exports = {
@@ -261,5 +277,6 @@ module.exports = {
     loginUser,
     getAllUsers,
     getUser,
-    updateUser
+    updateUser,
+    authUser
 }
