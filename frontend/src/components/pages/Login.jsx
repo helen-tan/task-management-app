@@ -22,10 +22,9 @@ function Login(props) {
         console.log(response.data)
         const admin = response.data.data[0].groupz.includes("admin") ? true : false
       
-        // persist jwt token, username & admin user status in local storage
+        // persist jwt token & username in local storage
         sessionStorage.setItem("token", response.data.token)
         sessionStorage.setItem("username", response.data.data[0].username)
-        sessionStorage.setItem("admin", admin) // CANNOT DO THIS
   
         props.setLoggedIn(true)
         navigate('/dashboard')
