@@ -20,12 +20,9 @@ function UserManagement() {
       const response = await Axios.get(`http://localhost:5000/api/users/authuser`, config)
 
       if (response.data) {
-        console.log(response.data)
         const username = sessionStorage.getItem("username")
         const admin = response.data.isAdmin
         const loggedInUser = response.data.loggedInUser
-
-        console.log(username === loggedInUser)
 
         // Check if logged in user = username in sessionStorage - If not log user out
         if (username !== loggedInUser) {
