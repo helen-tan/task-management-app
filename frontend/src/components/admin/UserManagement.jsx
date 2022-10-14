@@ -26,14 +26,12 @@ function UserManagement() {
 
         // Check if logged in user = username in sessionStorage - If not log user out (someone was trying to hack from sessionStorage)
         if (username !== loggedInUser) {
-          console.log("in here 1")
           sessionStorage.clear()
           navigate("/") 
         }
 
         // Check if user is an admin - Prevent non-admin users from accessing. Redirect to dashboard (Non-admin trying to access from URL)
         if (!admin) {
-          console.log("in here 2")
           navigate("/dashboard") 
         }
       }
