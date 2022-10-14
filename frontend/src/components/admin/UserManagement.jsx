@@ -3,19 +3,22 @@ import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import Page from '../utils/Page'
 import BackButton from '../utils/BackButton'
+import { BsPencilSquare } from "react-icons/bs"
 
 function UserManagement() {
+  const [users, setUsers] = useState([])
 
   const navigate = useNavigate()
 
+  const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
+  const config = {
+    headers: {
+      Authorization: bearer_token
+    }
+  }
+
   // Send request to check if the user is in the group "admin" + check username
   async function authenticate() {
-    const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
-    const config = {
-      headers: {
-        Authorization: bearer_token
-      }
-    }
     try {
       const response = await Axios.get(`http://localhost:5000/api/users/authuser`, config)
 
@@ -27,12 +30,12 @@ function UserManagement() {
         // Check if logged in user = username in sessionStorage - If not log user out (someone was trying to hack from sessionStorage)
         if (username !== loggedInUser) {
           sessionStorage.clear()
-          navigate("/") 
+          navigate("/")
         }
 
         // Check if user is an admin - Prevent non-admin users from accessing. Redirect to dashboard (Non-admin trying to access from URL)
         if (!admin) {
-          navigate("/dashboard") 
+          navigate("/dashboard")
         }
       }
     } catch (err) {
@@ -43,9 +46,23 @@ function UserManagement() {
 
 
   useEffect(() => {
+    // Prevent non-admins from accessing this page
     authenticate()
-    
-  }, [authenticate])
+
+    // Fetch all users
+    async function fetchAllUsers() {
+      try {
+        const response = await Axios.get(`http://localhost:5000/api/users`, config)
+        // console.log(response.data)
+        // Set array of users into state
+        setUsers(response.data.data)
+
+      } catch (err) {
+        console.log("There was a problem")
+      }
+    }
+    fetchAllUsers()
+  }, [])
 
   return (
     <Page title="User Management">
@@ -55,7 +72,57 @@ function UserManagement() {
 
       <h1 className='text-3xl mb-10 '><strong>User Management</strong></h1>
 
-      <h2 className='text-2xl text-start ml-5'><strong>Create a New User</strong></h2>
+      <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Create a New User</h2>
+
+      <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Users</h2>
+
+      <div className="overflow-x-auto mx-5">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Groups</th>
+              <th>Status</th>
+              <th>Password</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={user.username}>
+                <td>{index + 1}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>
+                  {user.groupz.map((group) => (
+                    <div className="badge badge-sm badge-ghost ml-1" key={group}>{group}</div>
+                  ))}
+                </td>
+                <td>{user.is_active === 1 ? 
+                  <div className="badge badge-success gap-2 text-white">
+                    active 
+                  </div>
+                  : 
+                  <div className="badge badge-error gap-2 text-white">
+                    inactive 
+                  </div>}</td>
+                <td></td>
+                <td>
+                  <button className="btn btn-sm gap-2">
+                    <BsPencilSquare /> Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+
+          </tbody>
+
+        </table>
+      </div>
+
     </Page>
   )
 }
