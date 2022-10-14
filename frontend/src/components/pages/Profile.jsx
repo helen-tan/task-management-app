@@ -67,7 +67,7 @@ function Profile() {
     // Update user details
     const handleUpdate = async (e) => {
         e.preventDefault()
-        
+
         const newUserData = {
             email: emailInput,
             password: passwordInput,
@@ -131,13 +131,13 @@ function Profile() {
                 contentLabel="Edit Details"
             >
                 <div className="flex justify-between mb-5">
-                    <h2 className="font-bold">Edit Details</h2>
+                    <h2 className="font-bold text-xl">Edit Details</h2>
                     <button onClick={closeModal}><strong>X</strong></button>
                 </div>
                 
                 <form onSubmit={handleUpdate}>
                     <div className="form-group">
-                        <label htmlFor="profile-email-edit">Email:</label>
+                        <label htmlFor="profile-email-edit" className="font-semibold">Email:</label>
                         <input 
                             className="form-control" 
                             onChange={(e) => setEmailInput(e.target.value)}
@@ -148,7 +148,7 @@ function Profile() {
                         ></input>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="profile-password-edit">New Password:</label>
+                        <label htmlFor="profile-password-edit" className="font-semibold">New Password:</label>
                         <input 
                             className="form-control" 
                             onChange={(e) => setPasswordInput(e.target.value)}
@@ -159,7 +159,7 @@ function Profile() {
                         ></input>
                     </div>
                     
-                    <button className="btn" type="submit">Submit</button>
+                    <button className="btn btn-block mt-3" type="submit">Submit</button>
                 </form>
 
             </Modal>
