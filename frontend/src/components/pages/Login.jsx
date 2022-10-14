@@ -63,7 +63,7 @@ function Login(props) {
             <label htmlFor="password-register" className="text-muted mb-1">
               <small>Password</small>
             </label>
-            <input onChange={(e) => setPassword(e.target.value)} id="password-register" name="password" className="form-control" type="password" placeholder="Create a password" />
+            <input onChange={(e) => setPassword(e.target.value)} id="password-register" name="password" className="form-control" type="password" placeholder="Enter your password" />
           </div>
 
           <div className="form-group">
