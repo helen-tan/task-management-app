@@ -180,8 +180,8 @@ const getUser = catchAsyncErrors(async (req, res) => {
     })
 })
 
-// @desc    Update user
-// @route   /api/user/:username
+// @desc    Update user (for admin only)
+// @route   /api/user/:username/updateUser
 // @access  Private
 const updateUser = catchAsyncErrors(async (req, res) => {
     // Get logged in user (from unique username in jwt token)
@@ -256,6 +256,110 @@ const updateUser = catchAsyncErrors(async (req, res) => {
 
 })
 
+// @desc    Update user (For normal user) - only email & pw
+// @route   /api/user/:username/updateProfile
+// @access  Private
+const updateProfile = catchAsyncErrors(async (req, res) => {
+    // Get logged in user (from unique username in jwt token)
+    const loggedInUser = req.username
+    // Get user whose info is to be changed (from the params)
+    const username = req.params.username
+    console.log(`Logged in user is ${loggedInUser}`)
+    console.log(`User to be updated is ${username}`)
+
+    let sql = ""
+    let hashedPassword = ""
+    const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/    // Valid email string 
+    const passwordRegexp = /^[a-zA-Z0-9\W|_]{8,10}$/                       // alphanumeric with special chars, 8-10 chars
+
+    // Salt for hashing password
+    const salt = await bcrypt.genSalt(10)
+
+    // User who can update is the only user themselves - if not owner, restrict access 
+    if (loggedInUser !== username) {
+        return res.status(401).send({
+            success: false,
+            message: 'You are not authorized to access this'
+        })
+    }
+    // User inputs
+    let { email, password } = req.body
+
+    // If empty fields were sent
+    if (email === "" && password === "") {
+        return res.status(200).send({
+            success: false,
+            message: 'No changes were detected'
+        })
+        // If only Email field filled
+    } else if (email.length > 1 && password.length < 1) {
+        // email input validation
+        if (!emailRegexp.test(email) ) {
+            return res.status(400).send({
+                success: false,
+                message: 'Please give a valid email input'
+            })
+        } else {
+            sql = `update users set email = "${email}" where username = "${loggedInUser}"`
+        }
+        // If only Password field filled
+    } else if (email.length < 1 && password.length > 1) {
+        // password input validation
+        if (!passwordRegexp.test(password)) {
+            return res.status(400).send({
+                success: false,
+                message: 'Please give a valid password input, of 8-10 characters, containing only alphabets, numbers and special characters',
+            })
+        } else {
+            // hash pw
+            hashedPassword = await bcrypt.hash(password, salt) 
+
+            sql = `update users set password = "${hashedPassword}" where username = "${loggedInUser}"`
+        }
+        //Both Email & Password fields filled 
+    } else {
+        // email & password input validation
+        if (!emailRegexp.test(email) ) {
+            return res.status(400).send({
+                success: false,
+                message: 'Please give a valid email input'
+            })
+        } else if (!passwordRegexp.test(password)) {
+            return res.status(400).send({
+                success: false,
+                message: 'Please give a valid password input, of 8-10 characters, containing only alphabets, numbers and special characters',
+            })
+        } else {
+            // hash pw
+            hashedPassword = await bcrypt.hash(password, salt)
+
+            sql = `update users set email = "${email}", password = "${hashedPassword}" where username = "${loggedInUser}"`
+        }
+    }
+
+    let updated_user = {
+        username: loggedInUser,
+        email: email,
+        password: hashedPassword,
+    }
+
+    // Update Profile
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                message: 'Profile updated successfully',
+                data: updated_user
+            })
+        }
+    })
+})
+
 // @desc    Authenticate user (Returns if user is an admin & the loggedIn user)
 // @route   /api/users/authuser
 // @access  Private
@@ -278,5 +382,6 @@ module.exports = {
     getAllUsers,
     getUser,
     updateUser,
+    updateProfile,
     authUser
 }

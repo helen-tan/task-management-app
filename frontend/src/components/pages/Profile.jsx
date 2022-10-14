@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import Modal from 'react-modal';
 import BackButton from "../utils/BackButton"
 import { BsPencilSquare } from "react-icons/bs"
+import { toast } from 'react-toastify'
 
 import Axios from "axios"
 
@@ -23,14 +24,15 @@ function Profile() {
 
     const params = useParams() // Get URL dynamic params
 
+    const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
+    const config = {
+        headers: {
+            Authorization: bearer_token
+        }
+    }
+
     useEffect(() => {
         async function fetchUserData() {
-            const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
-            const config = {
-                headers: {
-                    Authorization: bearer_token
-                }
-            }
             try {
                 const response = await Axios.get(`http://localhost:5000/api/users/${params.username}`, config)
                 console.log(response.data)
@@ -70,13 +72,39 @@ function Profile() {
     const closeModal = () => setModalIsOpen(false)
     
     // Update user details
-    const handleUpdate = (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault()
-        console.log('submit')
-        console.log(email)
-        console.log(password1)
-        console.log(password2)
+        
         // Validation - password 1 & password2 must match
+        if (password1 !== password2) {
+            return toast.error("Passwords do not match")
+        }
+        // TODO: Validation - check for valid password
+        // TODO: Validation - check for valid email
+
+        const newUserData = {
+            email,
+            password: password1,
+            is_active: true,
+            groupz: ["qa"]
+        }
+        
+        // Send put request to update user details
+        try {
+            const response = await Axios.put(`http://localhost:5000/api/users/${params.username}`, {
+                email,
+                password: password1,
+                is_active: "true",
+                groupz: ["qa"]
+            }
+            , config)
+            if (response) {
+                console.log(response)
+                toast.success("User details successfully updated")
+            }
+        } catch (err) {
+            toast.error("There was a problem")
+        }
 
         closeModal()
     }
@@ -119,8 +147,10 @@ function Profile() {
                 style={customStyles}
                 contentLabel="Edit Details"
             >
-                <h2>Edit Details</h2>
-                <button onClick={closeModal} className="btn btn-sm">X</button>
+                <div className="flex justify-between mb-5">
+                    <h2 className="font-bold">Edit Details</h2>
+                    <button onClick={closeModal}><strong>X</strong></button>
+                </div>
                 
                 <form onSubmit={handleUpdate}>
                     <div className="form-group">

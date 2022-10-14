@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from 'react'
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Components
 import Header from "./components/shared/Header";
@@ -15,25 +17,29 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("admin"))
 
   return (
-    <Router>
-      <div className="container">
-        <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin} />
+    <>
+      <Router>
+        <div className="container">
+          <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin} />
 
-        <Routes>
-          {/* Public Routes */}
-          <Route path='/' element={<Login setLoggedIn={setLoggedIn} />} />
+          <Routes>
+            {/* Public Routes */}
+            <Route path='/' element={<Login setLoggedIn={setLoggedIn} />} />
 
-          {/* Protected Routes */}
-          <Route element={<PrivateRoute />}>
-            <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='/profile/:username' element={<Profile />} />
-            <Route path='/usermanagement' element={<UserManagement />} />
-          </Route>
+            {/* Protected Routes */}
+            <Route element={<PrivateRoute />}>
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/profile/:username' element={<Profile />} />
+              <Route path='/usermanagement' element={<UserManagement />} />
+            </Route>
 
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+
+      <ToastContainer/>
+    </>
   );
 }
 
