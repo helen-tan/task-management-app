@@ -20,18 +20,20 @@ function UserManagement() {
       const response = await Axios.get(`http://localhost:5000/api/users/authuser`, config)
 
       if (response.data) {
-        const username = sessionStorage.getItem("username")
-        const admin = response.data.isAdmin
-        const loggedInUser = response.data.loggedInUser
+        const username = sessionStorage.getItem("username")   // supposed logged in user saved in sessionStorage (not reliable)
+        const admin = response.data.isAdmin                   // admin status returned from api
+        const loggedInUser = response.data.loggedInUser       // logged in user returned from api (more reliable)
 
-        // Check if logged in user = username in sessionStorage - If not log user out
+        // Check if logged in user = username in sessionStorage - If not log user out (someone was trying to hack from sessionStorage)
         if (username !== loggedInUser) {
+          console.log("in here 1")
           sessionStorage.clear()
           navigate("/") 
         }
 
-        // Check if user is an admin - Prevent non-admin users from accessing. Redirect to dashboard
+        // Check if user is an admin - Prevent non-admin users from accessing. Redirect to dashboard (Non-admin trying to access from URL)
         if (!admin) {
+          console.log("in here 2")
           navigate("/dashboard") 
         }
       }
