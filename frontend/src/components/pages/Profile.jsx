@@ -68,9 +68,6 @@ function Profile() {
     const handleUpdate = async (e) => {
         e.preventDefault()
         
-        // TODO: Validation - check for valid password
-        // TODO: Validation - check for valid email
-
         const newUserData = {
             email: emailInput,
             password: passwordInput,
