@@ -13,6 +13,9 @@ function Profile() {
     const [email, setEmail] = useState("")
     const [groups, setGroups] = useState([""])
     const [password, setPassword] = useState("")
+
+    const [emailInput, setEmailInput] = useState("")
+    const [passwordInput, setPasswordInput] = useState("")
     const [modalIsOpen, setModalIsOpen] = useState(false)
 
     const params = useParams() // Get URL dynamic params
@@ -33,6 +36,8 @@ function Profile() {
                 setUsername(response.data.data[0].username)
                 setEmail(response.data.data[0].email)
                 setGroups(response.data.data[0].groupz)
+
+                setEmailInput(response.data.data[0].email)
 
             } catch (err) {
                 console.log("There was a problem")
@@ -67,8 +72,8 @@ function Profile() {
         // TODO: Validation - check for valid email
 
         const newUserData = {
-            email,
-            password: password,
+            email: emailInput,
+            password: passwordInput,
         }
         
         // Send put request to update user details
@@ -76,7 +81,6 @@ function Profile() {
             const response = await Axios.put(`http://localhost:5000/api/users/${params.username}/updateProfile`, newUserData, config)
             if (response) {
                 console.log(response.data)
-                console.log(response.data.success)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
                     closeModal()
@@ -88,8 +92,7 @@ function Profile() {
             console.log(err)
             toast.error("There was a problem")
         }
-
-        
+       
     }
 
     return (
@@ -137,25 +140,25 @@ function Profile() {
                 
                 <form onSubmit={handleUpdate}>
                     <div className="form-group">
-                        <label htmlFor="email-edit">Email:</label>
+                        <label htmlFor="profile-email-edit">Email:</label>
                         <input 
                             className="form-control" 
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => setEmailInput(e.target.value)}
                             type="text"
                             placeholder="Enter your email here" 
-                            value={email}
-                            id="email-edit"
+                            value={emailInput}
+                            id="profile-email-edit"
                         ></input>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password-edit">New Password:</label>
+                        <label htmlFor="profile-password-edit">New Password:</label>
                         <input 
                             className="form-control" 
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => setPasswordInput(e.target.value)}
                             type="text"
                             placeholder="Enter new password" 
-                            value={password}
-                            id="password-edit"
+                            value={passwordInput}
+                            id="profile-password-edit"
                         ></input>
                     </div>
                     

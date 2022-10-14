@@ -289,14 +289,14 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
 
     // If empty fields were sent
     if (email.length < 1 && password.length < 1) {
-        //console.log("In empty fields were sent") 
+        console.log("In empty fields were sent") 
         return res.status(200).send({
             success: false,
             message: 'No changes were detected'
         })
         // If only Email field filled
     } else if (email.length > 1 && password.length < 1) {
-        //console.log("In Only Email filled") 
+        console.log("In Only Email filled") 
         // email input validation
         if (!emailRegexp.test(email) ) {
             return res.status(200).send({
@@ -308,7 +308,7 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
         }
         // If only Password field filled
     } else if (email.length < 1 && password.length > 1) {
-        //console.log("In Only password filled")
+        console.log("In Only password filled")
         // password input validation
         if (!passwordRegexp.test(password)) {
             return res.status(200).send({
@@ -323,7 +323,7 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
         }
         //Both Email & Password fields filled 
     } else {
-        //console.log("In All fields filled")
+        console.log("In All fields filled")
         // email & password input validation
         if (!emailRegexp.test(email) ) {
             return res.status(200).send({
