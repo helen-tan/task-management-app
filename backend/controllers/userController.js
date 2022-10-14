@@ -264,8 +264,8 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
     const loggedInUser = req.username
     // Get user whose info is to be changed (from the params)
     const username = req.params.username
-    console.log(`Logged in user is ${loggedInUser}`)
-    console.log(`User to be updated is ${username}`)
+    //console.log(`Logged in user is ${loggedInUser}`)
+    //console.log(`User to be updated is ${username}`)
 
     let sql = ""
     let hashedPassword = ""
@@ -284,18 +284,22 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
     }
     // User inputs
     let { email, password } = req.body
+    console.log(`email: ${email}`)
+    console.log(`password: ${password}`)
 
     // If empty fields were sent
-    if (email === "" && password === "") {
+    if (email.length < 1 && password.length < 1) {
+        //console.log("In empty fields were sent") 
         return res.status(200).send({
             success: false,
             message: 'No changes were detected'
         })
         // If only Email field filled
     } else if (email.length > 1 && password.length < 1) {
+        //console.log("In Only Email filled") 
         // email input validation
         if (!emailRegexp.test(email) ) {
-            return res.status(400).send({
+            return res.status(200).send({
                 success: false,
                 message: 'Please give a valid email input'
             })
@@ -304,9 +308,10 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
         }
         // If only Password field filled
     } else if (email.length < 1 && password.length > 1) {
+        //console.log("In Only password filled")
         // password input validation
         if (!passwordRegexp.test(password)) {
-            return res.status(400).send({
+            return res.status(200).send({
                 success: false,
                 message: 'Please give a valid password input, of 8-10 characters, containing only alphabets, numbers and special characters',
             })
@@ -318,14 +323,15 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
         }
         //Both Email & Password fields filled 
     } else {
+        //console.log("In All fields filled")
         // email & password input validation
         if (!emailRegexp.test(email) ) {
-            return res.status(400).send({
+            return res.status(200).send({
                 success: false,
                 message: 'Please give a valid email input'
             })
         } else if (!passwordRegexp.test(password)) {
-            return res.status(400).send({
+            return res.status(200).send({
                 success: false,
                 message: 'Please give a valid password input, of 8-10 characters, containing only alphabets, numbers and special characters',
             })

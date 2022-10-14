@@ -9,17 +9,10 @@ import { toast } from 'react-toastify'
 import Axios from "axios"
 
 function Profile() {
-    // const [profileData, setProfileData] = useState({
-    //     username: "...",
-    //     email: "...",
-    //     groups: ["..."]
-    // })
-
-    const [username, setUsername] = useState("...")
-    const [email, setEmail] = useState("...")
-    const [groups, setGroups] = useState(["..."])
-    const [password1, setPassword1] = useState("...")
-    const [password2, setPassword2] = useState("...")
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [groups, setGroups] = useState([""])
+    const [password, setPassword] = useState("")
     const [modalIsOpen, setModalIsOpen] = useState(false)
 
     const params = useParams() // Get URL dynamic params
@@ -41,11 +34,6 @@ function Profile() {
                 setEmail(response.data.data[0].email)
                 setGroups(response.data.data[0].groupz)
 
-                // setProfileData({
-                //     username: response.data.data[0].username,
-                //     email: response.data.data[0].email,
-                //     groups: response.data.data[0].groupz
-                // })
             } catch (err) {
                 console.log("There was a problem")
             }
@@ -75,38 +63,33 @@ function Profile() {
     const handleUpdate = async (e) => {
         e.preventDefault()
         
-        // Validation - password 1 & password2 must match
-        if (password1 !== password2) {
-            return toast.error("Passwords do not match")
-        }
         // TODO: Validation - check for valid password
         // TODO: Validation - check for valid email
 
         const newUserData = {
             email,
-            password: password1,
-            is_active: true,
-            groupz: ["qa"]
+            password: password,
         }
         
         // Send put request to update user details
         try {
-            const response = await Axios.put(`http://localhost:5000/api/users/${params.username}`, {
-                email,
-                password: password1,
-                is_active: "true",
-                groupz: ["qa"]
-            }
-            , config)
+            const response = await Axios.put(`http://localhost:5000/api/users/${params.username}/updateProfile`, newUserData, config)
             if (response) {
-                console.log(response)
-                toast.success("User details successfully updated")
-            }
+                console.log(response.data)
+                console.log(response.data.success)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                    closeModal()
+                } else {
+                    toast.warning(response.data.message)
+                }
+            } 
         } catch (err) {
+            console.log(err)
             toast.error("There was a problem")
         }
 
-        closeModal()
+        
     }
 
     return (
@@ -165,25 +148,17 @@ function Profile() {
                         ></input>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password1-edit">Password:</label>
+                        <label htmlFor="password-edit">New Password:</label>
                         <input 
                             className="form-control" 
-                            onChange={(e) => setPassword1(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                             type="text"
                             placeholder="Enter new password" 
-                            id="password1-edit"
+                            value={password}
+                            id="password-edit"
                         ></input>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password2-edit">Confirm Password:</label>
-                        <input 
-                            className="form-control" 
-                            onChange={(e) => setPassword2(e.target.value)}
-                            type="text"
-                            placeholder="Enter new password again" 
-                            id="password2-edit"
-                        ></input>
-                    </div>
+                    
                     <button className="btn" type="submit">Submit</button>
                 </form>
 
