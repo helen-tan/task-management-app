@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Axios from 'axios'
+import Select from 'react-select'
 import { FaPlus } from "react-icons/fa"
 
 function CreateUser() {
@@ -8,8 +9,7 @@ function CreateUser() {
     const [passwordInput, setPasswordInput] = useState("")
     const [groupsInput, setGroupsInput] = useState([""])
 
-    const [groups, setGroups] = useState([""])
-    // TODO: how to have multiple group inputs?
+    const [groupOptions, setGroupOptions] = useState([])
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -24,18 +24,32 @@ function CreateUser() {
             try {
                 const response = await Axios.get(`http://localhost:5000/api/groups/`, config)
                 //console.log(response.data)
+                //console.log(response.data.data)
 
-                setGroups(response.data.data)
+                let options = [] // Select component from 'react-select' has a prop 'options' with only accepts an array with items of objects <{value:string,label:string}>
+
+                response.data.data.forEach((group) => {
+                    //console.log(group.group_name)
+                    options.push({ 
+                        value: group.group_name, 
+                        label: group.group_name 
+                    })
+                })
+               // console.log(options)
+
+                setGroupOptions(options)
             } catch (err) {
                 console.log("There was a problem")
             }
         }
+
         fetchAllGroups()
-    }, [groups])
+    }, [])
 
     const handleCreateUser = (e) => {
         e.preventDefault()
         console.log("submit")
+        console.log(groupsInput)
     }
 
     return (
@@ -92,15 +106,16 @@ function CreateUser() {
                 {/* Groups */}
                 <div className="form-control w-full">
                     <label className="label">
-                        <span className="label-text">Groups</span>
+                        <span className="label-text">Group(s)</span>
                     </label>
-                    <select 
-                        className="select select-bordered"
-                    >
-                        {groups.map((group, index) => (
-                            <option key={index}>{group.group_name}</option>
-                        ))}
-                    </select>
+                 
+                    <Select
+                        placeholder="Select group(s)"
+                        options={groupOptions}
+                        isMulti={true}
+                        onChange={setGroupsInput}
+                        isSearchable
+                    />
                 </div>
             </div>
 
