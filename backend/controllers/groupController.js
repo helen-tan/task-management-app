@@ -8,8 +8,8 @@ const createGroup = catchAsyncErrors(async (req, res) => {
     const { group_name } = req.body
 
     // Validation - Check for empty input
-    if (!group_name) {
-        return res.status(400).send({
+    if (group_name.length < 1) {
+        return res.status(200).send({
             success: false,
             message: 'Please enter a group name'
         })
