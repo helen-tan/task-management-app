@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaPlus } from "react-icons/fa";
 
 function CreateUser() {
     const [usernameInput, setUsernameInput] = useState("")
@@ -14,9 +15,9 @@ function CreateUser() {
 
     return (
         <form onSubmit={handleCreateUser} className="border-solid border-2 border-slate-200 rounded p-4">
-            <div className="md:flex gap-2 items-center">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
                 {/* Username */}
-                <div className="form-control w-full max-w-xs">
+                <div className="form-control w-full">
                     <label htmlFor="create-user-username" className="label">
                         <span className="label-text">Username</span>
                     </label>
@@ -24,7 +25,7 @@ function CreateUser() {
                         onChange={(e) => setUsernameInput(e.target.value)}
                         id="create-user-username"
                         name="username"
-                        className="input input-bordered w-full max-w-xs"
+                        className="input input-bordered w-full"
                         type="text"
                         placeholder="Enter a username"
                         autoComplete="off"
@@ -32,7 +33,7 @@ function CreateUser() {
                 </div>
 
                 {/* Email */}
-                <div className="form-control w-full max-w-xs">
+                <div className="form-control w-full">
                     <label htmlFor="create-user-email" className="label">
                         <span className="label-text">Email</span>
                     </label>
@@ -40,7 +41,7 @@ function CreateUser() {
                         onChange={(e) => setEmailInput(e.target.value)}
                         id="create-user-email"
                         name="email"
-                        className="input input-bordered w-full max-w-xs"
+                        className="input input-bordered w-full"
                         type="text"
                         placeholder="Enter an email"
                         autoComplete="off"
@@ -48,7 +49,7 @@ function CreateUser() {
                 </div>
 
                 {/* Password */}
-                <div className="form-control w-full max-w-xs">
+                <div className="form-control w-full">
                     <label htmlFor="create-user-password" className="label">
                         <span className="label-text">Password</span>
                     </label>
@@ -56,7 +57,7 @@ function CreateUser() {
                         onChange={(e) => setEmailInput(e.target.value)}
                         id="create-user-password"
                         name="email"
-                        className="input input-bordered w-full max-w-xs"
+                        className="input input-bordered w-full"
                         type="text"
                         placeholder="Enter a password"
                         autoComplete="off"
@@ -64,7 +65,7 @@ function CreateUser() {
                 </div>
 
                 {/* Groups */}
-                <div className="form-control w-full max-w-xs">
+                <div className="form-control w-full">
                     <label className="label">
                         <span className="label-text">Groups</span>
                     </label>
@@ -79,7 +80,9 @@ function CreateUser() {
                 </div>
             </div>
 
-            <button className="btn btn-sm mt-3" type="submit">Create user</button>
+            <div className="flex justify-center lg:justify-end">
+                <button className="btn btn-sm mt-3 gap-1" type="submit"><FaPlus/>Create user</button>
+            </div>
 
         </form>
     )
