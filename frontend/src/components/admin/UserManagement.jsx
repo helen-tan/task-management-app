@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import Page from '../utils/Page'
 import BackButton from '../utils/BackButton'
-import { BsPencilSquare } from "react-icons/bs"
+import UserItem from './UserItem'
 
 function UserManagement() {
   const [users, setUsers] = useState([])
@@ -92,37 +92,11 @@ function UserManagement() {
 
           <tbody>
             {users.map((user, index) => (
-              <tr key={user.username}>
-                <td>{index + 1}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>
-                  {user.groupz.map((group) => (
-                    <div className="badge badge-sm badge-ghost ml-1" key={group}>{group}</div>
-                  ))}
-                </td>
-                <td>{user.is_active === 1 ? 
-                  <div className="badge badge-success gap-2 text-white">
-                    active 
-                  </div>
-                  : 
-                  <div className="badge badge-error gap-2 text-white">
-                    inactive 
-                  </div>}</td>
-                <td></td>
-                <td>
-                  <button className="btn btn-sm gap-2">
-                    <BsPencilSquare /> Edit
-                  </button>
-                </td>
-              </tr>
+              <UserItem key={user.username} index={index} user={user}/>
             ))}
-
           </tbody>
-
         </table>
       </div>
-
     </Page>
   )
 }
