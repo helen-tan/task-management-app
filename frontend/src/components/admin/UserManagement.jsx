@@ -4,9 +4,14 @@ import Axios from 'axios'
 import Page from '../utils/Page'
 import BackButton from '../utils/BackButton'
 import UserItem from './UserItem'
+import Modal from 'react-modal'
+import { toast } from 'react-toastify'
 
 function UserManagement() {
   const [users, setUsers] = useState([])
+
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [createGroupInput, setCreateGroupInput] = useState("")
 
   const navigate = useNavigate()
 
@@ -64,6 +69,46 @@ function UserManagement() {
     fetchAllUsers()
   }, [])
 
+  // Modal: Create New Group 
+  Modal.setAppElement('#root');
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      width: '50%'
+    },
+  };
+
+  const openModal = () => setModalIsOpen(true)
+  const closeModal = () => setModalIsOpen(false)
+
+  const handleGroupCreate = async (e) => {
+    e.preventDefault()
+
+    // Send post request to create a new group
+    try {
+      const response = await Axios.post(`http://localhost:5000/api/groups`, {group_name: createGroupInput}, config)
+      if (response) {
+        console.log(response.data)
+        if (response.data.success === true) {
+          toast.success(response.data.message)
+          // clear user input
+          document.getElementById("create-group").value = ""
+        } else {
+          toast.warning(response.data.message)
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      toast.error("There was a problem")
+    }
+  }
+
   return (
     <Page title="User Management">
       <div className="flex justify-start mb-5 ml-5">
@@ -74,7 +119,7 @@ function UserManagement() {
 
       <div className='flex justify-between items-center'>
         <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Create a New User</h2>
-        <button className="btn btn-sm">
+        <button onClick={openModal} className="btn btn-sm">
           Create new group
         </button>
       </div>
@@ -102,6 +147,35 @@ function UserManagement() {
           </tbody>
         </table>
       </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Create New Group"
+      >
+        <div className="flex justify-between mb-5">
+          <h2 className="font-bold text-xl">Create new group</h2>
+          <button onClick={closeModal}><strong>X</strong></button>
+        </div>
+
+        <form onSubmit={handleGroupCreate}>
+          <div className="form-group">
+            <label htmlFor="create-group" className="font-semibold">Group name:</label>
+            <input
+              className="form-control"
+              onChange={(e) => setCreateGroupInput(e.target.value)}
+              type="text"
+              placeholder="Enter a new group name here"
+              value={createGroupInput}
+              id="create-group"
+            ></input>
+          </div>
+
+          <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
+        </form>
+
+      </Modal>
     </Page>
   )
 }
