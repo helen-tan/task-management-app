@@ -107,7 +107,11 @@ function UserManagement() {
       }
     } catch (err) {
       console.log(err)
-      toast.error("There was a problem")
+      if (err.response.data.message === "ER_DUP_ENTRY"){
+        toast.warning("This group already exists")
+      } else {
+        toast.error("There was a problem")
+      }
       // clear user input
       document.getElementById("create-group").value = ""
     }
