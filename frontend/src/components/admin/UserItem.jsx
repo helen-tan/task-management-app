@@ -3,7 +3,7 @@ import { BsPencilSquare } from "react-icons/bs"
 function UserItem(props) {
     return (
         <tr>
-            <td>{props.index + 1}</td>
+            <td className="font-semibold">{props.index + 1}</td>
             <td>{props.user.username}</td>
             <td>{props.user.email}</td>
             <td>
