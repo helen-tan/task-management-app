@@ -72,7 +72,12 @@ function UserManagement() {
 
       <h1 className='text-3xl mb-10 '><strong>User Management</strong></h1>
 
-      <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Create a New User</h2>
+      <div className='flex justify-between items-center'>
+        <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Create a New User</h2>
+        <button className="btn btn-sm">
+          Create new group
+        </button>
+      </div>
 
       <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Users</h2>
 
@@ -92,7 +97,7 @@ function UserManagement() {
 
           <tbody>
             {users.map((user, index) => (
-              <UserItem key={user.username} index={index} user={user}/>
+              <UserItem key={user.username} index={index} user={user} />
             ))}
           </tbody>
         </table>
