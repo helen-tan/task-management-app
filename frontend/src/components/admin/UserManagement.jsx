@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import Page from '../utils/Page'
 import BackButton from '../utils/BackButton'
+import CreateUser from './CreateUser'
 import UserItem from './UserItem'
 import Modal from 'react-modal'
 import { toast } from 'react-toastify'
@@ -127,11 +128,16 @@ function UserManagement() {
 
       <div className='flex justify-between items-center'>
         <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Create a New User</h2>
+        {/* Create group button */}
         <button onClick={openModal} className="btn btn-sm">
           Create new group
         </button>
       </div>
 
+      {/* Create new user form */}
+      <CreateUser />
+
+      {/* List of existing users */}
       <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Users</h2>
 
       <div className="overflow-x-auto mx-5">
