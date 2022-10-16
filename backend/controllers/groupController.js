@@ -19,7 +19,7 @@ const createGroup = catchAsyncErrors(async (req, res) => {
     const group_nameRegexp = /^[a-z]{2,}$/   // only alphabets, no numbers, no special chars
 
     if (!group_name.match(group_nameRegexp)) {
-        res.status(400).send({
+        return res.status(200).send({
             success: false,
             message: "Please use only alphabets, with a minimum of 2 characters"
         })

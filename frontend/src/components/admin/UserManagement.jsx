@@ -101,11 +101,15 @@ function UserManagement() {
           document.getElementById("create-group").value = ""
         } else {
           toast.warning(response.data.message)
+          // clear user input
+          document.getElementById("create-group").value = ""
         }
       }
     } catch (err) {
       console.log(err)
       toast.error("There was a problem")
+      // clear user input
+      document.getElementById("create-group").value = ""
     }
   }
 
