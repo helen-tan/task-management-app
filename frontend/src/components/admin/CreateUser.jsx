@@ -1,12 +1,37 @@
-import { useState } from 'react'
-import { FaPlus } from "react-icons/fa";
+import { useState, useEffect } from 'react'
+import Axios from 'axios'
+import { FaPlus } from "react-icons/fa"
 
 function CreateUser() {
     const [usernameInput, setUsernameInput] = useState("")
     const [emailInput, setEmailInput] = useState("")
     const [passwordInput, setPasswordInput] = useState("")
+    const [groupsInput, setGroupsInput] = useState([""])
+
+    const [groups, setGroups] = useState([""])
     // TODO: how to have multiple group inputs?
-    // TODO: need to send a req to get all the groups in order to display them in the select dropdown
+
+    const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
+    const config = {
+        headers: {
+            Authorization: bearer_token
+        }
+    }
+
+    useEffect(() => {
+        // Fetch All groups
+        async function fetchAllGroups() {
+            try {
+                const response = await Axios.get(`http://localhost:5000/api/groups/`, config)
+                //console.log(response.data)
+
+                setGroups(response.data.data)
+            } catch (err) {
+                console.log("There was a problem")
+            }
+        }
+        fetchAllGroups()
+    }, [groups])
 
     const handleCreateUser = (e) => {
         e.preventDefault()
@@ -69,19 +94,18 @@ function CreateUser() {
                     <label className="label">
                         <span className="label-text">Groups</span>
                     </label>
-                    <select className="select select-bordered">
-                        <option disabled selected>Pick one</option>
-                        <option>Star Wars</option>
-                        <option>Harry Potter</option>
-                        <option>Lord of the Rings</option>
-                        <option>Planet of the Apes</option>
-                        <option>Star Trek</option>
+                    <select 
+                        className="select select-bordered"
+                    >
+                        {groups.map((group, index) => (
+                            <option key={index}>{group.group_name}</option>
+                        ))}
                     </select>
                 </div>
             </div>
 
             <div className="flex justify-center lg:justify-end">
-                <button className="btn btn-sm mt-3 gap-1" type="submit"><FaPlus/>Create user</button>
+                <button className="btn btn-sm mt-3 gap-1" type="submit"><FaPlus />Create user</button>
             </div>
 
         </form>
