@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { FaSignInAlt } from 'react-icons/fa'
 import Page from '../utils/Page'
 import Axios from 'axios'
+import { toast } from 'react-toastify'
 
 function Login(props) {
   const [username, setUsername] = useState()
@@ -20,19 +21,22 @@ function Login(props) {
       })
       if (response.data) {
         console.log(response.data)
-        const admin = response.data.data[0].groupz.includes("admin") ? true : false
-      
-        // persist jwt token & username in local storage
-        sessionStorage.setItem("token", response.data.token)
-        sessionStorage.setItem("username", response.data.data[0].username)
-  
-        props.setLoggedIn(true)
-        navigate('/dashboard')
+        if (response.data.success === true) {
+          toast.success(response.data.message)
+          // persist jwt token & username in local storage
+          sessionStorage.setItem("token", response.data.token)
+          sessionStorage.setItem("username", response.data.data[0].username)
+
+          props.setLoggedIn(true)
+          navigate('/dashboard')
+        } else {
+          toast.warning(response.data.message)
+        }
       } else {
         console.log('There was an error')
       }
     } catch (err) {
-      if(err.response) {
+      if (err.response) {
         console.log(err.response.data) // Error msg set in backend
       }
     }

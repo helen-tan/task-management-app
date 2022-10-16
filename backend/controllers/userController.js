@@ -84,7 +84,7 @@ const loginUser = catchAsyncErrors(async (req, res) => {
             if (results.length > 0) {
                 // Validation - Check that the is_active property is true first, otherwise prevent login
                 if (!results[0].is_active) {
-                    return res.status(403).send({
+                    return res.status(200).send({
                         success: false,
                         message: 'Account is inactive. Please contact your administrator'
                     })
@@ -100,13 +100,13 @@ const loginUser = catchAsyncErrors(async (req, res) => {
                         token: generateToken(username)
                     });
                 } else {
-                    res.status(401).send({
+                    res.status(200).send({
                         success: false,
                         message: 'Username and password do not match'
                     })
                 }
             } else {
-                res.status(400).send({
+                res.status(200).send({
                     success: false,
                     message: 'Username does not exist'
                 })
