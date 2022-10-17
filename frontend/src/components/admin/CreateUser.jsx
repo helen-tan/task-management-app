@@ -4,7 +4,7 @@ import Select from 'react-select'
 import { FaPlus } from "react-icons/fa"
 import { toast } from 'react-toastify'
 
-function CreateUser() {
+function CreateUser(props) {
     const [usernameInput, setUsernameInput] = useState("")
     const [emailInput, setEmailInput] = useState("")
     const [passwordInput, setPasswordInput] = useState("")
@@ -45,7 +45,7 @@ function CreateUser() {
         }
 
         fetchAllGroups()
-    }, [])
+    }, [props.count])
 
     const handleCreateUser = async (e) => {
         e.preventDefault()
@@ -78,7 +78,7 @@ function CreateUser() {
                 if (response.data.success === true) {
                     toast.success(response.data.message)
                     // clear user inputs
-                    document.getElementById("create-user-username").value = ""
+                    document.getElementById("create-user-username").value = "" // or setState?
                     document.getElementById("create-user-email").value = ""
                     document.getElementById("create-user-password").value = ""
 

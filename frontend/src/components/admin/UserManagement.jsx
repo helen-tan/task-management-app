@@ -14,6 +14,8 @@ function UserManagement() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [createGroupInput, setCreateGroupInput] = useState("")
 
+  const [count, setCount] = useState(0) // For inducing re-render of CreateUser form whenever a new group is created 
+
   const navigate = useNavigate()
 
   const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
@@ -68,7 +70,7 @@ function UserManagement() {
       }
     }
     fetchAllUsers()
-  }, [users])
+  }, [users]) // Re-render this component whenever users state updates
 
   // Modal: Create New Group 
   Modal.setAppElement('#root');
@@ -98,8 +100,11 @@ function UserManagement() {
         console.log(response.data)
         if (response.data.success === true) {
           toast.success(response.data.message)
+          // increment count state (to induce re render of CreateUser form to include new group instatnly in dropdown)
+          setCount(prevState => prevState + 1)
           // clear user input
           document.getElementById("create-group").value = ""
+
         } else {
           toast.warning(response.data.message)
           // clear user input
@@ -135,7 +140,7 @@ function UserManagement() {
       </div>
 
       {/* Create new user form */}
-      <CreateUser />
+      <CreateUser count={count}/>
 
       {/* List of existing users */}
       <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Users</h2>
