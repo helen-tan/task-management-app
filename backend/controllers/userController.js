@@ -8,7 +8,29 @@ const { checkGroup } = require('../middleware/authMiddleware')
 // @route   /api/users
 // @access  Private
 const createUser = catchAsyncErrors(async (req, res) => {
-    const { username, email, password, groupz } = req.body
+    let { username, email, password, groupz } = req.body
+
+    let tempStr = groupz.toString() // convert groupz input from object to string
+    console.log("Group string from req.body: " + tempStr)
+
+    // Format group input from request from: dev,guests => ["dev", "guests"]
+    let str_array = tempStr.split(",");
+    let newString = ""
+    for (let i = 0; i < str_array.length; i++) {
+        // Trim the excess whitespace
+        if (i == 0) { 
+            // front of string - ["...",
+            newString += "[\"" + str_array[i] + "\","
+        } else if (i == (str_array.length - 1)) {
+            // back of string - "..."]
+            newString += "\"" + str_array[i] + "\"]"
+        } else {
+            // middle of string - ,"..."  ("...",)
+            newString += "\"" + str_array[i] + "\","
+        }
+    } 
+    console.log("check: " + newString)
+    groupz = newString
 
     // validation - check for empty inputs
     if (!username || !email || !password) {
@@ -292,16 +314,16 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
 
     // If empty fields were sent
     if (email.length < 1 && password.length < 1) {
-        console.log("In empty fields were sent") 
+        console.log("In empty fields were sent")
         return res.status(200).send({
             success: false,
             message: 'No changes were detected'
         })
         // If only Email field filled
     } else if (email.length > 1 && password.length < 1) {
-        console.log("In Only Email filled") 
+        console.log("In Only Email filled")
         // email input validation
-        if (!emailRegexp.test(email) ) {
+        if (!emailRegexp.test(email)) {
             return res.status(200).send({
                 success: false,
                 message: 'Please give a valid email input'
@@ -320,7 +342,7 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
             })
         } else {
             // hash pw
-            hashedPassword = await bcrypt.hash(password, salt) 
+            hashedPassword = await bcrypt.hash(password, salt)
 
             sql = `update users set password = "${hashedPassword}" where username = "${loggedInUser}"`
         }
@@ -328,7 +350,7 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
     } else {
         console.log("In All fields filled")
         // email & password input validation
-        if (!emailRegexp.test(email) ) {
+        if (!emailRegexp.test(email)) {
             return res.status(200).send({
                 success: false,
                 message: 'Please give a valid email input'
@@ -379,7 +401,7 @@ const authUser = catchAsyncErrors(async (req, res) => {
     const isAdmin = await checkGroup(loggedInUser, 'admin')
     //console.log(isAdmin)
 
-    res.status(200).send({ 
+    res.status(200).send({
         isAdmin: isAdmin,
         loggedInUser: loggedInUser
     })

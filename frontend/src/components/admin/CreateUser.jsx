@@ -57,13 +57,16 @@ function CreateUser() {
         groupsInput.forEach((groupInput) => {
             groupsInputArr.push(groupInput.value)
         })
+
+      
         console.log(groupsInputArr)
+
 
         const newUserData = {
             username: usernameInput,
             email: emailInput,
             password: passwordInput,
-            groupz: `"${groupsInputArr}"`
+            groupz: groupsInputArr
         }
 
         console.log(newUserData)
@@ -78,8 +81,6 @@ function CreateUser() {
                     document.getElementById("create-user-username").value = ""
                     document.getElementById("create-user-email").value = ""
                     document.getElementById("create-user-password").value = ""
-                    //document.getElementById("create-user-groups").value = ""
-                    //console.log(document.querySelector("#css-12jo7m5"))
 
                 } else {
                     toast.warning(response.data.message)
