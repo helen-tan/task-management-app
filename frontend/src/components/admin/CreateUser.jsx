@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Axios from 'axios'
 import Select from 'react-select'
 import { FaPlus } from "react-icons/fa"
+import { toast } from 'react-toastify'
 
 function CreateUser() {
     const [usernameInput, setUsernameInput] = useState("")
@@ -30,12 +31,12 @@ function CreateUser() {
 
                 response.data.data.forEach((group) => {
                     //console.log(group.group_name)
-                    options.push({ 
-                        value: group.group_name, 
-                        label: group.group_name 
+                    options.push({
+                        value: group.group_name,
+                        label: group.group_name
                     })
                 })
-               // console.log(options)
+                // console.log(options)
 
                 setGroupOptions(options)
             } catch (err) {
@@ -46,10 +47,52 @@ function CreateUser() {
         fetchAllGroups()
     }, [])
 
-    const handleCreateUser = (e) => {
+    const handleCreateUser = async (e) => {
         e.preventDefault()
-        console.log("submit")
-        console.log(groupsInput)
+        //console.log(groupsInput)
+
+        let groupsInputArr = []
+
+        // Reformat groupsInput from [{value: 'xxx', label: 'xxx'}, {value: 'yyy', label: 'yyy'}] to ["xxx", "yyy"] 
+        groupsInput.forEach((groupInput) => {
+            groupsInputArr.push(groupInput.value)
+        })
+        console.log(groupsInputArr)
+
+        const newUserData = {
+            username: usernameInput,
+            email: emailInput,
+            password: passwordInput,
+            groupz: `"${groupsInputArr}"`
+        }
+
+        console.log(newUserData)
+        // Send post request to create user
+        try {
+            const response = await Axios.post(`http://localhost:5000/api/users`, newUserData, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                    // clear user inputs
+                    document.getElementById("create-user-username").value = ""
+                    document.getElementById("create-user-email").value = ""
+                    document.getElementById("create-user-password").value = ""
+                    //document.getElementById("create-user-groups").value = ""
+                    //console.log(document.querySelector("#css-12jo7m5"))
+
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            if (err.response.data.message === "ER_DUP_ENTRY") {
+                toast.warning("This user already exists")
+            } else {
+                toast.error("There was a problem")
+            }
+        }
     }
 
     return (
@@ -93,7 +136,7 @@ function CreateUser() {
                         <span className="label-text">Password</span>
                     </label>
                     <input
-                        onChange={(e) => setEmailInput(e.target.value)}
+                        onChange={(e) => setPasswordInput(e.target.value)}
                         id="create-user-password"
                         name="email"
                         className="input input-bordered w-full"
@@ -105,11 +148,12 @@ function CreateUser() {
 
                 {/* Groups */}
                 <div className="form-control w-full">
-                    <label className="label">
+                    <label htmlFor="create-user-groups" className="label">
                         <span className="label-text">Group(s)</span>
                     </label>
-                 
+
                     <Select
+                        id="create-user-groups"
                         placeholder="Select group(s)"
                         options={groupOptions}
                         isMulti={true}

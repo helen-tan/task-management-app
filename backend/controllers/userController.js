@@ -14,9 +14,9 @@ const createUser = catchAsyncErrors(async (req, res) => {
     if (!username || !email || !password) {
         // res.status(400)
         // throw new Error('Please include all fields')
-        return res.status(400).send({
+        return res.status(200).send({
             success: false,
-            message: 'Please include all fields'
+            message: 'Please include a username, email and password'
         })
     }
 
@@ -26,7 +26,7 @@ const createUser = catchAsyncErrors(async (req, res) => {
     const passwordRegexp = /^[a-zA-Z0-9\W|_]{8,10}$/                       // alphanumeric with special chars, 8-10 chars
 
     if (!username.match(usernameRegexp) || !email.match(emailRegexp) || !password.match(passwordRegexp)) {
-        return res.status(400).send({
+        return res.status(200).send({
             success: false,
             message: 'Please give a valid username, email or password input'
         })
@@ -36,6 +36,9 @@ const createUser = catchAsyncErrors(async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
+    // console.log("here")
+    // console.log(groupz)
+
     const new_user = {
         username: username,
         email: email,
@@ -43,7 +46,7 @@ const createUser = catchAsyncErrors(async (req, res) => {
         groupz: groupz
     }
 
-    db.query('insert into users (username, email, password, is_active, groupz) values (?, ?, ?, true, ?)', [
+    db.query("insert into users (username, email, password, is_active, groupz) values (?, ?, ?, true, ?)", [
         username,
         email,
         hashedPassword,
