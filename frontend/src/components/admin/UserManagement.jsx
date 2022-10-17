@@ -68,7 +68,7 @@ function UserManagement() {
       }
     }
     fetchAllUsers()
-  }, [])
+  }, [users])
 
   // Modal: Create New Group 
   Modal.setAppElement('#root');
