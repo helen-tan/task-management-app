@@ -14,21 +14,30 @@ const createUser = catchAsyncErrors(async (req, res) => {
     console.log("Group string from req.body: " + tempStr)
 
     // Format group input from request from: dev,guests => ["dev", "guests"]
-    let str_array = tempStr.split(",");
+    let str_array = tempStr.split(",")
     let newString = ""
-    for (let i = 0; i < str_array.length; i++) {
-        // Trim the excess whitespace
-        if (i == 0) { 
-            // front of string - ["...",
-            newString += "[\"" + str_array[i] + "\","
-        } else if (i == (str_array.length - 1)) {
-            // back of string - "..."]
-            newString += "\"" + str_array[i] + "\"]"
-        } else {
-            // middle of string - ,"..."  ("...",)
-            newString += "\"" + str_array[i] + "\","
-        }
-    } 
+    
+    console.log(`str_array is ${str_array}`)
+    console.log(str_array)
+
+    if (str_array.length === 1) {
+        newString = `["${str_array}"]`
+    } else {
+        for (let i = 0; i < str_array.length; i++) {
+            // Trim the excess whitespace
+            if (i == 0) { 
+                // front of string - ["...",
+                newString += "[\"" + str_array[i] + "\","
+            } else if (i == (str_array.length - 1)) {
+                // back of string - "..."]
+                newString += "\"" + str_array[i] + "\"]"
+            } else {
+                // middle of string - ,"..."  ("...",)
+                newString += "\"" + str_array[i] + "\","
+            }
+        } 
+    }
+    
     console.log("check: " + newString)
     groupz = newString
 
