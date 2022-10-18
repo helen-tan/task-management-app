@@ -2,9 +2,9 @@ import { BsPencilSquare } from "react-icons/bs"
 
 function UserItem(props) {
     return (
-        <tr>
+        <tr className="text-sm">
             <td className="font-semibold">{props.index + 1}</td>
-            <td>{props.user.username}</td>
+            <td className="font-semibold">{props.user.username}</td>
             <td>{props.user.email}</td>
             <td>
                 {props.user.groupz.map((group) => (

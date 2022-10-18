@@ -201,7 +201,7 @@ function UserManagement() {
       {/* List of existing users */}
       <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Users</h2>
 
-      <div className="overflow-x-auto mx-5">
+      <div className="overflow-x-auto mx-10">
         <form onSubmit={handleEditFormSubmit}>
           <table className="table w-full">
             <thead>
@@ -211,7 +211,7 @@ function UserManagement() {
                 <th>Email</th>
                 <th>Groups</th>
                 <th>Status</th>
-                <th>Password</th>
+                <th></th>
                 <th>Actions</th>
               </tr>
             </thead>

@@ -43,18 +43,22 @@ function EditUserItem(props) {
 
 
   return (
-    <tr>
+    <tr className="text-sm">
       <td className="font-semibold">{props.index + 1}</td>
 
-      <td>{props.user.username}</td>
+      <td className="font-semibold">{props.user.username}</td>
 
       <td>
+        <label htmlFor="edit-user-email" className="label pt-0">
+          <span className="label-text text-cyan-700 font-semibold">Edit email:</span>
+        </label>
         <input
           type='text'
-          className="bg-slate-100 border-solid border-2 border-slate-300 p-2 rounded"
+          className="w-44 border-solid border-2 border-slate-300 p-2 rounded"
           required="required"
           placeholder="email"
           name="email"
+          id="edit-user-email"
           value={props.editFormEmail}
           onChange={(e) => props.setEditFormEmail(e.target.value)}
         ></input>
@@ -71,12 +75,15 @@ function EditUserItem(props) {
           onChange={(e) => props.setEditFormGroups(e.target.value)}
         ></input> */}
 
-        {/*TODO: Handle the onChange to update form state */}
+        <label htmlFor="edit-user-groups" className="label pt-0">
+          <span className="label-text text-cyan-700 font-semibold">Edit groups:</span>
+        </label>
         <Select
-          className="w-56"
+          className="w-56 border-solid border-2 border-slate-300 rounded"
           placeholder="Select group(s)"
           options={groupOptions}
           isMulti={true}
+          id="edit-user-groups"
           name="groupz"
           onChange={props.setEditFormGroups}
         />
@@ -95,29 +102,37 @@ function EditUserItem(props) {
       </td>
 
       <td>
+        <label htmlFor="edit-user-groups" className="label pt-0">
+          <span className="label-text text-cyan-700 font-semibold">Edit account status:</span>
+        </label>
         <input
           type='text'
-          className="bg-slate-100 border-solid border-2 border-slate-300 p-2 rounded"
-          required="required"
+          className="w-36 border-solid border-2 border-slate-300 p-2 rounded"
+          required="required "
           placeholder="status"
           name="is_active"
+          id="edit-user-groups"
           value={props.editFormStatus}
           onChange={(e) => props.setEditFormStatus(e.target.value)}
         ></input>
       </td>
 
       <td>
+        <label htmlFor="edit-user-groups" className="label pt-0">
+          <span className="label-text text-cyan-700 font-semibold">New password:</span>
+        </label>
         <input
           type='text'
-          className="bg-slate-100 border-solid border-2 border-slate-300 p-2 rounded"
+          className="w-36 border-solid border-2 border-slate-300 p-2 rounded"
           required="required"
           placeholder="password"
+          id="edit-user-groups"
           name="password"
           onChange={(e) => props.setEditFormPassword(e.target.value)}
         ></input>
       </td>
 
-      <td className="flex gap-2">
+      <td className="flex flex-col gap-2">
         <button className="btn btn-sm">
           Save
         </button>
