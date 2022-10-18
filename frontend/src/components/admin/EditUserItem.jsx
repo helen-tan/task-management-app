@@ -137,10 +137,10 @@ function EditUserItem(props) {
       </td>
 
       <td className="flex flex-col gap-2">
-        <button className="btn btn-sm">
+        <button className="btn btn-sm btn-success">
           Save
         </button>
-        <button onClick={props.handleCancelClick} className="btn btn-sm">
+        <button onClick={props.handleCancelClick} className="btn btn-sm btn-error">
           Cancel
         </button>
       </td>

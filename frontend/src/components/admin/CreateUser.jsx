@@ -97,7 +97,7 @@ function CreateUser(props) {
     }
 
     return (
-        <form onSubmit={handleCreateUser} className="border-solid border-2 border-slate-200 rounded p-4">
+        <form onSubmit={handleCreateUser} className="border-solid border-2 border-slate-200 rounded mx-10 p-4">
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
                 {/* Username */}
                 <div className="form-control w-full">

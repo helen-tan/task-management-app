@@ -223,7 +223,7 @@ function UserManagement() {
       <div className='flex justify-between items-center'>
         <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Create a New User</h2>
         {/* Create group button */}
-        <button onClick={openModal} className="btn btn-sm">
+        <button onClick={openModal} className="btn btn-sm mr-10">
           Create new group
         </button>
       </div>
