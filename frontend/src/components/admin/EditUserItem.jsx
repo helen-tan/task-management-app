@@ -85,40 +85,43 @@ function EditUserItem(props) {
           isMulti={true}
           id="edit-user-groups"
           name="groupz"
+          value={props.editFormGroups}
           onChange={props.setEditFormGroups}
         />
-
-        {/* <Select
-          className="w-56"
-          placeholder="Select group(s)"
-          options={groupOptions}
-          name="groupz"
-          isMulti={true}
-          isSearchable
-          value={props.editFormData.groupz} // Causing infinite loop somehow?
-          onChange={props.handleEditFormChange}
-        /> */}
-
       </td>
 
       <td>
-        <label htmlFor="edit-user-groups" className="label pt-0">
+        <label htmlFor="edit-user-status" className="label pt-0">
           <span className="label-text text-cyan-700 font-semibold">Edit account status:</span>
         </label>
-        <input
+
+        <select 
+          className="select w-36 border-solid border-2 border-slate-300 rounded"
+          placeholder="Select status"
+          id="edit-user-status"
+          name="is_active"
+          value={props.editFormStatus}
+          onChange={(e) => props.setEditFormStatus(e.target.value)}
+        >
+          <option value="1">active</option>
+          <option value="0">inactive</option>
+        </select>
+        
+        {/* <input
           type='text'
           className="w-36 border-solid border-2 border-slate-300 p-2 rounded"
           required="required "
           placeholder="status"
           name="is_active"
-          id="edit-user-groups"
+          id="edit-user-status"
           value={props.editFormStatus}
           onChange={(e) => props.setEditFormStatus(e.target.value)}
-        ></input>
+        ></input> */}
+
       </td>
 
       <td>
-        <label htmlFor="edit-user-groups" className="label pt-0">
+        <label htmlFor="edit-user-password" className="label pt-0">
           <span className="label-text text-cyan-700 font-semibold">New password:</span>
         </label>
         <input
@@ -126,7 +129,7 @@ function EditUserItem(props) {
           className="w-36 border-solid border-2 border-slate-300 p-2 rounded"
           required="required"
           placeholder="password"
-          id="edit-user-groups"
+          id="edit-user-password"
           name="password"
           onChange={(e) => props.setEditFormPassword(e.target.value)}
         ></input>

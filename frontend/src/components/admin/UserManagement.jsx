@@ -84,8 +84,16 @@ function UserManagement() {
     e.preventDefault()
     setUserToEdit(user.username)
 
+    // format groups for react-select Select component (to see initial value in input)
+    // in format: [{ value: "xxx", label: "xxx" }, { value: "yyy", label: "yyy" }] 
+    let initialGroups = []
+
+    user.groupz.forEach((group) => {
+      initialGroups.push({ value: `${group}`, label: `${group}` })
+    })
+    
     setEditFormEmail(user.email)
-    setEditFormGroups(user.groupz)
+    setEditFormGroups(initialGroups)
     setEditFormStatus(user.is_active)
     setEditFormPassword(user.password)
   }
