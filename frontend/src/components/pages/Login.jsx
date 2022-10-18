@@ -55,7 +55,7 @@ function Login(props) {
       </section>
 
       <section className='form'>
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit} className="w-3/6 mx-auto">
           <div className="form-group">
             <label htmlFor="username-register" className="text-muted mb-1">
               <small>Username</small>
@@ -71,7 +71,7 @@ function Login(props) {
           </div>
 
           <div className="form-group">
-            <button type="submit" className="py-3 mt-4 btn btn-lg btn-active btn-block">
+            <button type="submit" className="mt-4 btn btn-md btn-active btn-block">
               Login
             </button>
           </div>
