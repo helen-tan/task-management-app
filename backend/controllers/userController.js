@@ -241,18 +241,51 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     // Validation - Regex to validate user input
     const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/    // Valid email string 
     const passwordRegexp = /^[a-zA-Z0-9\W|_]{8,10}$/                       // alphanumeric with special chars, 8-10 chars
-    const is_activeRegexp = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])$/    // must be 'true' or 'false'
+    const is_activeRegexp = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]|1|0)$/    // must be 'true' or 'false' or "1" or "0"
 
 
     if (!emailRegexp.test(email) || !passwordRegexp.test(password) || !is_activeRegexp.test(is_active)) {
-        return res.status(400).send({
+        console.log(`Email input is ${email}`)
+        console.log(`Password input is ${password}`)
+        console.log(`is_active input is ${is_active}`)
+ 
+        return res.status(200).send({
             success: false,
             message: 'Please give a valid email, password or account status input'
         })
     }
 
+    // Format group input from request from: dev,guests => ["dev", "guests"]
+    let tempStr = groupz.toString() // convert groupz input from object to string
+    console.log("Group string from req.body: " + tempStr)
+
+    let str_array = tempStr.split(",")
+    let newString = ""
+
+    if (str_array.length === 1) {
+        newString = `["${str_array}"]`
+    } else {
+        for (let i = 0; i < str_array.length; i++) {
+            // Trim the excess whitespace
+            if (i == 0) { 
+                // front of string - ["...",
+                newString += "[\"" + str_array[i] + "\","
+            } else if (i == (str_array.length - 1)) {
+                // back of string - "..."]
+                newString += "\"" + str_array[i] + "\"]"
+            } else {
+                // middle of string - ,"..."  ("...",)
+                newString += "\"" + str_array[i] + "\","
+            }
+        } 
+    }
+    
+    console.log("check: " + newString)
+    groupz = newString
+
     // Change is_active from num to string
-    is_active = (is_active === "true") ? "1" : "0"
+    is_active = (is_active === "true" || is_active === 1 || is_active === "1") ? "1" : "0"
+
 
     // Hash password
     const salt = await bcrypt.genSalt(10)

@@ -91,7 +91,7 @@ function UserManagement() {
     user.groupz.forEach((group) => {
       initialGroups.push({ value: `${group}`, label: `${group}` })
     })
-    
+
     setEditFormEmail(user.email)
     setEditFormGroups(initialGroups)
     setEditFormStatus(user.is_active)
@@ -113,19 +113,44 @@ function UserManagement() {
   // }
 
   // Handle Save btn click
-  const handleEditFormSubmit = (e) => {
+  const handleEditFormSubmit = async (e) => {
     e.preventDefault()
+
+    // format groups from  [{ value: "xxx", label: "xxx" }, { value: "yyy", label: "yyy" }] format
+    // back to ["xxx", "yyy"] format
+    let groupsInputArr = []
+
+    // Format editFormGroups from [{value: 'xxx', label: 'xxx'}, {value: 'yyy', label: 'yyy'}] to ["xxx", "yyy"] 
+    editFormGroups.forEach((item) => {
+      groupsInputArr.push(item.value)
+    })
 
     const editedUser = {
       email: editFormEmail,
-      groupz: editFormGroups,
+      groupz: groupsInputArr,
       is_active: editFormStatus,
       password: editFormPassword
     }
 
     console.log(editedUser)
 
-    // TOOO: Send req to edit user
+    // Send put request to update user details
+    try {
+      const response = await Axios.put(`http://localhost:5000/api/users/${userToEdit}/updateUser`, editedUser, config)
+      if (response) {
+        console.log(response.data)
+        if (response.data.success === true) {
+          toast.success(response.data.message)
+
+        } else {
+          toast.warning(response.data.message)
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      console.log(err.response.data)
+      toast.error("There was a problem")
+    }
 
     // Hide editable row
     setUserToEdit(null)

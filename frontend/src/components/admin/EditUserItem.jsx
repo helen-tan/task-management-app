@@ -129,6 +129,7 @@ function EditUserItem(props) {
           className="w-36 border-solid border-2 border-slate-300 p-2 rounded"
           required="required"
           placeholder="password"
+          autoComplete='off'
           id="edit-user-password"
           name="password"
           onChange={(e) => props.setEditFormPassword(e.target.value)}
