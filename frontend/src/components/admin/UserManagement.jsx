@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import Axios from 'axios'
 import Page from '../utils/Page'
 import BackButton from '../utils/BackButton'
+import Modal from 'react-modal'
 import CreateUser from './CreateUser'
 import UserItem from './UserItem'
-import Modal from 'react-modal'
-import { toast } from 'react-toastify'
+import EditUserItem from './EditUserItem'
 
 function UserManagement() {
   const [users, setUsers] = useState([])
+  const [userToEdit, setUserToEdit] = useState(null) // user is not editing any row by default
+
+  const [editFormEmail, setEditFormEmail] = useState("")
+  const [editFormGroups, setEditFormGroups] = useState([])
+  const [editFormStatus, setEditFormStatus] = useState("")
+  const [editFormPassword, setEditFormPassword] = useState("")
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [createGroupInput, setCreateGroupInput] = useState("")
@@ -72,6 +79,55 @@ function UserManagement() {
     fetchAllUsers()
   }, [users]) // Re-render this component whenever users state updates
 
+  // Handle edit row
+  const handleEditClick = (e, user) => {
+    e.preventDefault()
+    setUserToEdit(user.username)
+
+    setEditFormEmail(user.email)
+    setEditFormGroups(user.groupz)
+    setEditFormStatus(user.is_active)
+    setEditFormPassword(user.password)
+  }
+
+  // Handle edit row changes (Outdated: Used previously when all the form data was stored in 1 state )
+  // const handleEditFormChange = (e) => {
+  //   e.preventDefault()
+
+  //   const fieldName = e.target.getAttribute("name")
+  //   const fieldValue = e.target.value
+
+  //   const newFormData = { ...editFormData }
+  //   newFormData[fieldName] = fieldValue
+
+  //   setEditFormData(newFormData)
+  //   console.log(editFormData)
+  // }
+
+  // Handle Save btn click
+  const handleEditFormSubmit = (e) => {
+    e.preventDefault()
+
+    const editedUser = {
+      email: editFormEmail,
+      groupz: editFormGroups,
+      is_active: editFormStatus,
+      password: editFormPassword
+    }
+
+    console.log(editedUser)
+
+    // TOOO: Send req to edit user
+
+    // Hide editable row
+    setUserToEdit(null)
+  }
+
+  // Handle Cencel btn click
+  const handleCancelClick = (e) => {
+    setUserToEdit(null)
+  }
+
   // Modal: Create New Group 
   Modal.setAppElement('#root');
 
@@ -95,7 +151,7 @@ function UserManagement() {
 
     // Send post request to create a new group
     try {
-      const response = await Axios.post(`http://localhost:5000/api/groups`, {group_name: createGroupInput}, config)
+      const response = await Axios.post(`http://localhost:5000/api/groups`, { group_name: createGroupInput }, config)
       if (response) {
         console.log(response.data)
         if (response.data.success === true) {
@@ -113,7 +169,7 @@ function UserManagement() {
       }
     } catch (err) {
       console.log(err)
-      if (err.response.data.message === "ER_DUP_ENTRY"){
+      if (err.response.data.message === "ER_DUP_ENTRY") {
         toast.warning("This group already exists")
       } else {
         toast.error("There was a problem")
@@ -140,31 +196,54 @@ function UserManagement() {
       </div>
 
       {/* Create new user form */}
-      <CreateUser count={count}/>
+      <CreateUser count={count} />
 
       {/* List of existing users */}
       <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Users</h2>
 
       <div className="overflow-x-auto mx-5">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Groups</th>
-              <th>Status</th>
-              <th>Password</th>
-              <th></th>
-            </tr>
-          </thead>
+        <form onSubmit={handleEditFormSubmit}>
+          <table className="table w-full">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Groups</th>
+                <th>Status</th>
+                <th>Password</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {users.map((user, index) => (
-              <UserItem key={user.username} index={index} user={user} />
-            ))}
-          </tbody>
-        </table>
+            <tbody>
+              {users.map((user, index) => (
+                <>
+                  {userToEdit === user.username
+                    ? <EditUserItem
+                      index={index}
+                      user={user}
+                      handleCancelClick={handleCancelClick}        // fn to handle Cancel btn click
+                      editFormEmail={editFormEmail}
+                      editFormGroups={editFormGroups}
+                      editFormStatus={editFormStatus}
+                      editFormPassword={editFormPassword}
+                      setEditFormEmail={setEditFormEmail}          // To handle row changes
+                      setEditFormGroups={setEditFormGroups}
+                      setEditFormStatus={setEditFormStatus}
+                      setEditFormPassword={setEditFormPassword}
+                    />
+                    : <UserItem
+                      index={index}
+                      user={user}
+                      handleEditClick={handleEditClick} // fn to handle Edit btn click
+                    />
+                  }
+                </>
+              ))}
+            </tbody>
+          </table>
+        </form>
       </div>
 
       <Modal

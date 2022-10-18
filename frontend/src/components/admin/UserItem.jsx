@@ -23,7 +23,7 @@ function UserItem(props) {
             </td>
             <td></td>
             <td>
-                <button className="btn btn-sm gap-2">
+                <button onClick={e => props.handleEditClick(e, props.user)} className="btn btn-sm gap-2">
                     <BsPencilSquare /> Edit
                 </button>
             </td>
