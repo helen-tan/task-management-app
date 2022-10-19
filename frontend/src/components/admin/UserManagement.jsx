@@ -189,10 +189,10 @@ function UserManagement() {
         console.log(response.data)
         if (response.data.success === true) {
           toast.success(response.data.message)
+          // clear user input
+          setCreateGroupInput("") // somehow document.getElementById("create-group").value = "" doesn't work...
           // increment count state (to induce re render of CreateUser form to include new group instatnly in dropdown)
           setCount(prevState => prevState + 1)
-          // clear user input
-          document.getElementById("create-group").value = ""
 
         } else {
           toast.warning(response.data.message)
