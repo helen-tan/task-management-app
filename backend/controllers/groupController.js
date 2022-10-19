@@ -21,7 +21,7 @@ const createGroup = catchAsyncErrors(async (req, res) => {
     if (!group_name.match(group_nameRegexp)) {
         return res.status(200).send({
             success: false,
-            message: "Please use only alphabets, with a minimum of 2 characters"
+            message: "Group names can only have alphabets with no spaces, with a minimum of 2 characters"
         })
     }
 
