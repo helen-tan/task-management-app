@@ -141,19 +141,20 @@ function UserManagement() {
         console.log(response.data)
         if (response.data.success === true) {
           toast.success(response.data.message)
-
+          // Hide editable row
+          setUserToEdit(null)
         } else {
           toast.warning(response.data.message)
+          // Leave editable row open for user to correct mistake
         }
       }
     } catch (err) {
       console.log(err)
       console.log(err.response.data)
       toast.error("There was a problem")
+      // Hide editable row
+      setUserToEdit(null)
     }
-
-    // Hide editable row
-    setUserToEdit(null)
   }
 
   // Handle Cencel btn click
