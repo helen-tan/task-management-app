@@ -16,7 +16,7 @@ const createUser = catchAsyncErrors(async (req, res) => {
     // Format group input from request from: dev,guests => ["dev", "guests"]
     let str_array = tempStr.split(",")
     let newString = ""
-    
+
     console.log(`str_array is ${str_array}`)
     console.log(str_array)
 
@@ -25,7 +25,7 @@ const createUser = catchAsyncErrors(async (req, res) => {
     } else {
         for (let i = 0; i < str_array.length; i++) {
             // Trim the excess whitespace
-            if (i == 0) { 
+            if (i == 0) {
                 // front of string - ["...",
                 newString += "[\"" + str_array[i] + "\","
             } else if (i == (str_array.length - 1)) {
@@ -35,9 +35,9 @@ const createUser = catchAsyncErrors(async (req, res) => {
                 // middle of string - ,"..."  ("...",)
                 newString += "\"" + str_array[i] + "\","
             }
-        } 
+        }
     }
-    
+
     console.log("check: " + newString)
     groupz = newString
 
@@ -238,22 +238,28 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     // User inputs
     let { email, password, is_active, groupz } = req.body
 
+    let sql = ""
+    let hashedPassword = ""
+
     // Validation - Regex to validate user input
     const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/    // Valid email string 
     const passwordRegexp = /^[a-zA-Z0-9\W|_]{8,10}$/                       // alphanumeric with special chars, 8-10 chars
     const is_activeRegexp = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]|1|0)$/    // must be 'true' or 'false' or "1" or "0"
 
+    console.log(`Email input is ${email}`)
+    console.log(`Password input is ${password}`)
+    console.log(`is_active input is ${is_active}`)
+    console.log(`groupz input is ${groupz}`)
+    console.log(`groupz input length is ${groupz.length}`)
 
-    if (!emailRegexp.test(email) || !passwordRegexp.test(password) || !is_activeRegexp.test(is_active)) {
-        console.log(`Email input is ${email}`)
-        console.log(`Password input is ${password}`)
-        console.log(`is_active input is ${is_active}`)
- 
-        return res.status(200).send({
-            success: false,
-            message: 'Please give a valid email, password or account status input'
-        })
-    }
+
+    // if (!emailRegexp.test(email) || !passwordRegexp.test(password) || !is_activeRegexp.test(is_active)) {
+
+    //     return res.status(200).send({
+    //         success: false,
+    //         message: 'Please give a valid email, password or account status input'
+    //     })
+    // }
 
     // Format group input from request from: dev,guests => ["dev", "guests"]
     let tempStr = groupz.toString() // convert groupz input from object to string
@@ -267,7 +273,7 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     } else {
         for (let i = 0; i < str_array.length; i++) {
             // Trim the excess whitespace
-            if (i == 0) { 
+            if (i == 0) {
                 // front of string - ["...",
                 newString += "[\"" + str_array[i] + "\","
             } else if (i == (str_array.length - 1)) {
@@ -277,19 +283,81 @@ const updateUser = catchAsyncErrors(async (req, res) => {
                 // middle of string - ,"..."  ("...",)
                 newString += "\"" + str_array[i] + "\","
             }
-        } 
+        }
     }
-    
-    console.log("check: " + newString)
-    groupz = newString
 
     // Change is_active from num to string
     is_active = (is_active === "true" || is_active === 1 || is_active === "1") ? "1" : "0"
 
+    console.log("HEHEHEHEHEH")
+    console.log("password length:" + password.length)
+    console.log("email length:" + email.length)
+    console.log("is_active" + is_active)
+    console.log("is_active length:" + is_active.length)
+    console.log("groupz length:" + groupz.length)
+    // 1. Password omitted
+    if (email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length > 0) {
+        console.log("No PW filled. Email, is_active, groupz filled")
+        console.log(password.length)
+        // email input validation
+        if (!emailRegexp.test(email)) {
+            return res.status(200).send({
+                success: false,
+                message: 'Please give a valid email input'
+            })
+        } else {
+            // convert groupz into string form accepted by db
+            // console.log("check: " + newString)
+            groupz = newString
+            // console.log("length" + newString.length)
+            // console.log("groupz" + groupz)
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
+            sql = `update users set email = "${email}", is_active = "${is_active}", groupz = '${groupz}' where username = "${username}"`
+        }
+
+        // 2. Password & groups omitted
+    } else if (email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length < 1) {
+        console.log("No PW & groups filled. Email, is_active filled")
+        // email input validation
+        if (!emailRegexp.test(email)) {
+            return res.status(200).send({
+                success: false,
+                message: 'Please give a valid email input'
+            })
+        } else {
+            sql = `update users set email = "${email}", is_active = "${is_active}" where username = "${username}"`
+        }
+
+        // 3. All fields filled
+    } else if (email.length > 0 && password.length > 0 && is_active.length > 0 && groupz.length > 0) {
+        console.log("All fields filled")
+        console.log(password.length)
+        // email & password input validation
+        if (!emailRegexp.test(email)) {
+            return res.status(200).send({
+                success: false,
+                message: 'Please give a valid email input'
+            })
+        } else if (!passwordRegexp.test(password)) {
+            return res.status(200).send({
+                success: false,
+                message: 'Please give a valid password input, of 8-10 characters, containing only alphabets, numbers and special characters',
+            })
+        } else {
+            // hash pw
+            hashedPassword = await bcrypt.hash(password, salt)
+            // convert groupz into string form accepted by db
+            // console.log("check: " + newString)
+            groupz = newString
+            // console.log("length" + newString.length)
+            // console.log("groupz" + groupz)
+            // Change is_active from num to string
+            is_active = (is_active === "true" || is_active === 1 || is_active === "1") ? "1" : "0"
+
+            sql = `update users set email = "${email}", password = "${hashedPassword}", is_active = "${is_active}", groupz = '${groupz}' where username = "${username}"`
+        }
+
+    }
 
     let updated_user = {
         username: username,
@@ -300,13 +368,7 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     }
 
     // update user
-    db.query('update users set email = ?, password = ?, is_active = ?, groupz = ? where username = ?', [
-        email,
-        hashedPassword,
-        is_active,
-        groupz,
-        username
-    ], (err, results) => {
+    db.query(sql, (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,
