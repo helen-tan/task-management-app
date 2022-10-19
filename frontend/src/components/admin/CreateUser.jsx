@@ -58,7 +58,7 @@ function CreateUser(props) {
             groupsInputArr.push(groupInput.value)
         })
 
-      
+
         console.log(groupsInputArr)
 
 
@@ -113,6 +113,15 @@ function CreateUser(props) {
                         placeholder="Enter a username"
                         autoComplete="off"
                     />
+                    <label className="label">
+                        <span className="label-text-alt text-gray-400 text-start pl-5">
+                            <ul className="list-disc">
+                                <li>Must be min 5 characters</li>
+                                <li>Numbers are allowed</li>
+                                <li>No spacings or special characters allowed</li>
+                            </ul>
+                        </span>
+                    </label>
                 </div>
 
                 {/* Email */}
@@ -129,6 +138,9 @@ function CreateUser(props) {
                         placeholder="Enter an email"
                         autoComplete="off"
                     />
+                    <label className="label">
+                        <span className="label-text-alt text-gray-400 text-start">A valid email address</span>
+                    </label>
                 </div>
 
                 {/* Password */}
@@ -145,6 +157,15 @@ function CreateUser(props) {
                         placeholder="Enter a password"
                         autoComplete="off"
                     />
+                    <label className="label">
+                        <span className="label-text-alt text-gray-400 text-start pl-5">
+                            <ul className="list-disc">
+                                <li>Must be min 8, max 10 characters</li>
+                                <li>Must contain at least 1 number</li>
+                                <li>Must contain at least 1 special character</li>
+                            </ul>
+                        </span>
+                    </label>
                 </div>
 
                 {/* Groups */}
@@ -161,6 +182,9 @@ function CreateUser(props) {
                         onChange={setGroupsInput}
                         isSearchable
                     />
+                    <label className="label">
+                        <span className="label-text-alt text-gray-400 text-start">Select existing group(s)</span>
+                    </label>
                 </div>
             </div>
 
