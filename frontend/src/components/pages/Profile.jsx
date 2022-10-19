@@ -184,6 +184,7 @@ function Profile() {
                             placeholder="Enter new password"
                             value={passwordInput}
                             id="profile-password-edit"
+                            autocomplete="off"
                         ></input>
                     </div>
 
