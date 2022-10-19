@@ -127,7 +127,6 @@ function EditUserItem(props) {
         <input
           type='text'
           className="w-36 border-solid border-2 border-slate-300 p-2 rounded"
-          required="required"
           placeholder="password"
           autoComplete='off'
           id="edit-user-password"
