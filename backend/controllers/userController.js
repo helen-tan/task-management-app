@@ -274,8 +274,12 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     let newString = ""
 
     if (str_array.length === 1) {
-        newString = `["${str_array}"]`
-    } else {
+        if (str_array[0].length > 0) {
+            newString = `["${str_array}"]`
+        } else {
+            newString = `[]`
+        }
+    } else  {
         for (let i = 0; i < str_array.length; i++) {
             // Trim the excess whitespace
             if (i == 0) {
@@ -301,8 +305,8 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     // console.log("groupz length:" + groupz.length)
 
 
-    // 1. Password omitted
-    if (email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length > 0) {
+    // 1. Password omitted (groups is considered filled even if empty - means unassociate groups)
+    if (email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length > 0 || email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length < 1 ) {
         console.log("No PW filled. Email, is_active, groupz filled")
         console.log(password.length)
         // email input validation
@@ -321,7 +325,7 @@ const updateUser = catchAsyncErrors(async (req, res) => {
             sql = `update users set email = "${email}", is_active = "${is_active}", groupz = '${groupz}' where username = "${username}"`
         }
 
-        // 2. All fields filled
+        // 2. All fields filled 
     } else if (email.length > 0 && password.length > 0 && is_active.length > 0 && groupz.length > 0) {
         console.log("All fields filled")
         console.log(password.length)
