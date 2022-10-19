@@ -301,6 +301,16 @@ function UserManagement() {
               value={createGroupInput}
               id="create-group"
             ></input>
+
+            <label className="label pl-5">
+              <span className="label-text-alt text-gray-400 text-start">
+                <ul className="list-disc">
+                  <li>Must be min 2 characters</li>
+                  <li>Must only contain alphabets</li>
+                  <li>No spacings allowed</li>
+                </ul>
+              </span>
+            </label>
           </div>
 
           <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
