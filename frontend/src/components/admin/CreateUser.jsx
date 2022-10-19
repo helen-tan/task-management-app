@@ -8,7 +8,7 @@ function CreateUser(props) {
     const [usernameInput, setUsernameInput] = useState("")
     const [emailInput, setEmailInput] = useState("")
     const [passwordInput, setPasswordInput] = useState("")
-    const [groupsInput, setGroupsInput] = useState([""])
+    const [groupsInput, setGroupsInput] = useState([])
 
     const [groupOptions, setGroupOptions] = useState([])
 
