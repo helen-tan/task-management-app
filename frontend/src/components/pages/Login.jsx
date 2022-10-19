@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaSignInAlt } from 'react-icons/fa'
 import Page from '../utils/Page'
@@ -10,6 +10,13 @@ function Login(props) {
   const [password, setPassword] = useState()
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Already Logged-in users should not access this login page - navigate back to the dahsboard
+    if (sessionStorage.getItem("username") !== null){
+      navigate('/dashboard')
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
