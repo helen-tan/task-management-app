@@ -289,12 +289,13 @@ const updateUser = catchAsyncErrors(async (req, res) => {
     // Change is_active from num to string
     is_active = (is_active === "true" || is_active === 1 || is_active === "1") ? "1" : "0"
 
-    console.log("HEHEHEHEHEH")
-    console.log("password length:" + password.length)
-    console.log("email length:" + email.length)
-    console.log("is_active" + is_active)
-    console.log("is_active length:" + is_active.length)
-    console.log("groupz length:" + groupz.length)
+    // console.log("password length:" + password.length)
+    // console.log("email length:" + email.length)
+    // console.log("is_active" + is_active)
+    // console.log("is_active length:" + is_active.length)
+    // console.log("groupz length:" + groupz.length)
+
+
     // 1. Password omitted
     if (email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length > 0) {
         console.log("No PW filled. Email, is_active, groupz filled")
