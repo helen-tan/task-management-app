@@ -139,15 +139,17 @@ const loginUser = catchAsyncErrors(async (req, res) => {
                         token: generateToken(username)
                     });
                 } else {
+                    // username & password do not match
                     res.status(200).send({
                         success: false,
-                        message: 'Username and password do not match'
+                        message: 'Invalid username or password'
                     })
                 }
             } else {
+                // username does not exist
                 res.status(200).send({
                     success: false,
-                    message: 'Username does not exist'
+                    message: 'Invalid username or password'
                 })
             }
         }
