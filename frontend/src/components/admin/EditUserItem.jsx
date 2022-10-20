@@ -102,6 +102,7 @@ function EditUserItem(props) {
           name="is_active"
           value={props.editFormStatus}
           onChange={(e) => props.setEditFormStatus(e.target.value)}
+          disabled = {props.user.username === 'admin' ? true : false}
         >
           <option value="1">active</option>
           <option value="0">inactive</option>
