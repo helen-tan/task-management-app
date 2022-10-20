@@ -112,6 +112,7 @@ function CreateUser(props) {
                         type="text"
                         placeholder="Enter a username"
                         autoComplete="off"
+                        required="required"
                     />
                     <label className="label">
                         <span className="label-text-alt text-gray-400 text-start pl-5">
@@ -137,6 +138,7 @@ function CreateUser(props) {
                         type="text"
                         placeholder="Enter an email"
                         autoComplete="off"
+                        required="required"
                     />
                     <label className="label">
                         <span className="label-text-alt text-gray-400 text-start">A valid email address</span>
@@ -156,6 +158,7 @@ function CreateUser(props) {
                         type="password"
                         placeholder="Enter a password"
                         autoComplete="off"
+                        required="required"
                     />
                     <label className="label">
                         <span className="label-text-alt text-gray-400 text-start pl-5">
