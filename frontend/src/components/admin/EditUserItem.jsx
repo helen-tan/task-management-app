@@ -87,6 +87,7 @@ function EditUserItem(props) {
           name="groupz"
           value={props.editFormGroups}
           onChange={props.setEditFormGroups}
+          isDisabled = {props.user.username === 'admin' ? true : false}
         />
       </td>
 
