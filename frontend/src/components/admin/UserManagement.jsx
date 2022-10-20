@@ -307,7 +307,7 @@ function UserManagement() {
               <span className="label-text-alt text-gray-400 text-start">
                 <ul className="list-disc">
                   <li>Must be min 2 characters</li>
-                  <li>Must only contain alphabets</li>
+                  <li>Must only contain alphabets or underscore(_)</li>
                   <li>No spacings allowed</li>
                 </ul>
               </span>

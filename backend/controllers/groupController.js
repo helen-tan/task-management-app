@@ -16,7 +16,7 @@ const createGroup = catchAsyncErrors(async (req, res) => {
     }
 
     // Validation - Regex to validate user input
-    const group_nameRegexp = /^[a-z]{2,}$/   // only alphabets, no numbers, no special chars
+    const group_nameRegexp = /^[a-zA-Z_]{2,}$/   // only alphabets, no numbers, no special chars, underscores ok
 
     if (!group_name.match(group_nameRegexp)) {
         return res.status(200).send({
