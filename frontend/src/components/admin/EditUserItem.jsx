@@ -125,7 +125,7 @@ function EditUserItem(props) {
           <span className="label-text text-cyan-700 font-semibold">New password:</span>
         </label>
         <input
-          type='text'
+          type='password'
           className="w-36 border-solid border-2 border-slate-300 p-2 rounded"
           placeholder="password"
           autoComplete='off'

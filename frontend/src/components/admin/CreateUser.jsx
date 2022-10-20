@@ -153,7 +153,7 @@ function CreateUser(props) {
                         id="create-user-password"
                         name="email"
                         className="input input-bordered w-full"
-                        type="text"
+                        type="password"
                         placeholder="Enter a password"
                         autoComplete="off"
                     />
