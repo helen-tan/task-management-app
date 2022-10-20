@@ -36,8 +36,8 @@ function Profile() {
                 const loggedInUser = response.data.loggedInUser // logged in user
            
                 console.log(response.data)
-                console.log(`logged in user is ${loggedInUser}`)
-                console.log(`user of interest is ${username}`)
+                //console.log(`logged in user is ${loggedInUser}`)
+                //console.log(`user of interest is ${username}`)
 
                 // Check if logged in user = username in sessionStorage - If not redirect to dashboard
                 if (username !== loggedInUser) {
@@ -108,6 +108,7 @@ function Profile() {
                 console.log(response.data)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
+                    setEmail(response.data.data.email)
                     closeModal()
                 } else {
                     toast.warning(response.data.message)
@@ -180,11 +181,11 @@ function Profile() {
                         <input
                             className="form-control"
                             onChange={(e) => setPasswordInput(e.target.value)}
-                            type="text"
+                            type="password"
                             placeholder="Enter new password"
                             value={passwordInput}
                             id="profile-password-edit"
-                            autocomplete="off"
+                            autoComplete="off"
                         ></input>
                     </div>
 
