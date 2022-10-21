@@ -9,9 +9,10 @@ import CreateUser from './CreateUser'
 import UserItem from './UserItem'
 import EditUserItem from './EditUserItem'
 
-function UserManagement() {
+function UserManagement(props) {
   const [users, setUsers] = useState([])
   const [userToEdit, setUserToEdit] = useState(null) // user is not editing any row by default
+  const [loggedInUser, setLoggedInUser] = useState()
 
   const [editFormEmail, setEditFormEmail] = useState("")
   const [editFormGroups, setEditFormGroups] = useState([])
@@ -21,7 +22,8 @@ function UserManagement() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [createGroupInput, setCreateGroupInput] = useState("")
 
-  const [count, setCount] = useState(0) // For inducing re-render of CreateUser form whenever a new group is created 
+  const [newGroupCount, setNewGroupCount] = useState(0) // For inducing re-render of CreateUser form whenever a new group is created 
+  const [newUserCount, setNewUserCount] = useState(0) // For inducing re-render of UserItem whwn a new user is created
 
   const navigate = useNavigate()
 
@@ -32,21 +34,16 @@ function UserManagement() {
     }
   }
 
-  // Send request to check if the user is in the group "admin" + check username
   async function authenticate() {
     try {
       const response = await Axios.get(`http://localhost:5000/api/users/authuser`, config)
 
       if (response.data) {
-        const username = sessionStorage.getItem("username")   // supposed logged in user saved in sessionStorage (not reliable)
         const admin = response.data.isAdmin                   // admin status returned from api
-        const loggedInUser = response.data.loggedInUser       // logged in user returned from api (more reliable)
-
-        // Check if logged in user = username in sessionStorage - If not log user out (someone was trying to hack from sessionStorage)
-        if (username !== loggedInUser) {
-          sessionStorage.clear()
-          navigate("/")
-        }
+        // console.log(props.loggedInUser) // props doesn't persist wtf
+        setLoggedInUser(response.data.loggedInUser)           // logged in user returned from api 
+        //const loggedInUser = response.data.loggedInUser       // logged in user returned from api (more reliable)
+        // const username = props.loggedInUser                      // Get logged in user from global state/ props
 
         // Check if user is an admin - Prevent non-admin users from accessing. Redirect to dashboard (Non-admin trying to access from URL)
         if (!admin) {
@@ -55,7 +52,6 @@ function UserManagement() {
       }
     } catch (err) {
       console.log("There was a problem")
-      navigate("/")
     }
   }
 
@@ -77,7 +73,7 @@ function UserManagement() {
       }
     }
     fetchAllUsers()
-  }, [users]) // Re-render this component whenever users state updates
+  }, [newUserCount]) // Re-render this component whenever users state updates 
 
   // Handle edit row
   const handleEditClick = (e, user) => {
@@ -193,7 +189,7 @@ function UserManagement() {
           // clear user input
           setCreateGroupInput("") // somehow document.getElementById("create-group").value = "" doesn't work...
           // increment count state (to induce re render of CreateUser form to include new group instatnly in dropdown)
-          setCount(prevState => prevState + 1)
+          setNewGroupCount(prevState => prevState + 1)
 
         } else {
           toast.warning(response.data.message)
@@ -230,7 +226,7 @@ function UserManagement() {
       </div>
 
       {/* Create new user form */}
-      <CreateUser count={count} />
+      <CreateUser newGroupCount={newGroupCount} setNewUserCount={setNewUserCount}/>
 
       {/* List of existing users */}
       <h2 className='text-2xl text-start font-semibold mx-5 my-5'>Users</h2>

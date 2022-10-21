@@ -45,7 +45,7 @@ function CreateUser(props) {
         }
 
         fetchAllGroups()
-    }, [props.count])
+    }, [props.newGroupCount])
 
     const handleCreateUser = async (e) => {
         e.preventDefault()
@@ -77,6 +77,8 @@ function CreateUser(props) {
                 console.log(response.data)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
+                    // increment count state (to induce re render of CreateUser form to include new group instantly in dropdown)
+                    props.setNewUserCount(prevState => prevState + 1)
                     // clear user inputs
                     document.getElementById("create-user-username").value = "" // or setState?
                     document.getElementById("create-user-email").value = ""

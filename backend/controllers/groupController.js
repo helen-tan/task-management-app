@@ -56,7 +56,7 @@ const checkGroup = catchAsyncErrors(async (req, res) => {
 
     db.query('select * from users where username = ?', [username], (err, results) => {
         if (err) {
-            res.status(400).send({
+            return res.status(400).send({
                 success: false,
                 message: err.code
             })
@@ -67,13 +67,13 @@ const checkGroup = catchAsyncErrors(async (req, res) => {
 
             // Send the response
             if (inGroup) {
-                res.status(200).send({
+                return res.status(200).send({
                     success: true,
                     inGroup: true,
                     message: `This user '${username}' is in the group '${group_name}'`
                 })
             } else {
-                res.status(200).send({
+                return res.status(200).send({
                     success: true,
                     inGroup: false,
                     message: `This user '${username}' is NOT in the group '${group_name}'`

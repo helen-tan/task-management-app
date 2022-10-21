@@ -47,7 +47,7 @@ function Profile() {
         } catch (err) {
             console.log("There was a problem")
             console.log(err)
-            navigate("/dashboard")
+            //navigate("/dashboard")
         }
     }
 

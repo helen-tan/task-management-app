@@ -6,31 +6,55 @@ import { FaSignOutAlt } from 'react-icons/fa'
 
 function HeaderLoggedIn(props) {
     const [isAdmin, setIsAdmin] = useState()
+    const [loggedInUser, setLoggedInUser] = useState()
+
+    // Send request to check if the user is in the group "admin"
+    const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
+    const config = {
+        headers: {
+            Authorization: bearer_token
+        }
+    }
+
+    async function authenticate() {
+        try {
+          const response = await Axios.get(`http://localhost:5000/api/users/authuser`, config)
+    
+          if (response.data) {
+            const admin = response.data.isAdmin                   // admin status returned from api
+            // console.log(`in headerloggedin props.loggedinuser is ${props.loggedInUser}`)
+            setLoggedInUser(response.data.loggedInUser)           // logged in user returned from api 
+            //const loggedInUser = response.data.loggedInUser       
+            // const username = props.loggedInUser                      // Get logged in user from global state/ props (DOESN'T PERSIST WTF)
+            
+            // Check if user is an admin 
+            admin ? setIsAdmin(true) :setIsAdmin(false)
+          }
+        } catch (err) {
+          console.log("There was a problem")
+        }
+      }
+
+    // async function checkIfAdmin() {
+    //     console.log(`in headerloggedin props.loggedinuser is ${props.loggedInUser}`)
+    //     try {
+    //         const response = await Axios.post(`http://localhost:5000/api/groups/checkGroup`, {
+    //             username: props.loggedInUser,
+    //             group_name: "admin"
+    //         }, config)
+    //         if (response.data) {
+    //             // console.log(response.data.inGroup)
+    //             response.data.inGroup ? setIsAdmin(true) : setIsAdmin(false)
+    //         }
+    //     } catch (err) {
+    //         console.log(`in headerloggedin props.loggedinuser is ${props.loggedInUser}`)
+    //         console.log("There was a problem")
+    //     }
+    // }
 
     useEffect(() => {
-        //setIsAdmin(sessionStorage.getItem("admin")) // CANNOT DO THIS
-        // Send request to check if the user is in the group "admin"
-        const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
-        const config = {
-            headers: {
-                Authorization: bearer_token
-            }
-        }
-        async function checkIfAdmin() {
-            try {
-                const response = await Axios.post(`http://localhost:5000/api/groups/checkGroup`, {
-                    username: sessionStorage.getItem("username"),
-                    group_name: "admin"
-                }, config)
-                if (response.data) {
-                    // console.log(response.data.inGroup)
-                    response.data.inGroup ? setIsAdmin(true) : setIsAdmin(false)
-                }
-            } catch (err) {
-                console.log("There was a problem")
-            }
-        }
-        checkIfAdmin()
+        // checkIfAdmin()
+        authenticate()
     }, [])
 
     const handleLogout = () => {
@@ -47,8 +71,8 @@ function HeaderLoggedIn(props) {
                     User Management
                 </Link>)}
 
-            <Link to={`/profile/${sessionStorage.getItem("username")}`}>
-                <strong>{sessionStorage.getItem("username")}</strong>
+            <Link to={`/profile/${loggedInUser}`}>
+                <strong>{loggedInUser}</strong>
             </Link>
 
             <button onClick={handleLogout} className="btn btn-sm gap-2">

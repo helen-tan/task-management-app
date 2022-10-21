@@ -26,8 +26,8 @@ const createUser = catchAsyncErrors(async (req, res) => {
         } else {
             newString = `[]`
         }
-       // console.log(`Come onnnnn ${newString}`)
-    } else  {
+        // console.log(`Come onnnnn ${newString}`)
+    } else {
         for (let i = 0; i < str_array.length; i++) {
             // Trim the excess whitespace
             if (i == 0) {
@@ -96,7 +96,7 @@ const createUser = catchAsyncErrors(async (req, res) => {
             success: false,
             message: 'Please give a valid password'
         })
-    } 
+    }
 
     // Hash password
     const salt = await bcrypt.genSalt(10)
@@ -311,7 +311,7 @@ const updateUser = catchAsyncErrors(async (req, res) => {
         } else {
             newString = `[]`
         }
-    } else  {
+    } else {
         for (let i = 0; i < str_array.length; i++) {
             // Trim the excess whitespace
             if (i == 0) {
@@ -338,7 +338,7 @@ const updateUser = catchAsyncErrors(async (req, res) => {
 
 
     // 1. Password omitted (groups is considered filled even if empty - means unassociate groups)
-    if (email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length > 0 || email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length < 1 ) {
+    if (email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length > 0 || email.length > 0 && password.length < 1 && is_active.length > 0 && groupz.length < 1) {
         console.log("No PW filled. Email, is_active, groupz filled")
         console.log(password.length)
         // email input validation
@@ -510,12 +510,12 @@ const updateProfile = catchAsyncErrors(async (req, res) => {
     // Update Profile
     db.query(sql, (err, results) => {
         if (err) {
-            res.status(400).send({
+            return res.status(400).send({
                 success: false,
                 message: err.code
             })
         } else {
-            res.status(200).send({
+            return res.status(200).send({
                 success: true,
                 message: 'Profile updated successfully',
                 data: updated_user
@@ -534,10 +534,24 @@ const authUser = catchAsyncErrors(async (req, res) => {
     const isAdmin = await checkGroup(loggedInUser, 'admin')
     //console.log(isAdmin)
 
-    res.status(200).send({
-        isAdmin: isAdmin,
-        loggedInUser: loggedInUser
-    })
+    // res.status(200).send({
+    //     isAdmin: isAdmin,
+    //     loggedInUser: loggedInUser
+    // })
+    try{
+        return res.status(200).send({
+            isAdmin: isAdmin,
+            loggedInUser: loggedInUser
+        })
+    }
+    catch(e){
+        console.log(e)
+        return res.status(200).send({
+            isAdmin: isAdmin,
+            loggedInUser: loggedInUser
+        })
+    }
+
 })
 
 module.exports = {

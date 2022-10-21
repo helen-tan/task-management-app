@@ -13,9 +13,9 @@ function Login(props) {
 
   useEffect(() => {
     // Already Logged-in users should not access this login page - navigate back to the dahsboard
-    if (sessionStorage.getItem("username") !== null){
-      navigate('/dashboard')
-    }
+    // if (sessionStorage.getItem("username") !== null){
+    //   navigate('/dashboard')
+    // }
   }, [])
 
   const handleSubmit = async (e) => {
@@ -30,11 +30,11 @@ function Login(props) {
         console.log(response.data)
         if (response.data.success === true) {
           toast.success(response.data.message)
-          // persist jwt token & username in local storage
+          // persist jwt token in local storage (don't store username)
           sessionStorage.setItem("token", response.data.token)
-          sessionStorage.setItem("username", response.data.data[0].username)
-
+          //console.log('in login loggedinuser is'+response.data.data[0].username)
           props.setLoggedIn(true)
+          // props.setLoggedInUser(response.data.data[0].username)
           navigate('/dashboard')
         } else {
           toast.warning(response.data.message)

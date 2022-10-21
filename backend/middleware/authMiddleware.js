@@ -5,26 +5,48 @@ const db = require('../config/database')
 const protect = catchAsyncErrors(async (req, res, next) => {
     let token
 
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        try {
+    try {
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             // Get token from header
             token = req.headers.authorization.split(' ')[1]
 
             // Verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        
+
             // Get username (unique identifier) from token/ Set req.username to username and controller will see it
             // console.log(decoded) //E.g. { username: 'admin', iat: 1665043915, exp: 1667635915 }
             req.username = decoded.username
-
-        } catch (error) {
-            // No such token
-            console.log(error)
-            res.status(401).send({
-                message: 'Not authorized'
-            })
         }
+
+    } catch (err) {
+        // No such token
+        console.log(error)
+        return res.status(401).send({
+            message: 'Not authorized'
+        })
+
     }
+
+    // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    //     try {
+    //         // Get token from header
+    //         token = req.headers.authorization.split(' ')[1]
+
+    //         // Verify token
+    //         const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    //         // Get username (unique identifier) from token/ Set req.username to username and controller will see it
+    //         // console.log(decoded) //E.g. { username: 'admin', iat: 1665043915, exp: 1667635915 }
+    //         req.username = decoded.username
+
+    //     } catch (error) {
+    //         // No such token
+    //         console.log(error)
+    //         res.status(401).send({
+    //             message: 'Not authorized'
+    //         })
+    //     }
+    // }
 
     // No Token
     if (!token) {
@@ -45,12 +67,12 @@ const authorizeUser = (groupname) => {
         // Check if user's groups contain 'admin'
         let isAdmin = await checkGroup(username, groupname)
         //console.log(`isAdmin is ${isAdmin}`)
-    
-        if(!isAdmin) {
+
+        if (!isAdmin) {
             return res.status(403).send({
                 message: 'Not authorized to access this resource'
-            }) 
-        } 
+            })
+        }
         next()
     })
 }
@@ -61,12 +83,16 @@ const checkGroup = (username, groupname) => {
             if (err) {
                 reject(false)
             } else {
-                let user_groups = results[0].groupz
-                // check if the array contains groupname
-                if (user_groups.includes(groupname)) {
-                    resolve(true)
-                } else {
-                    resolve(false)
+                try {
+                    let user_groups = results[0].groupz
+                    // check if the array contains groupname
+                    if (user_groups.includes(groupname)) {
+                        resolve(true)
+                    } else {
+                        resolve(false)
+                    }
+                } catch (err) {
+                    reject(false)
                 }
             }
         })
@@ -122,10 +148,10 @@ const checkGroup2 = (username, groupname) => {
     })
 }
 */
-    
 
-module.exports = { 
+
+module.exports = {
     protect,
     authorizeUser,
     checkGroup
- }
+}

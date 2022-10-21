@@ -15,17 +15,17 @@ import NotFound from "./components/pages/NotFound";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(Boolean(sessionStorage.getItem("token")))
-  const [isAdmin, setIsAdmin] = useState(sessionStorage.getItem("admin"))
+  // const [loggedInUser, setLoggedInUser] = useState() //doesn not persists on refresh in child components
 
   return (
     <>
       <Router>
         <div className="container">
-          <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin} />
+          <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
 
           <Routes>
             {/* Public Routes */}
-            <Route path='/' element={<Login setLoggedIn={setLoggedIn} />} />
+            <Route path='/' element={<Login setLoggedIn={setLoggedIn}/>} />
 
             {/* Protected Routes */}
             <Route element={<PrivateRoute />}>
