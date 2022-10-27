@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 5000
 // Route imports
 const userRoutes = require('./routes/userRoutes')
 const groupRoutes = require('./routes/groupRoutes')
+const applicationRoutes = require('./routes/applicationRoutes')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 })
 app.use('/api/users', userRoutes)
 app.use('/api/groups', groupRoutes)
+app.use('/api/applications', applicationRoutes)
 
 
 // Error Handler middleware
