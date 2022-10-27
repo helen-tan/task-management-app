@@ -18,6 +18,16 @@ const createApplication = catchAsyncErrors(async(req, res) => {
         app_permit_done
     } = req.body
 
+    // Validation: Regex to validate user input
+    const app_acronymRegexp = /^[a-zA-Z0-9]$/          // only alphanumeric, no special chars, no spaces
+
+    if (!app_acronym.match(app_acronymRegexp)) {
+        return res.status(200).send({
+            success: false,
+            message: 'Please give a valid app acronym (only letters & numbers. No spaces)'
+        })
+    }
+
     new_application = {
         app_acronym,
         app_description,
