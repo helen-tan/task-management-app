@@ -80,6 +80,14 @@ const createApplication = catchAsyncErrors(async(req, res) => {
     })
 })
 
+// @desc    Update application
+// @route   /api/applications/:app_acronym/updateApplication
+// @access  Private
+const updateApplication = catchAsyncErrors((req,res) => {
+    res.send("Hello from updateApplication")
+})
+
 module.exports = {
-    createApplication
+    createApplication,
+    updateApplication
 }
