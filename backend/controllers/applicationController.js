@@ -80,6 +80,31 @@ const createApplication = catchAsyncErrors(async(req, res) => {
     })
 })
 
+// @desc    Get all applications
+// @route   /api/applications
+// @access  Private
+const getAllApplications= catchAsyncErrors((req, res) => {
+    let sql = 'select * from applications'
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            //res.status(400)
+            //throw new Error('Could not get all users')
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                count: results.length,
+                data: results
+            })
+        }
+
+    })
+})
+
 // @desc    Update application
 // @route   /api/applications/:app_acronym/updateApplication
 // @access  Private
@@ -153,5 +178,6 @@ const updateApplication = catchAsyncErrors((req,res) => {
 
 module.exports = {
     createApplication,
+    getAllApplications,
     updateApplication
 }
