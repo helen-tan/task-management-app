@@ -38,8 +38,8 @@ function Dashboard() {
 
   return (
     <Page title="Dashboard">
-      <div className="h-screen">
-        <h1>Welcome <strong>{loggedInUser}</strong></h1>
+      <div>
+        <h1 className="text-2xl">Welcome <strong>{loggedInUser}</strong></h1>
 
         <AppList />
       </div>
