@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Page from '../utils/Page'
+import AppList from '../shared/AppList'
 import Axios from "axios"
 
 function Dashboard() {
@@ -39,6 +40,8 @@ function Dashboard() {
     <Page title="Dashboard">
       <div className="h-screen">
         <h1>Welcome <strong>{loggedInUser}</strong></h1>
+
+        <AppList />
       </div>
     </Page>
   )
