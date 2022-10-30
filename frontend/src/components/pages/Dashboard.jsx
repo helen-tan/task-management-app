@@ -40,9 +40,8 @@ function Dashboard() {
     <Page title="Dashboard">
       <div>
         <h1 className="text-2xl">Welcome <strong>{loggedInUser}</strong></h1>
-
-        <AppList />
       </div>
+      <AppList />
     </Page>
   )
 }
