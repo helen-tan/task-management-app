@@ -60,8 +60,8 @@ function AppList() {
             borderRadius: ".5em",
             overflowY: "auto"
         },
-        overlay: { 
-            zIndex: 1000 ,
+        overlay: {
+            zIndex: 1000,
             background: "rgba(0, 0, 0, 0.5)",
             //overflowY: "auto"
         }
@@ -119,7 +119,7 @@ function AppList() {
             </div>
 
             <Modal
-            scrollable={true}
+                scrollable={true}
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 style={customStyles}
@@ -167,13 +167,14 @@ function AppList() {
 
                         {/*Description input */}
                         <label htmlFor="create-app-description" className="font-semibold">Description:</label>
-                        <textarea id="create-app-description" cols="30" rows="5"></textarea>
+                        <textarea id="create-app-description" cols="30" rows="5" placeholder="Say a few words about the application..."></textarea>
 
-                    
+
                         <div className="font-bold text-base mb-5">Groups permitted to:</div>
                         {/*App_permit_create */}
                         <label htmlFor="create-app-permitcreate" className="font-semibold">Create Tasks:</label>
-                        <select id="create-app-permitcreate">
+                        <select id="create-app-permitcreate" defaultValue="">
+                            <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
                             ))}
@@ -181,7 +182,8 @@ function AppList() {
 
                         {/*App_permit_open */}
                         <label htmlFor="create-app-permitopen" className="font-semibold">Shift Tasks to To-do:</label>
-                        <select id="create-app-permitopen">
+                        <select id="create-app-permitopen" defaultValue="">
+                            <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
                             ))}
@@ -189,7 +191,8 @@ function AppList() {
 
                         {/*App_permit_toDoList */}
                         <label htmlFor="create-app-permittodolist" className="font-semibold">Shift Tasks to Doing:</label>
-                        <select id="create-app-permittodolist">
+                        <select id="create-app-permittodolist" defaultValue="">
+                            <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
                             ))}
@@ -197,7 +200,8 @@ function AppList() {
 
                         {/*App_permit_Doing */}
                         <label htmlFor="create-app-permitdoing" className="font-semibold">Shift Tasks to Done:</label>
-                        <select id="create-app-permitdoing">
+                        <select id="create-app-permitdoing" defaultValue="">
+                            <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
                             ))}
@@ -205,7 +209,8 @@ function AppList() {
 
                         {/*App_permit_Done */}
                         <label htmlFor="create-app-permitdone" className="font-semibold">Close Tasks:</label>
-                        <select id="create-app-permitdone">
+                        <select id="create-app-permitdone" defaultValue="">
+                            <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
                             ))}
