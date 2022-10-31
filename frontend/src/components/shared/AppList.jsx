@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { toast } from 'react-toastify'
 import Axios from "axios"
 import Modal from 'react-modal'
 import { BsPlusLg } from "react-icons/bs"
@@ -10,14 +11,15 @@ function AppList() {
 
     // Create App form inputs
     const [createAppNameInput, setCreateAppNameInput] = useState("")
-    const [createAppStartdateInput, setCreateAppStartdateInput] = useState()
-    const [createAppEnddateInput, setCreateAppEnddateInput] = useState()
-    const [createAppDescriptionInput, setCreateAppDescriptionInput] = useState()
-    const [createAppPermitCreate, setAppPermitCreate] = useState()
-    const [createAppPermitOpen, setAppPermitOpen] = useState()
-    const [createAppPermitTodolist, setAppPermitTodolist] = useState()
-    const [createAppPermitDoing, setAppPermitDoing] = useState()
-    const [createAppPermitDone, setAppPermitDone] = useState()
+    const [createAppStartdateInput, setCreateAppStartdateInput] = useState("")
+    const [createAppEnddateInput, setCreateAppEnddateInput] = useState("")
+    const [createAppRnumInput, setCreateAppRnumInput] = useState()
+    const [createAppDescriptionInput, setCreateAppDescriptionInput] = useState("")
+    const [createAppPermitCreate, setCreateAppPermitCreate] = useState("")
+    const [createAppPermitOpen, setCreateAppPermitOpen] = useState("")
+    const [createAppPermitTodolist, setCreateAppPermitTodolist] = useState("")
+    const [createAppPermitDoing, setCreateAppPermitDoing] = useState("")
+    const [createAppPermitDone, setCreateAppPermitDone] = useState("")
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -81,9 +83,47 @@ function AppList() {
     const openModal = () => setModalIsOpen(true)
     const closeModal = () => setModalIsOpen(false)
 
-    const handleAppCreate = (e) => {
+    const handleAppCreate = async (e) => {
         e.preventDefault()
-        console.log('app create')
+
+        let new_app = {
+            app_acronym: createAppNameInput,
+            app_description: createAppDescriptionInput,
+            app_rnumber: createAppRnumInput,
+            app_startdate: createAppStartdateInput,
+            app_enddate: createAppEnddateInput,
+            app_permit_create: createAppPermitCreate,
+            app_permit_open: createAppPermitOpen,
+            app_permit_todolist: createAppPermitTodolist,
+            app_permit_doing: createAppPermitDoing,
+            app_permit_done: createAppPermitDone
+        }
+
+        // Send post request to create new application
+        try {
+            const response = await Axios.post(`http://localhost:5000/api/applications`, new_app, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                    // clear user input
+                    //setCreateGroupInput("") // somehow document.getElementById("create-group").value = "" doesn't work...
+                    // increment count state (to induce re render of CreateUser form to include new group instatnly in dropdown)
+                    //setNewGroupCount(prevState => prevState + 1)
+
+                } else {
+                    toast.warning(response.data.message)
+                    // clear user input
+                    //document.getElementById("create-group").value = ""
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            // clear user input
+            document.getElementById("create-group").value = ""
+        }
+
+        console.log(new_app)
     }
 
     return (
@@ -147,10 +187,10 @@ function AppList() {
                         <label htmlFor="create-app-name" className="font-semibold">Application Name:</label>
                         <input
                             className="form-control"
-                            //onChange={(e) => setCreateGroupInput(e.target.value)}
+                            onChange={(e) => setCreateAppNameInput(e.target.value)}
                             type="text"
                             placeholder="Enter a new app name here"
-                            //value={createGroupInput}
+                            value={createAppNameInput}
                             id="create-app-name"
                         />
 
@@ -159,32 +199,51 @@ function AppList() {
                             <div className="w-full">
                                 <label htmlFor="create-app-startdate" className="font-semibold">Start Date:</label>
                                 <input
-                                    //onChange={(e) => setCreateGroupInput(e.target.value)}
+                                    onChange={(e) => setCreateAppStartdateInput(e.target.value)}
                                     type="date"
-                                    //value={createGroupInput}
+                                    value={createAppStartdateInput}
                                     id="create-app-startdate"
                                 />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="create-app-enddate" className="font-semibold">End Date:</label>
                                 <input
-                                    //onChange={(e) => setCreateGroupInput(e.target.value)}
+                                    onChange={(e) => setCreateAppEnddateInput(e.target.value)}
                                     type="date"
-                                    //value={createGroupInput}
+                                    value={createAppEnddateInput}
                                     id="create-app-enddate"
                                 />
                             </div>
                         </div>
 
+                        {/*R_number input */}
+                        <label htmlFor="create-app-rnum" className="font-semibold">R Number:</label>
+                        <input
+                            className="form-control"
+                            onChange={(e) => setCreateAppRnumInput(e.target.value)}
+                            type="number"
+                            placeholder="Enter a number to identify your app"
+                            value={createAppRnumInput}
+                            id="create-app-rnum"
+                        />
+
                         {/*Description input */}
                         <label htmlFor="create-app-description" className="font-semibold">Description:</label>
-                        <textarea id="create-app-description" cols="30" rows="5" placeholder="Say a few words about the application..."></textarea>
+                        <textarea
+                            id="create-app-description"
+                            cols="30"
+                            rows="5"
+                            placeholder="Say a few words about the application..."
+                            value={createAppDescriptionInput}
+                            onChange={(e) => setCreateAppDescriptionInput(e.target.value)}
+                        ></textarea>
 
 
                         <div className="font-bold text-base mb-5">Groups permitted to:</div>
+
                         {/*App_permit_create */}
                         <label htmlFor="create-app-permitcreate" className="font-semibold">Create Tasks (App_permit_Create):</label>
-                        <select id="create-app-permitcreate" defaultValue="">
+                        <select id="create-app-permitcreate" defaultValue="" value={createAppPermitCreate} onChange={(e) => setCreateAppPermitCreate(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -193,7 +252,7 @@ function AppList() {
 
                         {/*App_permit_open */}
                         <label htmlFor="create-app-permitopen" className="font-semibold">Shift Tasks to To-do (App_permit_Open):</label>
-                        <select id="create-app-permitopen" defaultValue="">
+                        <select id="create-app-permitopen" defaultValue="" value={createAppPermitOpen} onChange={(e) => setCreateAppPermitOpen(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -202,7 +261,7 @@ function AppList() {
 
                         {/*App_permit_toDoList */}
                         <label htmlFor="create-app-permittodolist" className="font-semibold">Shift Tasks to Doing (App_permit_toDoList):</label>
-                        <select id="create-app-permittodolist" defaultValue="">
+                        <select id="create-app-permittodolist" defaultValue="" value={createAppPermitTodolist} onChange={(e) => setCreateAppPermitTodolist(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -211,7 +270,7 @@ function AppList() {
 
                         {/*App_permit_Doing */}
                         <label htmlFor="create-app-permitdoing" className="font-semibold">Shift Tasks to Done (App_permit_Doing):</label>
-                        <select id="create-app-permitdoing" defaultValue="">
+                        <select id="create-app-permitdoing" defaultValue="" value={createAppPermitDoing} onChange={(e) => setCreateAppPermitDoing(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -220,7 +279,7 @@ function AppList() {
 
                         {/*App_permit_Done */}
                         <label htmlFor="create-app-permitdone" className="font-semibold">Close Tasks (App_permit_Done):</label>
-                        <select id="create-app-permitdone" defaultValue="">
+                        <select id="create-app-permitdone" defaultValue="" value={createAppPermitDone} onChange={(e) => setCreateAppPermitDone(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
