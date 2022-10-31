@@ -6,6 +6,7 @@ import { BsPlusLg } from "react-icons/bs"
 function AppList() {
     const [apps, setApps] = useState([])
     const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [groupOptions, setGroupOptions] = useState([])
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -26,8 +27,21 @@ function AppList() {
         }
     }
 
+    // Fetch All groups
+    const fetchAllGroups = async () => {
+        try {
+            const response = await Axios.get(`http://localhost:5000/api/groups/`, config)
+            //console.log(response.data)
+            //console.log(response.data.data)
+            setGroupOptions(response.data.data)
+        } catch (err) {
+            console.log("There was a problem")
+        }
+    }
+
     useEffect(() => {
         fetchAllApps()
+        fetchAllGroups()
     }, [])
 
     // Modal: Create New Application
@@ -159,55 +173,43 @@ function AppList() {
                         <div className="font-bold text-base mb-5">Groups permitted to:</div>
                         {/*App_permit_create */}
                         <label htmlFor="create-app-permitcreate" className="font-semibold">Create Tasks:</label>
-                        <input
-                            className="form-control"
-                            //onChange={(e) => setCreateGroupInput(e.target.value)}
-                            type="text"
-                            //value={createGroupInput}
-                            id="create-app-permitcreate"
-                        />
+                        <select id="create-app-permitcreate">
+                            {groupOptions.map((groupOption) => (
+                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                            ))}
+                        </select>
 
                         {/*App_permit_open */}
                         <label htmlFor="create-app-permitopen" className="font-semibold">Shift Tasks to To-do:</label>
-                        <input
-                            className="form-control"
-                            //onChange={(e) => setCreateGroupInput(e.target.value)}
-                            type="text"
-                            //value={createGroupInput}
-                            id="create-app-permitopen"
-                        />
+                        <select id="create-app-permitopen">
+                            {groupOptions.map((groupOption) => (
+                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                            ))}
+                        </select>
 
                         {/*App_permit_toDoList */}
                         <label htmlFor="create-app-permittodolist" className="font-semibold">Shift Tasks to Doing:</label>
-                        <input
-                            className="form-control"
-                            //onChange={(e) => setCreateGroupInput(e.target.value)}
-                            type="text"
-                            //value={createGroupInput}
-                            id="create-app-permittodolist"
-                        />
+                        <select id="create-app-permittodolist">
+                            {groupOptions.map((groupOption) => (
+                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                            ))}
+                        </select>
 
                         {/*App_permit_Doing */}
                         <label htmlFor="create-app-permitdoing" className="font-semibold">Shift Tasks to Done:</label>
-                        <input
-                            className="form-control"
-                            //onChange={(e) => setCreateGroupInput(e.target.value)}
-                            type="text"
-                            //value={createGroupInput}
-                            id="create-app-permitdoing"
-                        />
+                        <select id="create-app-permitdoing">
+                            {groupOptions.map((groupOption) => (
+                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                            ))}
+                        </select>
 
                         {/*App_permit_Done */}
                         <label htmlFor="create-app-permitdone" className="font-semibold">Close Tasks:</label>
-                        <input
-                            className="form-control"
-                            //onChange={(e) => setCreateGroupInput(e.target.value)}
-                            type="text"
-                            //value={createGroupInput}
-                            id="create-app-permitdone"
-                        />
-                      
-
+                        <select id="create-app-permitdone">
+                            {groupOptions.map((groupOption) => (
+                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                            ))}
+                        </select>
                     </div>
 
                     <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
