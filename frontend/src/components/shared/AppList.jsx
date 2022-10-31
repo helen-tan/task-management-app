@@ -8,6 +8,7 @@ function AppList() {
     const [apps, setApps] = useState([])
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [groupOptions, setGroupOptions] = useState([])
+    const [newAppCount, setNewAppCount] = useState(0)
 
     // Create App form inputs
     const [createAppNameInput, setCreateAppNameInput] = useState("")
@@ -55,7 +56,7 @@ function AppList() {
     useEffect(() => {
         fetchAllApps()
         fetchAllGroups()
-    }, [])
+    }, [newAppCount])
 
     // Modal: Create New Application
     Modal.setAppElement('#root');
@@ -118,8 +119,8 @@ function AppList() {
                     setCreateAppPermitDoing("")
                     setCreateAppPermitDone("")
 
-                    // increment count state (to induce re render of CreateUser form to include new group instatnly in dropdown)
-                    //setNewGroupCount(prevState => prevState + 1)
+                    // increment count state (to induce re render of App list to include new App instantly)
+                    setNewAppCount(prevState => prevState + 1)
 
                 } else {
                     toast.warning(response.data.message)
