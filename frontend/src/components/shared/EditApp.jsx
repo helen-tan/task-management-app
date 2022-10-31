@@ -76,9 +76,10 @@ function EditApp(props) {
                         className="form-control"
                         onChange={(e) => setEditAppNameInput(e.target.value)}
                         type="text"
-                        placeholder="Enter a new app name here"
+                        placeholder="Rename the app here"
                         value={editAppNameInput}
                         id="edit-app-name"
+                        required
                     />
 
                     {/*Start & End Date input */}
@@ -90,6 +91,7 @@ function EditApp(props) {
                                 type="date"
                                 value={editAppStartdateInput}
                                 id="edit-app-startdate"
+                                required
                             />
                         </div>
                         <div className="w-full">
@@ -99,6 +101,7 @@ function EditApp(props) {
                                 type="date"
                                 value={editAppEnddateInput}
                                 id="edit-app-enddate"
+                                required
                             />
                         </div>
                     </div>
@@ -112,6 +115,7 @@ function EditApp(props) {
                         placeholder="Enter a number to identify your app"
                         value={editAppRnumInput}
                         id="edit-app-rnum"
+                        required
                     />
 
                     {/*Description input */}
@@ -130,7 +134,7 @@ function EditApp(props) {
 
                     {/*App_permit_create */}
                     <label htmlFor="edit-app-permitcreate" className="font-semibold">Create Tasks (App_permit_Create):</label>
-                    <select id="edit-app-permitcreate" value={editAppPermitCreate} onChange={(e) => setEditAppPermitCreate(e.target.value)}>
+                    <select id="edit-app-permitcreate" required value={editAppPermitCreate} onChange={(e) => setEditAppPermitCreate(e.target.value)}>
                         <option value="" disabled>Choose a group...</option>
                         {props.groupOptions.map((groupOption) => (
                             <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -139,7 +143,7 @@ function EditApp(props) {
 
                     {/*App_permit_open */}
                     <label htmlFor="edit-app-permitopen" className="font-semibold">Shift Tasks to To-do (App_permit_Open):</label>
-                    <select id="edit-app-permitopen" value={editAppPermitOpen} onChange={(e) => setEditAppPermitOpen(e.target.value)}>
+                    <select id="edit-app-permitopen" required value={editAppPermitOpen} onChange={(e) => setEditAppPermitOpen(e.target.value)}>
                         <option value="" disabled>Choose a group...</option>
                         {props.groupOptions.map((groupOption) => (
                             <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -148,7 +152,7 @@ function EditApp(props) {
 
                     {/*App_permit_toDoList */}
                     <label htmlFor="edit-app-permittodolist" className="font-semibold">Shift Tasks to Doing (App_permit_toDoList):</label>
-                    <select id="edit-app-permittodolist" value={editAppPermitTodolist} onChange={(e) => setEditAppPermitTodolist(e.target.value)}>
+                    <select id="edit-app-permittodolist" required value={editAppPermitTodolist} onChange={(e) => setEditAppPermitTodolist(e.target.value)}>
                         <option value="" disabled>Choose a group...</option>
                         {props.groupOptions.map((groupOption) => (
                             <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -157,7 +161,7 @@ function EditApp(props) {
 
                     {/*App_permit_Doing */}
                     <label htmlFor="edit-app-permitdoing" className="font-semibold">Shift Tasks to Done (App_permit_Doing):</label>
-                    <select id="edit-app-permitdoing" value={editAppPermitDoing} onChange={(e) => setEditAppPermitDoing(e.target.value)}>
+                    <select id="edit-app-permitdoing" required value={editAppPermitDoing} onChange={(e) => setEditAppPermitDoing(e.target.value)}>
                         <option value="" disabled>Choose a group...</option>
                         {props.groupOptions.map((groupOption) => (
                             <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -166,7 +170,7 @@ function EditApp(props) {
 
                     {/*App_permit_Done */}
                     <label htmlFor="edit-app-permitdone" className="font-semibold">Close Tasks (App_permit_Done):</label>
-                    <select id="edit-app-permitdone" value={editAppPermitDone} onChange={(e) => setEditAppPermitDone(e.target.value)}>
+                    <select id="edit-app-permitdone" required value={editAppPermitDone} onChange={(e) => setEditAppPermitDone(e.target.value)}>
                         <option value="" disabled>Choose a group...</option>
                         {props.groupOptions.map((groupOption) => (
                             <option key={groupOption.group_name}>{groupOption.group_name}</option>
