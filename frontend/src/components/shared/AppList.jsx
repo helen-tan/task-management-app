@@ -13,7 +13,7 @@ function AppList() {
     const [createAppNameInput, setCreateAppNameInput] = useState("")
     const [createAppStartdateInput, setCreateAppStartdateInput] = useState("")
     const [createAppEnddateInput, setCreateAppEnddateInput] = useState("")
-    const [createAppRnumInput, setCreateAppRnumInput] = useState()
+    const [createAppRnumInput, setCreateAppRnumInput] = useState("")
     const [createAppDescriptionInput, setCreateAppDescriptionInput] = useState("")
     const [createAppPermitCreate, setCreateAppPermitCreate] = useState("")
     const [createAppPermitOpen, setCreateAppPermitOpen] = useState("")
@@ -107,7 +107,17 @@ function AppList() {
                 if (response.data.success === true) {
                     toast.success(response.data.message)
                     // clear user input
-                    //setCreateGroupInput("") // somehow document.getElementById("create-group").value = "" doesn't work...
+                    setCreateAppNameInput("")
+                    setCreateAppStartdateInput("")
+                    setCreateAppEnddateInput("")
+                    setCreateAppRnumInput("")
+                    setCreateAppDescriptionInput("")
+                    setCreateAppPermitCreate("")
+                    setCreateAppPermitOpen("")
+                    setCreateAppPermitTodolist("")
+                    setCreateAppPermitDoing("")
+                    setCreateAppPermitDone("")
+
                     // increment count state (to induce re render of CreateUser form to include new group instatnly in dropdown)
                     //setNewGroupCount(prevState => prevState + 1)
 

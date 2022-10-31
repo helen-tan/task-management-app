@@ -19,12 +19,20 @@ const createApplication = catchAsyncErrors(async(req, res) => {
     } = req.body
 
     // Validation: Regex to validate user input
-    const app_acronymRegexp = /^[a-zA-Z0-9]$/          // only alphanumeric, no special chars, no spaces
+    const app_acronymRegexp = /^[a-zA-Z0-9]*$/             // only alphanumeric, no special chars, no spaces
+    const app_rnumberRegexp = /^([1-9][0-9]{0,3}|10000)$/  // Min 0, Max 10,000, no decimals, no negatives
 
     if (!app_acronym.match(app_acronymRegexp)) {
         return res.status(200).send({
             success: false,
             message: 'Please give a valid app acronym (only letters & numbers. No spaces)'
+        })
+    }
+
+    if(!app_rnumber.match(app_rnumberRegexp)) {
+        return res.status(200).send({
+            success: false,
+            message: 'R number must be a number between 0 - 10,000'
         })
     }
 
