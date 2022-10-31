@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import Axios from "axios"
 import Modal from 'react-modal'
 
 function EditApp(props) {
@@ -14,11 +15,43 @@ function EditApp(props) {
     const [editAppPermitDoing, setEditAppPermitDoing] = useState("")
     const [editAppPermitDone, setEditAppPermitDone] = useState("")
 
+    const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
+    const config = {
+        headers: {
+            Authorization: bearer_token
+        }
+    }
+
+    // Fetch data of application
+    const fetchAppData = async () => {
+        try {
+            const response = await Axios.get(`http://localhost:5000/api/applications/${props.appToEdit}`, config)
+            console.log(response.data)
+            if(response.data) {
+                setEditAppNameInput(response.data.data[0].app_acronym)
+                setEditAppStartdateInput(response.data.data[0].app_startdate.split("T")[0])
+                setEditAppEnddateInput(response.data.data[0].app_enddate.split("T")[0])
+                setEditAppRnumInput(response.data.data[0].app_rnumber)
+                setEditAppDescriptionInput(response.data.data[0].app_description)
+                setEditAppPermitCreate(response.data.data[0].app_permit_create)
+                setEditAppPermitOpen(response.data.data[0].app_permit_open)
+                setEditAppPermitTodolist(response.data.data[0].app_permit_todolist)
+                setEditAppPermitDoing(response.data.data[0].app_permit_doing)
+                setEditAppPermitDone(response.data.data[0].app_permit_done)
+            }
+
+        } catch (err) {
+            console.log("There was a problem")
+        }
+    }
+
     useEffect(() => {
         // Fetch the data of 1 application
+        fetchAppData()
     }, [])
 
-    const handleAppEdit = () => {
+    const handleAppEdit = (e) => {
+        e.preventDefault()
         console.log('edit')
     }
 

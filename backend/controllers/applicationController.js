@@ -113,6 +113,29 @@ const getAllApplications= catchAsyncErrors((req, res) => {
     })
 })
 
+// @desc    Get data of 1 application
+// @route   /api/applications/:app_acronym
+// @access  Private
+const getApplication = catchAsyncErrors((req, res) => {
+    // Get app_acronym (app identifier) of app of interest (from the params)
+    const app_acronym = req.params.app_acronym
+
+    db.query('select * from applications where app_acronym = ?', [app_acronym], (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                data: results
+            })
+        }
+    })
+
+})
+
 // @desc    Update application
 // @route   /api/applications/:app_acronym/updateApplication
 // @access  Private
@@ -187,5 +210,6 @@ const updateApplication = catchAsyncErrors((req,res) => {
 module.exports = {
     createApplication,
     getAllApplications,
+    getApplication,
     updateApplication
 }

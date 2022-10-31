@@ -9,6 +9,7 @@ function AppList() {
     const [apps, setApps] = useState([])
     const [createAppModalIsOpen, setCreateAppModalIsOpen] = useState(false)
     const [editAppModalIsOpen, setEditAppModalIsOpen] = useState(false)
+    const [appToEdit, setAppToEdit] = useState("")
     const [groupOptions, setGroupOptions] = useState([])
     const [newAppCount, setNewAppCount] = useState(0)
 
@@ -86,8 +87,16 @@ function AppList() {
     const openCreateAppModal = () => setCreateAppModalIsOpen(true)
     const closeCreateAppModal = () => setCreateAppModalIsOpen(false)
 
-    const openEditAppModal = () => setEditAppModalIsOpen(true)
-    const closeEditAppModal = () => setEditAppModalIsOpen(false)
+    const openEditAppModal = (e, app_acronym) => {
+        e.preventDefault()
+        setEditAppModalIsOpen(true)
+        setAppToEdit(app_acronym)
+        //console.log(app_acronym)
+    }
+    const closeEditAppModal = () => {
+        setEditAppModalIsOpen(false)
+        setAppToEdit("")
+    }
 
     const handleAppCreate = async (e) => {
         e.preventDefault()
@@ -171,7 +180,7 @@ function AppList() {
                                     <button className="btn btn-sm btn-outline mr-5">
                                         View
                                     </button>
-                                    <button onClick={openEditAppModal} className="btn btn-sm">
+                                    <button onClick={e => openEditAppModal(e, app.app_acronym)} className="btn btn-sm">
                                         Edit
                                     </button>
                                 </td>
@@ -180,7 +189,7 @@ function AppList() {
                     </tbody>
                 </table>
             </div>
-            
+
             {/* Create App Modal */}
             <Modal
                 scrollable={true}
@@ -306,12 +315,23 @@ function AppList() {
             </Modal>
 
             {/* Edit App Modal */}
-            <EditApp 
-                editAppModalIsOpen={editAppModalIsOpen}
-                closeEditAppModal={closeEditAppModal}
-                customStyles={customStyles}
-                groupOptions={groupOptions}
-            />
+            {editAppModalIsOpen &&
+                <EditApp
+                    editAppModalIsOpen={editAppModalIsOpen}
+                    closeEditAppModal={closeEditAppModal}
+                    customStyles={customStyles}
+                    appToEdit={appToEdit}
+                    groupOptions={groupOptions}
+                />
+            }
+            {/* <EditApp
+                    editAppModalIsOpen={editAppModalIsOpen}
+                    closeEditAppModal={closeEditAppModal}
+                    customStyles={customStyles}
+                    appToEdit={appToEdit}
+                    groupOptions={groupOptions}
+                /> */}
+
         </>
     )
 }
