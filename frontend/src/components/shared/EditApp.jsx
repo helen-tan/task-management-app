@@ -50,7 +50,7 @@ function EditApp(props) {
         fetchAppData()
     }, [])
 
-    const handleAppEdit = (e) => {
+    const handleAppEditSubmit = (e) => {
         e.preventDefault()
         console.log('edit')
     }
@@ -68,7 +68,7 @@ function EditApp(props) {
                 <button onClick={props.closeEditAppModal}><strong>X</strong></button>
             </div>
 
-            <form onSubmit={handleAppEdit}>
+            <form onSubmit={handleAppEditSubmit}>
                 <div className="form-group">
                     {/*App Name input */}
                     <label htmlFor="edit-app-name" className="font-semibold">Application Name:</label>

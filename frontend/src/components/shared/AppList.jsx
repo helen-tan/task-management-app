@@ -98,7 +98,7 @@ function AppList() {
         setAppToEdit("")
     }
 
-    const handleAppCreate = async (e) => {
+    const handleAppCreateSubmit = async (e) => {
         e.preventDefault()
 
         let new_app = {
@@ -203,7 +203,7 @@ function AppList() {
                     <button onClick={closeCreateAppModal}><strong>X</strong></button>
                 </div>
 
-                <form onSubmit={handleAppCreate}>
+                <form onSubmit={handleAppCreateSubmit}>
                     <div className="form-group">
                         {/*App Name input */}
                         <label htmlFor="create-app-name" className="font-semibold">Application Name:</label>
