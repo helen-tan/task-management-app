@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { toast } from 'react-toastify'
 import Axios from "axios"
 import Modal from 'react-modal'
 
@@ -27,11 +28,11 @@ function EditApp(props) {
         try {
             const response = await Axios.get(`http://localhost:5000/api/applications/${props.appToEdit}`, config)
             console.log(response.data)
-            if(response.data) {
+            if (response.data) {
                 setEditAppNameInput(response.data.data[0].app_acronym)
-                setEditAppStartdateInput(response.data.data[0].app_startdate.split("T")[0])
-                setEditAppEnddateInput(response.data.data[0].app_enddate.split("T")[0])
-                setEditAppRnumInput(response.data.data[0].app_rnumber)
+                setEditAppStartdateInput(response.data.data[0].app_startdate.split("T")[0]) // Note: Bcos of timezone probs, getting 1 day before
+                setEditAppEnddateInput(response.data.data[0].app_enddate.split("T")[0])     // Note: Bcos of timezone probs, getting 1 day before
+                setEditAppRnumInput(response.data.data[0].app_rnumber)  
                 setEditAppDescriptionInput(response.data.data[0].app_description)
                 setEditAppPermitCreate(response.data.data[0].app_permit_create)
                 setEditAppPermitOpen(response.data.data[0].app_permit_open)
@@ -50,9 +51,36 @@ function EditApp(props) {
         fetchAppData()
     }, [])
 
-    const handleAppEditSubmit = (e) => {
+    const handleAppEditSubmit = async (e) => {
         e.preventDefault()
-        console.log('edit')
+
+        let updatedAppData = {
+            app_description: editAppDescriptionInput,
+            app_startdate: editAppStartdateInput,
+            app_enddate: editAppEnddateInput,
+            app_permit_create: editAppPermitCreate,
+            app_permit_open: editAppPermitOpen,
+            app_permit_todolist: editAppPermitTodolist,
+            app_permit_doing: editAppPermitDoing,
+            app_permit_done: editAppPermitDone
+        }
+
+        // Send put request to update application details
+        try {
+            const response = await Axios.put(`http://localhost:5000/api/applications/${props.appToEdit}/updateApplication`, updatedAppData, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                    props.closeEditAppModal()
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("There was a problem")
+        }
     }
 
     return (
@@ -67,20 +95,40 @@ function EditApp(props) {
                 <h2 className="font-bold text-xl">Edit Application</h2>
                 <button onClick={props.closeEditAppModal}><strong>X</strong></button>
             </div>
-
+           
             <form onSubmit={handleAppEditSubmit}>
                 <div className="form-group">
-                    {/*App Name input */}
-                    <label htmlFor="edit-app-name" className="font-semibold">Application Name:</label>
-                    <input
+                    {/*App Name */}
+                    <div className="flex gap-2 mb-6 ml-1 mt-1">
+                        <div htmlFor="edit-app-name" className="font-semibold">Application Name:</div>
+                        <div>{editAppNameInput}</div>
+                    </div>
+                    {/* <input
                         className="form-control"
                         onChange={(e) => setEditAppNameInput(e.target.value)}
                         type="text"
                         placeholder="Rename the app here"
                         value={editAppNameInput}
                         id="edit-app-name"
-                        required
-                    />
+                        disabled
+                    /> */}
+
+                    {/*R_number */}
+                    <div className="flex gap-2 mb-6 ml-1 mt-1">
+                        <div htmlFor="edit-app-rnum" className="font-semibold">R Number:</div>
+                        <div>{editAppRnumInput}</div>
+                    </div>
+                    {/* <input
+                        className="form-control"
+                        onChange={(e) => setEditAppRnumInput(e.target.value)}
+                        type="number"
+                        placeholder="Enter a number to identify your app"
+                        value={editAppRnumInput}
+                        id="edit-app-rnum"
+                        disabled
+                    /> */}
+
+                    <div className="h-px bg-gray-400 mb-6"></div>
 
                     {/*Start & End Date input */}
                     <div className="flex flex-col md:flex-row justify-between gap-1">
@@ -106,17 +154,6 @@ function EditApp(props) {
                         </div>
                     </div>
 
-                    {/*R_number input */}
-                    <label htmlFor="edit-app-rnum" className="font-semibold">R Number:</label>
-                    <input
-                        className="form-control"
-                        onChange={(e) => setEditAppRnumInput(e.target.value)}
-                        type="number"
-                        placeholder="Enter a number to identify your app"
-                        value={editAppRnumInput}
-                        id="edit-app-rnum"
-                        required
-                    />
 
                     {/*Description input */}
                     <label htmlFor="edit-app-description" className="font-semibold">Description:</label>
