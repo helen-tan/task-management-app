@@ -254,7 +254,7 @@ function AppList() {
 
                         {/*App_permit_create */}
                         <label htmlFor="create-app-permitcreate" className="font-semibold">Create Tasks (App_permit_Create):</label>
-                        <select id="create-app-permitcreate" defaultValue="" value={createAppPermitCreate} onChange={(e) => setCreateAppPermitCreate(e.target.value)}>
+                        <select id="create-app-permitcreate" value={createAppPermitCreate} onChange={(e) => setCreateAppPermitCreate(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -263,7 +263,7 @@ function AppList() {
 
                         {/*App_permit_open */}
                         <label htmlFor="create-app-permitopen" className="font-semibold">Shift Tasks to To-do (App_permit_Open):</label>
-                        <select id="create-app-permitopen" defaultValue="" value={createAppPermitOpen} onChange={(e) => setCreateAppPermitOpen(e.target.value)}>
+                        <select id="create-app-permitopen" value={createAppPermitOpen} onChange={(e) => setCreateAppPermitOpen(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -272,7 +272,7 @@ function AppList() {
 
                         {/*App_permit_toDoList */}
                         <label htmlFor="create-app-permittodolist" className="font-semibold">Shift Tasks to Doing (App_permit_toDoList):</label>
-                        <select id="create-app-permittodolist" defaultValue="" value={createAppPermitTodolist} onChange={(e) => setCreateAppPermitTodolist(e.target.value)}>
+                        <select id="create-app-permittodolist" value={createAppPermitTodolist} onChange={(e) => setCreateAppPermitTodolist(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -281,7 +281,7 @@ function AppList() {
 
                         {/*App_permit_Doing */}
                         <label htmlFor="create-app-permitdoing" className="font-semibold">Shift Tasks to Done (App_permit_Doing):</label>
-                        <select id="create-app-permitdoing" defaultValue="" value={createAppPermitDoing} onChange={(e) => setCreateAppPermitDoing(e.target.value)}>
+                        <select id="create-app-permitdoing" value={createAppPermitDoing} onChange={(e) => setCreateAppPermitDoing(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
@@ -290,7 +290,7 @@ function AppList() {
 
                         {/*App_permit_Done */}
                         <label htmlFor="create-app-permitdone" className="font-semibold">Close Tasks (App_permit_Done):</label>
-                        <select id="create-app-permitdone" defaultValue="" value={createAppPermitDone} onChange={(e) => setCreateAppPermitDone(e.target.value)}>
+                        <select id="create-app-permitdone" value={createAppPermitDone} onChange={(e) => setCreateAppPermitDone(e.target.value)}>
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
                                 <option key={groupOption.group_name}>{groupOption.group_name}</option>
