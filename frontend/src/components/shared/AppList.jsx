@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react"
 import { toast } from 'react-toastify'
+import EditApp from "./EditApp"
 import Axios from "axios"
 import Modal from 'react-modal'
 import { BsPlusLg } from "react-icons/bs"
 
 function AppList() {
     const [apps, setApps] = useState([])
-    const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [createAppModalIsOpen, setCreateAppModalIsOpen] = useState(false)
+    const [editAppModalIsOpen, setEditAppModalIsOpen] = useState(false)
     const [groupOptions, setGroupOptions] = useState([])
     const [newAppCount, setNewAppCount] = useState(0)
 
@@ -81,8 +83,11 @@ function AppList() {
         }
     };
 
-    const openModal = () => setModalIsOpen(true)
-    const closeModal = () => setModalIsOpen(false)
+    const openCreateAppModal = () => setCreateAppModalIsOpen(true)
+    const closeCreateAppModal = () => setCreateAppModalIsOpen(false)
+
+    const openEditAppModal = () => setEditAppModalIsOpen(true)
+    const closeEditAppModal = () => setEditAppModalIsOpen(false)
 
     const handleAppCreate = async (e) => {
         e.preventDefault()
@@ -143,7 +148,7 @@ function AppList() {
                         <p className="mb-4 ml-4 text-left">Select an application to view its Kanban board.</p>
                     </div>
                     {/*Create new app button */}
-                    <button onClick={openModal} className="btn btn-sm mr-4 gap-2">
+                    <button onClick={openCreateAppModal} className="btn btn-sm mr-4 gap-2">
                         <BsPlusLg />
                         Create App
                     </button>
@@ -166,7 +171,7 @@ function AppList() {
                                     <button className="btn btn-sm btn-outline mr-5">
                                         View
                                     </button>
-                                    <button className="btn btn-sm">
+                                    <button onClick={openEditAppModal} className="btn btn-sm">
                                         Edit
                                     </button>
                                 </td>
@@ -175,17 +180,18 @@ function AppList() {
                     </tbody>
                 </table>
             </div>
-
+            
+            {/* Create App Modal */}
             <Modal
                 scrollable={true}
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
+                isOpen={createAppModalIsOpen}
+                onRequestClose={closeCreateAppModal}
                 style={customStyles}
                 contentLabel="Create New Application"
             >
                 <div className="flex justify-between mb-5">
                     <h2 className="font-bold text-xl">Create new Application</h2>
-                    <button onClick={closeModal}><strong>X</strong></button>
+                    <button onClick={closeCreateAppModal}><strong>X</strong></button>
                 </div>
 
                 <form onSubmit={handleAppCreate}>
@@ -298,6 +304,14 @@ function AppList() {
                 </form>
 
             </Modal>
+
+            {/* Edit App Modal */}
+            <EditApp 
+                editAppModalIsOpen={editAppModalIsOpen}
+                closeEditAppModal={closeEditAppModal}
+                customStyles={customStyles}
+                groupOptions={groupOptions}
+            />
         </>
     )
 }
