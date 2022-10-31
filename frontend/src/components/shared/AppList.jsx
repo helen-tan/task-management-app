@@ -124,14 +124,10 @@ function AppList() {
 
                 } else {
                     toast.warning(response.data.message)
-                    // clear user input
-                    //document.getElementById("create-group").value = ""
                 }
             }
         } catch (err) {
             console.log(err)
-            // clear user input
-            document.getElementById("create-group").value = ""
         }
 
         console.log(new_app)
