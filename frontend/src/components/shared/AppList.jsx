@@ -8,6 +8,17 @@ function AppList() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [groupOptions, setGroupOptions] = useState([])
 
+    // Create App form inputs
+    const [createAppNameInput, setCreateAppNameInput] = useState("")
+    const [createAppStartdateInput, setCreateAppStartdateInput] = useState()
+    const [createAppEnddateInput, setCreateAppEnddateInput] = useState()
+    const [createAppDescriptionInput, setCreateAppDescriptionInput] = useState()
+    const [createAppPermitCreate, setAppPermitCreate] = useState()
+    const [createAppPermitOpen, setAppPermitOpen] = useState()
+    const [createAppPermitTodolist, setAppPermitTodolist] = useState()
+    const [createAppPermitDoing, setAppPermitDoing] = useState()
+    const [createAppPermitDone, setAppPermitDone] = useState()
+
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
         headers: {
@@ -58,7 +69,7 @@ function AppList() {
             width: '50%',
             height: '90vh',
             borderRadius: ".5em",
-            overflowY: "auto"
+            overflowY: "auto",
         },
         overlay: {
             zIndex: 1000,
@@ -172,7 +183,7 @@ function AppList() {
 
                         <div className="font-bold text-base mb-5">Groups permitted to:</div>
                         {/*App_permit_create */}
-                        <label htmlFor="create-app-permitcreate" className="font-semibold">Create Tasks:</label>
+                        <label htmlFor="create-app-permitcreate" className="font-semibold">Create Tasks (App_permit_Create):</label>
                         <select id="create-app-permitcreate" defaultValue="">
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
@@ -181,7 +192,7 @@ function AppList() {
                         </select>
 
                         {/*App_permit_open */}
-                        <label htmlFor="create-app-permitopen" className="font-semibold">Shift Tasks to To-do:</label>
+                        <label htmlFor="create-app-permitopen" className="font-semibold">Shift Tasks to To-do (App_permit_Open):</label>
                         <select id="create-app-permitopen" defaultValue="">
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
@@ -190,7 +201,7 @@ function AppList() {
                         </select>
 
                         {/*App_permit_toDoList */}
-                        <label htmlFor="create-app-permittodolist" className="font-semibold">Shift Tasks to Doing:</label>
+                        <label htmlFor="create-app-permittodolist" className="font-semibold">Shift Tasks to Doing (App_permit_toDoList):</label>
                         <select id="create-app-permittodolist" defaultValue="">
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
@@ -199,7 +210,7 @@ function AppList() {
                         </select>
 
                         {/*App_permit_Doing */}
-                        <label htmlFor="create-app-permitdoing" className="font-semibold">Shift Tasks to Done:</label>
+                        <label htmlFor="create-app-permitdoing" className="font-semibold">Shift Tasks to Done (App_permit_Doing):</label>
                         <select id="create-app-permitdoing" defaultValue="">
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
@@ -208,7 +219,7 @@ function AppList() {
                         </select>
 
                         {/*App_permit_Done */}
-                        <label htmlFor="create-app-permitdone" className="font-semibold">Close Tasks:</label>
+                        <label htmlFor="create-app-permitdone" className="font-semibold">Close Tasks (App_permit_Done):</label>
                         <select id="create-app-permitdone" defaultValue="">
                             <option value="" disabled>Choose a group...</option>
                             {groupOptions.map((groupOption) => (
