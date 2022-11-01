@@ -9,7 +9,7 @@ function Page(props) {
     }, [])
 
     return (
-        <div className="pb-36">{props.children}</div>
+        <div className="pb-36 mt-14">{props.children}</div>
     )
 }
 
