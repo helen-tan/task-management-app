@@ -1,8 +1,40 @@
 import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 import SideMenu from "../shared/SideMenu"
 import BackLink from "../utils/BackLink"
+import Axios from "axios"
 
 function Kanban() {
+    const [app, setApp] = useState()
+    const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
+
+    const params = useParams()
+
+    const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
+    const config = {
+        headers: {
+            Authorization: bearer_token
+        }
+    }
+
+    const fetchAppData = async () => {
+        try {
+            const response = await Axios.get(`http://localhost:5000/api/applications/${params.app_acronym}`, config)
+            // console.log(response.data)
+            // console.log(response.data.data[0])
+            setApp(response.data.data[0])
+
+        } catch (err) {
+            console.log("There was a problem")
+        }
+    }
+
+
+    useEffect(() => {
+        // Fetch application details (to display app name & use selected details - r_number)
+        fetchAppData()
+    }, [])
+
     return (
         <div className="flex justify-between h-screen">
             <div className="bg-customBlack text-white w-2/12">
@@ -10,10 +42,17 @@ function Kanban() {
             </div>
 
             <div className="grow bg-slate-200">
-                <div className="bg-white px-10 pt-10 pb-4 text-start">
-                    <BackLink url='/dashboard'/>
-                    
-                    <p className="font-bold text-xl mb-5 mt-7">Kanban Board Title</p>
+                {/* Kanban board header */}
+                <div className="flex justify-between items-center bg-white pl-10 pr-40 pt-8 pb-4 text-start">
+                    <div>
+                        <BackLink url='/dashboard'/>
+                        <p className="font-bold text-xl mb-2 mt-6">{app_acronym}</p>
+                        <div className="text-sm mb-4"><span className="font-medium">R Number - </span>{app_rnumber}</div>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                        <div className="text-sm"><span className="font-semibold">Start Date: </span>{app_startdate.split("T")[0]}</div>
+                        <div className="text-sm"><span className="font-semibold">End Date: </span>{app_enddate.split("T")[0]}</div>
+                    </div>
                 </div>
 
                 {/* Columns */}
