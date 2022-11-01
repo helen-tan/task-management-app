@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import EditApp from "./EditApp"
 import Axios from "axios"
 import Modal from 'react-modal'
+import Kanban from "../pages/Kanban"
 import { BsPlusLg } from "react-icons/bs"
 
 function AppList() {
@@ -177,9 +179,12 @@ function AppList() {
                                 <th>{index + 1}</th>
                                 <td>{app.app_acronym}</td>
                                 <td className="text-end">
-                                    <button className="btn btn-sm btn-outline mr-5">
+                                    <Link to={`/application/${app.app_acronym}`}>
+                                        <button className="btn btn-sm btn-outline mr-5">
                                         View
-                                    </button>
+                                        </button>
+                                    </Link>
+                                
                                     <button onClick={e => openEditAppModal(e, app.app_acronym)} className="btn btn-sm">
                                         Edit
                                     </button>

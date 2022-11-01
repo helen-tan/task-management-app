@@ -10,6 +10,7 @@ import Footer from "./components/shared/Footer";
 import Dashboard from "./components/pages/Dashboard";
 import UserManagement from "./components/admin/UserManagement";
 import Profile from "./components/pages/Profile";
+import Kanban from "./components/pages/Kanban";
 import PrivateRoute from "./components/utils/PrivateRoute";
 import NotFound from "./components/pages/NotFound";
 
@@ -32,6 +33,7 @@ function App() {
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/profile/:username' element={<Profile />} />
               <Route path='/usermanagement' element={<UserManagement />} />
+              <Route path='/application/:app_acronym' element={<Kanban/>}/>
               <Route path='/*' element={<NotFound />} /> {/*A catch all - if user goes to any route that doesn't exist */}
             </Route>
 
