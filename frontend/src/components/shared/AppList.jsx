@@ -181,7 +181,7 @@ function AppList() {
                                 <td className="text-end">
                                     <Link to={`/application/${app.app_acronym}`}>
                                         <button className="btn btn-sm btn-outline mr-5">
-                                        View
+                                            View
                                         </button>
                                     </Link>
                                 
