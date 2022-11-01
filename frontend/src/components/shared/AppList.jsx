@@ -4,7 +4,6 @@ import { toast } from 'react-toastify'
 import EditApp from "./EditApp"
 import Axios from "axios"
 import Modal from 'react-modal'
-import Kanban from "../pages/Kanban"
 import { BsPlusLg } from "react-icons/bs"
 
 function AppList() {
