@@ -49,7 +49,7 @@ function Kanban() {
                     SideBar
                 </div>
     
-                <div className="grow bg-slate-200">
+                <div className="grow columns-bg">
                     {/* Kanban board header */}
                     <div className="flex justify-between items-center bg-white pl-10 pr-40 pt-8 pb-4 text-start">
                         <div>
@@ -64,8 +64,22 @@ function Kanban() {
                     </div>
     
                     {/* Columns */}
-                    <div className="bg-slate-200">
-                        Columns
+                    <div className="grid grid-cols-5 grif-flow-col px-5 pt-5 gap-2">
+                        <div className="border border-slate-300 rounded text-start pl-5 py-1 font-semibold">Open</div>
+                        <div className="border border-slate-300 rounded text-start pl-5 py-1 font-semibold">Todo</div>
+                        <div className="border border-slate-300 rounded text-start pl-5 py-1 font-semibold">Doing</div>
+                        <div className="border border-slate-300 rounded text-start pl-5 py-1 font-semibold">Done</div>
+                        <div className="border border-slate-300 rounded text-start pl-5 py-1 font-semibold">Closed</div>
+                    </div>
+
+                    <div className="grid grid-cols-5 grif-flow-col px-5 pt-2 gap-2 h-80">
+                        <div className="border border-slate-300 rounded  overflow-y-auto">
+                            <div className="border border-slate-300 rounded bg-white mx-auto mt-2 h-10 w-11/12">test</div>
+                        </div>
+                        <div className="border border-slate-300 rounded">tasks</div>
+                        <div className="border border-slate-300 rounded">tasks</div>
+                        <div className="border border-slate-300 rounded">tasks</div>
+                        <div className="border border-slate-300 rounded">tasks</div>
                     </div>
                 </div>
             </div>
