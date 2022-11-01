@@ -4,6 +4,7 @@ import SideMenu from "../shared/SideMenu"
 import BackLink from "../utils/BackLink"
 import Axios from "axios"
 import Spinner from "../utils/Spinner"
+import { BsPlusLg } from "react-icons/bs"
 
 function Kanban() {
     const [loading, setLoading] = useState(true)
@@ -27,7 +28,7 @@ function Kanban() {
                 // console.log(response.data.data[0])
                 setApp(response.data.data[0])
                 setLoading(false)
-            } 
+            }
 
         } catch (err) {
             console.log("There was a problem")
@@ -40,21 +41,35 @@ function Kanban() {
         fetchAppData()
     }, [])
 
-    if(loading) {
+    if (loading) {
         return <Spinner />
     } else {
         return (
             <div className="flex justify-between h-screen">
-                <div className="bg-customBlack text-white w-2/12">
-                    SideBar
+                <div className="bg-customBlack text-white w-2/12 p-4">
+                    {/* Create Task button */}
+                    <button className="btn bg-emerald-500 btn-sm text-white gap-2">
+                       <BsPlusLg/> New Task 
+                    </button>
+
+                    {/* Select Plans */}
+                    <div className="text-start mt-5 mb-2">Select Plan:</div>
+                    <div className="bg-zinc-100 p-3 rounded">
+                        <h3 className="text-black">There are no plans yet.</h3>
+                    </div>
+
+                    {/* Create Plan button */}
+                    <button className="btn bg-emerald-500 btn-sm text-white mt-4 gap-2">
+                       <BsPlusLg/> New Plan 
+                    </button>
                 </div>
-    
+
                 <div className="grow columns-bg">
                     {/* Kanban board header */}
                     <div className="flex justify-between items-center bg-white pl-10 pr-40 pt-8 pb-4 text-start">
                         <div>
-                            <BackLink url='/dashboard'/>
-                            <p className="font-bold text-xl mb-2 mt-6">{app_acronym}</p>
+                            <BackLink url='/dashboard' />
+                            <h1 className="font-bold text-xl mb-2 mt-6">{app_acronym}</h1>
                             <div className="text-sm mb-4"><span className="font-medium">R Number - </span>{app_rnumber}</div>
                         </div>
                         <div className="flex flex-col gap-3">
@@ -62,7 +77,7 @@ function Kanban() {
                             <div className="text-sm"><span className="font-semibold">End Date: </span>{app_enddate.split("T")[0]}</div>
                         </div>
                     </div>
-    
+
                     {/* Columns */}
                     <div className="grid grid-cols-5 grif-flow-col px-5 pt-5 gap-2">
                         <div className="border border-slate-300 rounded text-start pl-5 py-1 font-semibold">Open</div>
