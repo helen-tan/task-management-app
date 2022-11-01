@@ -6,7 +6,7 @@ function SideMenu() {
     return (
         <div className="bg-customBlack text-white w-2/12 p-4">
             {/* Create Task button */}
-            <button className="btn bg-emerald-500 btn-sm text-white gap-2">
+            <button className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
                 <BsPlusLg /> New Task
             </button>
 
@@ -17,7 +17,7 @@ function SideMenu() {
             </div>
 
             {/* Create Plan button */}
-            <button className="btn bg-emerald-500 btn-sm text-white mt-4 gap-2">
+            <button className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white mt-4 gap-2">
                 <BsPlusLg /> New Plan
             </button>
         </div>
