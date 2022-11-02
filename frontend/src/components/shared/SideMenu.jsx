@@ -10,7 +10,7 @@ function SideMenu(props) {
     const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
     const [newPlanCount, setNewPlanCount] = useState(0)
 
-     // Create Plan form inputs
+    // Create Plan form inputs
     const [createPlanNameInput, setCreatePlanNameInput] = useState("")
     const [createPlanStartdateInput, setCreatePlanStartdateInput] = useState("")
     const [createPlanEnddateInput, setCreatePlanEnddateInput] = useState("")
@@ -25,7 +25,7 @@ function SideMenu(props) {
 
     const fetchAllPlans = async () => {
         try {
-            const response = await Axios.get(`http://localhost:5000/api/plans/${props.app_acronym}`,  config)
+            const response = await Axios.get(`http://localhost:5000/api/plans/${props.app_acronym}`, config)
             if (response.data) {
                 setPlans(response.data.data)
                 console.log(response.data.data)
@@ -101,23 +101,37 @@ function SideMenu(props) {
             console.log(err)
             if (err.response.data.message === "ER_DUP_ENTRY") {
                 toast.warning("This plan name already exists")
-              } else {
+            } else {
                 toast.error("There was a problem")
-              }
+            }
         }
     }
 
     return (
-        <div className="bg-customBlack text-white w-2/12 p-4">
+        <div className="bg-customBlack text-white w-1/5 p-4">
             {/* Create Task button */}
             <button className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
                 <BsPlusLg /> New Task
             </button>
 
             {/* Select Plans */}
-            <div className="text-start mt-5 mb-2">Select Plan:</div>
+            <div className="text-start mt-5 mb-2">Plans</div>
             <div className="bg-zinc-100 p-3 rounded">
-                <h3 className="text-black">There are no plans yet.</h3>
+                {(plans === []) ?
+                    <h3 className="text-black">There are no plans yet.</h3>
+                    :
+                    plans.map((plan) => (
+                        <div className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
+                            borderLeft: `10px solid ${plan.plan_color}`
+                        }}>
+                            <p className="font-semibold">{plan.plan_mvp_name}</p>
+                            <button className="btn btn-outline mt-4 lg:mt-0 btn-sm gap-2">
+                                  Edit
+                            </button>
+                        </div>
+                    ))
+                }
+
             </div>
 
             {/* Create Plan button */}
