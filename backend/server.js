@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoutes')
 const groupRoutes = require('./routes/groupRoutes')
 const applicationRoutes = require('./routes/applicationRoutes')
 const planRoutes = require('./routes/planRoutes')
+const taskRoutes = require('./routes/taskRoutes')
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/groups', groupRoutes)
 app.use('/api/applications', applicationRoutes)
 app.use('/api/plans', planRoutes)
+app.use('/api/tasks', taskRoutes)
 
 
 // Error Handler middleware
