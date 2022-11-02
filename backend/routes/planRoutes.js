@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { createPlan, getAllPlansByApp } = require('../controllers/plansController')
+const { createPlan, getAllPlansByApp } = require('../controllers/planController')
 const { protect } = require('../middleware/authMiddleware')
 
 router.post('/', protect, createPlan)
