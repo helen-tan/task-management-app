@@ -45,7 +45,7 @@ function Kanban() {
     } else {
         return (
             <div className="flex justify-between h-screen">
-                <SideMenu />
+                <SideMenu app_acronym={app_acronym} />
 
                 <div className="grow columns-bg">
                     {/* Kanban board header */}

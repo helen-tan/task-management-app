@@ -1,17 +1,26 @@
 import { useState, useEffect } from "react"
+import { toast } from 'react-toastify'
 import Axios from "axios"
 import Modal from 'react-modal'
 import { BsPlusLg } from "react-icons/bs"
 import { SliderPicker } from 'react-color'
 
-function SideMenu() {
+function SideMenu(props) {
     const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
+    const [newPlanCount, setNewPlanCount] = useState(0)
 
      // Create Plan form inputs
     const [createPlanNameInput, setCreatePlanNameInput] = useState("")
     const [createPlanStartdateInput, setCreatePlanStartdateInput] = useState("")
     const [createPlanEnddateInput, setCreatePlanEnddateInput] = useState("")
     const [createPlanColorInput, setCreatePlanColorInput] = useState("")
+
+    const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
+    const config = {
+        headers: {
+            Authorization: bearer_token
+        }
+    }
 
     useEffect(() => {
         // Todo: Fetch all existing plans of an application
@@ -43,9 +52,45 @@ function SideMenu() {
     const openCreatePlanModal = () => setCreatePlanModalIsOpen(true)
     const closeCreatePlanModal = () => setCreatePlanModalIsOpen(false)
 
-    const handlePlanCreateSubmit = (e) => {
+    const handlePlanCreateSubmit = async (e) => {
         e.preventDefault()
-        console.log("Submit")
+
+        const new_plan = {
+            plan_mvp_name: createPlanNameInput,
+            plan_startdate: createPlanStartdateInput,
+            plan_enddate: createPlanEnddateInput,
+            plan_app_acronym: props.app_acronym,
+            plan_color: createPlanColorInput
+        }
+
+        // Send post request to create new plan
+        try {
+            const response = await Axios.post(`http://localhost:5000/api/plans`, new_plan, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                    // clear user input
+                    setCreatePlanNameInput("")
+                    setCreatePlanStartdateInput("")
+                    setCreatePlanEnddateInput("")
+                    setCreatePlanColorInput("")
+
+                    // increment count state (to induce re render of Plan list to include new Plan instantly)
+                    setNewPlanCount(prevState => prevState + 1)
+                    //console.log(new_plan)
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            if (err.response.data.message === "ER_DUP_ENTRY") {
+                toast.warning("This plan name already exists")
+              } else {
+                toast.error("There was a problem")
+              }
+        }
     }
 
     return (
@@ -89,6 +134,7 @@ function SideMenu() {
                             placeholder="Enter a new plan name here"
                             value={createPlanNameInput}
                             id="create-plan-name"
+                            required
                         />
 
                         {/*Start & End Date input */}
@@ -100,6 +146,7 @@ function SideMenu() {
                                     type="date"
                                     value={createPlanStartdateInput}
                                     id="create-plan-startdate"
+                                    required
                                 />
                             </div>
                             <div className="w-full">
@@ -109,6 +156,7 @@ function SideMenu() {
                                     type="date"
                                     value={createPlanEnddateInput}
                                     id="create-plan-enddate"
+                                    required
                                 />
                             </div>
                         </div>
@@ -116,7 +164,7 @@ function SideMenu() {
                         <label htmlFor="create-plan-color" className="font-semibold">Plan Color:</label>
                         <SliderPicker
                             color={createPlanColorInput}
-                            onChange={(hex) => setCreatePlanColorInput(hex)}
+                            onChange={(data) => setCreatePlanColorInput(data.hex)}
                             className="mb-10"
                         />
                     </div>
