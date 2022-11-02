@@ -2,9 +2,16 @@ import { useState, useEffect } from "react"
 import Axios from "axios"
 import Modal from 'react-modal'
 import { BsPlusLg } from "react-icons/bs"
+import { SliderPicker } from 'react-color'
 
 function SideMenu() {
     const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
+
+     // Create Plan form inputs
+    const [createPlanNameInput, setCreatePlanNameInput] = useState("")
+    const [createPlanStartdateInput, setCreatePlanStartdateInput] = useState("")
+    const [createPlanEnddateInput, setCreatePlanEnddateInput] = useState("")
+    const [createPlanColorInput, setCreatePlanColorInput] = useState("")
 
     useEffect(() => {
         // Todo: Fetch all existing plans of an application
@@ -77,10 +84,10 @@ function SideMenu() {
                         <label htmlFor="create-plan-name" className="font-semibold">Plan Name:</label>
                         <input
                             className="form-control"
-                            // onChange={(e) => setCreateAppNameInput(e.target.value)}
+                            onChange={(e) => setCreatePlanNameInput(e.target.value)}
                             type="text"
                             placeholder="Enter a new plan name here"
-                            //value={createAppNameInput}
+                            value={createPlanNameInput}
                             id="create-plan-name"
                         />
 
@@ -89,24 +96,30 @@ function SideMenu() {
                             <div className="w-full">
                                 <label htmlFor="create-plan-startdate" className="font-semibold">Start Date:</label>
                                 <input
-                                    //onChange={(e) => setCreateAppStartdateInput(e.target.value)}
+                                    onChange={(e) => setCreatePlanStartdateInput(e.target.value)}
                                     type="date"
-                                    //value={createAppStartdateInput}
+                                    value={createPlanStartdateInput}
                                     id="create-plan-startdate"
                                 />
                             </div>
                             <div className="w-full">
                                 <label htmlFor="create-plan-enddate" className="font-semibold">End Date:</label>
                                 <input
-                                    //onChange={(e) => setCreateAppEnddateInput(e.target.value)}
+                                    onChange={(e) => setCreatePlanEnddateInput(e.target.value)}
                                     type="date"
-                                    //value={createAppEnddateInput}
+                                    value={createPlanEnddateInput}
                                     id="create-plan-enddate"
                                 />
                             </div>
                         </div>
-                    </div>
 
+                        <label htmlFor="create-plan-color" className="font-semibold">Plan Color:</label>
+                        <SliderPicker
+                            color={createPlanColorInput}
+                            onChange={(hex) => setCreatePlanColorInput(hex)}
+                            className="mb-10"
+                        />
+                    </div>
 
                     <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
                 </form>
