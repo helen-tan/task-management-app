@@ -124,10 +124,15 @@ function SideMenu(props) {
                         <div className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
                             borderLeft: `10px solid ${plan.plan_color}`
                         }}>
-                            <p className="font-semibold">{plan.plan_mvp_name}</p>
-                            <button className="btn btn-outline mt-4 lg:mt-0 btn-sm gap-2">
-                                  Edit
-                            </button>
+                            <p className="text-xs font-semibold p-1">{plan.plan_mvp_name}</p>
+                            <div className="flex gap-1 mt-4 lg:mt-0 ">
+                                <button className="btn btn-outline text-xs btn-sm">
+                                    View
+                                </button>
+                                <button className="btn btn-outline text-xs btn-sm">
+                                    Edit
+                                </button>
+                            </div>
                         </div>
                     ))
                 }
