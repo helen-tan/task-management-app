@@ -7,8 +7,13 @@ import { SliderPicker } from 'react-color'
 
 function SideMenu(props) {
     const [plans, setPlans] = useState([])
-    const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
     const [newPlanCount, setNewPlanCount] = useState(0)
+    const [loading, setLoading] = useState(true)
+
+    // Modal states
+    const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
+    const [viewPlanModalIsOpen, setViewPlanModalIsOpen] = useState(false)
+    const [planToView, setPlanToView] = useState({})
 
     // Create Plan form inputs
     const [createPlanNameInput, setCreatePlanNameInput] = useState("")
@@ -28,6 +33,7 @@ function SideMenu(props) {
             const response = await Axios.get(`http://localhost:5000/api/plans/${props.app_acronym}`, config)
             if (response.data) {
                 setPlans(response.data.data)
+                setLoading(false)
                 //console.log(response.data.data)
             }
         } catch (err) {
@@ -40,7 +46,7 @@ function SideMenu(props) {
         fetchAllPlans()
     }, [newPlanCount])
 
-    // Modal: Create New Application
+    // Modal: Create New Plan
     Modal.setAppElement('#root');
 
     const customStyles = {
@@ -107,6 +113,18 @@ function SideMenu(props) {
         }
     }
 
+    // Modal: View Plan
+    const openViewPlanModal = (plan) => {
+        setViewPlanModalIsOpen(true)
+        setPlanToView(plan)
+        console.log(plan)
+    }
+
+    const closeViewPlanModal = () => {
+        setViewPlanModalIsOpen(false)
+        setPlanToView({})
+    }
+
     return (
         <div className="bg-customBlack text-white w-1/5 p-4">
             {/* Create Task button */}
@@ -116,28 +134,30 @@ function SideMenu(props) {
 
             {/* Select Plans */}
             <div className="text-start mt-5 mb-2">Plans</div>
-            <div className="bg-zinc-100 p-3 rounded">
-                {(plans === []) ?
-                    <h3 className="text-black">There are no plans yet.</h3>
-                    :
-                    plans.map((plan) => (
-                        <div key={plan.plan_mvp_name} className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
-                            borderLeft: `10px solid ${plan.plan_color}`
-                        }}>
-                            <p className="text-xs font-semibold p-1">{plan.plan_mvp_name}</p>
-                            <div className="flex gap-1 mt-4 lg:mt-0 ">
-                                <button className="btn btn-outline text-xs btn-sm">
-                                    View
-                                </button>
-                                <button className="btn btn-outline text-xs btn-sm">
-                                    Edit
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                }
 
-            </div>
+            {loading ?
+                <div>Loading...</div>
+                :
+                <div className="bg-zinc-100 p-3 rounded">
+                    {(plans === []) ?
+                        <h3 className="text-black">There are no plans yet.</h3>
+                        :
+                        plans.map((plan) => (
+                            <div key={plan.plan_mvp_name} className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
+                                borderLeft: `10px solid ${plan.plan_color}`
+                            }}>
+                                <p className="text-xs font-semibold p-1">{plan.plan_mvp_name}</p>
+                                <div className="mt-4 lg:mt-0 ">
+                                    <button onClick={() => openViewPlanModal(plan)} className="btn btn-outline text-xs btn-sm">
+                                        View
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            }
+
 
             {/* Create Plan button */}
             <button onClick={openCreatePlanModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white mt-4 gap-2">
@@ -204,6 +224,44 @@ function SideMenu(props) {
 
                     <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
                 </form>
+            </Modal>
+
+            {/* View Plan Modal */}
+            <Modal
+                scrollable={true}
+                isOpen={viewPlanModalIsOpen}
+                onRequestClose={closeViewPlanModal}
+                style={customStyles}
+                contentLabel="View a plan"
+            >
+                <div>
+                    <div className="flex justify-between mb-5">
+                        <h2 className="font-bold text-xl">Plan: <span className="font-medium ml-2">{planToView.plan_mvp_name}</span></h2>
+                        <button onClick={closeViewPlanModal}><strong>X</strong></button>
+                    </div>
+
+                    <div className="flex gap-5 mb-4">
+                        <p className="font-semibold text-stone-500 ">Start Date</p>
+                        <p>{planToView.plan_startdate}</p>
+                    </div>
+
+                    <div className="flex gap-5 mb-4">
+                        <p className="font-semibold text-stone-500 ">End Date</p>
+                        <p>{planToView.plan_enddate}</p>
+                    </div>
+
+                    <div className="flex gap-5 mb-4">
+                        <p className="font-semibold text-stone-500 ">Color</p>
+                        <div style={{
+                            width: '100px',
+                            height: '25px',
+                            backgroundColor: `${planToView.plan_color}`,
+                            border: `1px solid black`
+                        }}></div>
+                        <p>{planToView.plan_color}</p>
+                    </div>
+                </div>
+
             </Modal>
         </div>
     )
