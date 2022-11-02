@@ -28,7 +28,7 @@ function SideMenu(props) {
             const response = await Axios.get(`http://localhost:5000/api/plans/${props.app_acronym}`, config)
             if (response.data) {
                 setPlans(response.data.data)
-                console.log(response.data.data)
+                //console.log(response.data.data)
             }
         } catch (err) {
             console.log("There was a problem")
@@ -121,7 +121,7 @@ function SideMenu(props) {
                     <h3 className="text-black">There are no plans yet.</h3>
                     :
                     plans.map((plan) => (
-                        <div className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
+                        <div key={plan.plan_mvp_name} className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
                             borderLeft: `10px solid ${plan.plan_color}`
                         }}>
                             <p className="text-xs font-semibold p-1">{plan.plan_mvp_name}</p>
