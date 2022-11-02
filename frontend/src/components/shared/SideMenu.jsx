@@ -6,6 +6,7 @@ import { BsPlusLg } from "react-icons/bs"
 import { SliderPicker } from 'react-color'
 
 function SideMenu(props) {
+    const [plans, setPlans] = useState([])
     const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
     const [newPlanCount, setNewPlanCount] = useState(0)
 
@@ -22,8 +23,21 @@ function SideMenu(props) {
         }
     }
 
+    // const fetchAllPlans = async () => {
+    //     try {
+    //         const response = await Axios.get(`http://localhost:5000/api/plans`, config)
+    //         if (response.data) {
+    //             setPlans(response.data.data)
+    //             console.log(response.data.data)
+    //         }
+    //     } catch (err) {
+    //         console.log("There was a problem")
+    //     }
+    // }
+
     useEffect(() => {
-        // Todo: Fetch all existing plans of an application
+        // Fetch all existing plans of an application
+        //fetchAllPlans()
     }, [])
 
     // Modal: Create New Application

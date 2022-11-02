@@ -1,7 +1,7 @@
 const db = require('../config/database')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 
-// @desc    Create a aplan
+// @desc    Create a plan
 // @route   /api/plans
 // @access  Private
 const createPlan = catchAsyncErrors(async(req, res) => {
@@ -70,6 +70,29 @@ const createPlan = catchAsyncErrors(async(req, res) => {
     })
 })
 
+// @desc    Get all plans (by their app - plan_app_acronym)
+// @route   /api/plans
+// @access  Private
+const getAllPlans = catchAsyncErrors(async(req, res) => {
+    const { plan_app_acronym } = req.body
+
+    db.query(`select * from plans where plan_app_acronym = ?`, [plan_app_acronym], (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                count: results.length,
+                data: results
+            })
+        }
+    })
+})
+
 module.exports = {
-    createPlan
+    createPlan,
+    getAllPlans
 }
