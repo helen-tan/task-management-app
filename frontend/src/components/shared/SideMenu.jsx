@@ -38,7 +38,7 @@ function SideMenu(props) {
     useEffect(() => {
         // Fetch all existing plans of an application
         fetchAllPlans()
-    }, [])
+    }, [newPlanCount])
 
     // Modal: Create New Application
     Modal.setAppElement('#root');
