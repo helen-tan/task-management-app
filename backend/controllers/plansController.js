@@ -71,10 +71,11 @@ const createPlan = catchAsyncErrors(async(req, res) => {
 })
 
 // @desc    Get all plans (by their app - plan_app_acronym)
-// @route   /api/plans
+// @route   /api/plans/:app_acronym
 // @access  Private
-const getAllPlans = catchAsyncErrors(async(req, res) => {
-    const { plan_app_acronym } = req.body
+const getAllPlansByApp = catchAsyncErrors(async(req, res) => {
+    // Get app_acronym (app identifier) of app of interest (from the params)
+    const plan_app_acronym = req.params.app_acronym
 
     db.query(`select * from plans where plan_app_acronym = ?`, [plan_app_acronym], (err, results) => {
         if (err) {
@@ -94,5 +95,5 @@ const getAllPlans = catchAsyncErrors(async(req, res) => {
 
 module.exports = {
     createPlan,
-    getAllPlans
+    getAllPlansByApp
 }

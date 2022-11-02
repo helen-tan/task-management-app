@@ -23,21 +23,21 @@ function SideMenu(props) {
         }
     }
 
-    // const fetchAllPlans = async () => {
-    //     try {
-    //         const response = await Axios.get(`http://localhost:5000/api/plans`, config)
-    //         if (response.data) {
-    //             setPlans(response.data.data)
-    //             console.log(response.data.data)
-    //         }
-    //     } catch (err) {
-    //         console.log("There was a problem")
-    //     }
-    // }
+    const fetchAllPlans = async () => {
+        try {
+            const response = await Axios.get(`http://localhost:5000/api/plans/${props.app_acronym}`,  config)
+            if (response.data) {
+                setPlans(response.data.data)
+                console.log(response.data.data)
+            }
+        } catch (err) {
+            console.log("There was a problem")
+        }
+    }
 
     useEffect(() => {
         // Fetch all existing plans of an application
-        //fetchAllPlans()
+        fetchAllPlans()
     }, [])
 
     // Modal: Create New Application

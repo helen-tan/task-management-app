@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const { createPlan, getAllPlans } = require('../controllers/plansController')
+const { createPlan, getAllPlansByApp } = require('../controllers/plansController')
 const { protect } = require('../middleware/authMiddleware')
 
 router.post('/', protect, createPlan)
-router.get('/', protect, getAllPlans)
+router.get('/:app_acronym', protect, getAllPlansByApp)
 
 module.exports = router
