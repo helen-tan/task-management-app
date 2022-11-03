@@ -8,7 +8,9 @@ import TaskCard from "../shared/TaskCard"
 
 function Kanban() {
     const [loadingAppData, setLoadingAppData] = useState(true)
+    const [loadingTasksData, setLoadingTasksData] = useState(true)
     const [app, setApp] = useState({})
+    const [tasks, setTasks] = useState([])
     const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
 
     const params = useParams()
@@ -36,7 +38,17 @@ function Kanban() {
     }
 
     const fetchTasks = async () => {
-        console.log("Fetch tasks")
+        try {
+            const response = await Axios.get(`http://localhost:5000/api/tasks/${params.app_acronym}`, config)
+            if (response.data) {
+               console.log(response.data.data)
+               setTasks(response.data.data)
+               setLoadingTasksData(false)
+            }
+
+        } catch (err) {
+            console.log("There was a problem")
+        }
     }
 
     useEffect(() => {
@@ -49,7 +61,7 @@ function Kanban() {
         fetchTasks()
     }
 
-    if (loadingAppData) {
+    if (loadingAppData && loadingTasksData) {
         return <Spinner />
     } else {
         return (

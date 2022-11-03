@@ -166,7 +166,7 @@ const getAllTasksByApp = catchAsyncErrors(async(req, res) => {
     // Get app_acronym (app identifier) of app of interest (from the params)
     const task_app_acronym = req.params.app_acronym
 
-    db.query(`select * from taks where task_app_acronym = ?`, [task_app_acronym], (err, results) => {
+    db.query(`select * from tasks where task_app_acronym = ?`, [task_app_acronym], (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,

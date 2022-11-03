@@ -5,6 +5,6 @@ const { createTask, getAllTasksByApp } = require('../controllers/taskController'
 const { protect } = require('../middleware/authMiddleware')
 
 router.post('/:app_acronym', protect, createTask)
-router.get('/:app_acronym', protect, getAllPlansByApp)
+router.get('/:app_acronym', protect, getAllTasksByApp)
 
 module.exports = router
