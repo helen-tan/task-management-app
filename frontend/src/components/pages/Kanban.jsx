@@ -93,7 +93,7 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "open") {
-                                    return <TaskCard key={task.task_id} task={task} />
+                                    return <TaskCard key={task.task_id} task={task}  />
                                 }
                             })}
                         </div>
@@ -102,7 +102,7 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "todo") {
-                                    return <TaskCard key={task.task_id} task={task} />
+                                    return <TaskCard key={task.task_id} task={task}  />
                                 }
                             })}
                         </div>
@@ -120,7 +120,7 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "done") {
-                                    return <TaskCard key={task.task_id} task={task} />
+                                    return <TaskCard key={task.task_id} task={task}  />
                                 }
                             })}
                         </div>
