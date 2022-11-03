@@ -50,6 +50,7 @@ function TaskCard(props) {
         if (props.task.task_plan !== "") {
             getPlanColor()
         }
+        // Todo: Get data of this task
     }, [])
 
     const promoteProgress = (task_state) => {

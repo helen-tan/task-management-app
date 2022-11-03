@@ -93,7 +93,7 @@ function Kanban() {
                         {/* Open */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
-                                if (task.task_state == "open") {
+                                if (task.task_state === "open") {
                                     return <TaskCard
                                         key={task.task_id}
                                         task={task}
@@ -106,7 +106,7 @@ function Kanban() {
                         {/* Todo */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
-                                if (task.task_state == "todo") {
+                                if (task.task_state === "todo") {
                                     return <TaskCard
                                         key={task.task_id}
                                         task={task}
@@ -119,7 +119,7 @@ function Kanban() {
                         {/* Doing */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
-                                if (task.task_state == "doing") {
+                                if (task.task_state === "doing") {
                                     return <TaskCard
                                         key={task.task_id}
                                         task={task}
@@ -132,7 +132,7 @@ function Kanban() {
                         {/* Done */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
-                                if (task.task_state == "done") {
+                                if (task.task_state === "done") {
                                     return <TaskCard
                                         key={task.task_id}
                                         task={task}
@@ -145,7 +145,7 @@ function Kanban() {
                         {/* Closed */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
-                                if (task.task_state == "closed") {
+                                if (task.task_state === "closed") {
                                     return <TaskCard
                                         key={task.task_id}
                                         task={task}
