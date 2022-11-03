@@ -31,6 +31,29 @@ function TaskCard(props) {
         }
     }, [])
 
+    const promoteProgress = (task_state) => {
+        // Check the current task_state
+        const currentState = task_state
+        // Change the task_state to the one after it
+        // - if closed, don't do anything to the task_state - remain as "closed"
+        if (task_state === "open") {
+            //props.task.task_state = "todo"
+        } else if (task_state === "doing") {
+            //props.task.task_state = "done"
+        } else if (task_state === "done") {
+            //props.task.task_state = "closed"
+        } else if (task_state === "closed") {
+            //props.task.task_state = "closed"
+        }
+    }
+
+    const demoteProgress = (task_state) => {
+        // Check the current task_state
+        // - if open, don't do anything to the task_state
+        // Change the task_state to the one before it
+
+    }
+
     return (
         <div className="card-shadow rounded bg-white mx-auto mt-2 w-11/12 p-2" style={{
             borderLeft: `5px solid ${planColor}`
@@ -38,8 +61,12 @@ function TaskCard(props) {
             <div className="flex flex-col items-center md:flex-row justify-between gap-2 p-1">
                 <div className="small-text text-gray-500">{props.task.task_id}</div>
                 <div className="flex text-2xl">
-                    <MdArrowLeft />
-                    <MdArrowRight />
+                    <button onClick={promoteProgress(props.task.task_state)}>
+                        <MdArrowLeft />
+                    </button>
+                    <button onClick={demoteProgress(props.task.task_state)}>
+                        <MdArrowRight />
+                    </button>
                 </div>
             </div>
             <div className="flex flex-col items-start p-1 mb-2">
