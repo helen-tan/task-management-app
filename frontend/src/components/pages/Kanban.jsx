@@ -93,7 +93,9 @@ function Kanban() {
 
                     <div className="grid grid-cols-5 grid-flow-col px-5 pt-2 gap-2 h-80">
                         <div className="border border-slate-300 rounded overflow-y-auto">
-                            <TaskCard />
+                            {tasks.map((task) => (
+                                <TaskCard key={task.task_id} task={task} />
+                            ))}
                         </div>
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             
