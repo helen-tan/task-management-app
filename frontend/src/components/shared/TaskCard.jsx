@@ -95,10 +95,6 @@ function TaskCard(props) {
 
     }
 
-    const demoteClickTest = (task_state) => {
-        toast.warning(task_state)
-    }
-
     return (
         <div className="card-shadow rounded bg-white mx-auto mt-2 w-11/12 p-2" style={{
             borderLeft: `5px solid ${planColor}`
@@ -106,12 +102,16 @@ function TaskCard(props) {
             <div className="flex flex-col items-center md:flex-row justify-between gap-2 p-1">
                 <div className="small-text text-gray-500">{props.task.task_id}</div>
                 <div className="flex text-2xl">
-                    <button onClick={() => demoteProgress(props.task.task_state)}>
-                        <MdArrowLeft />
-                    </button>
-                    <button onClick={() => promoteProgress(props.task.task_state)}>
-                        <MdArrowRight />
-                    </button>
+                    {(props.task.task_state !== "open") && (
+                        <button onClick={() => demoteProgress(props.task.task_state)}>
+                            <MdArrowLeft />
+                        </button>
+                    )}
+                    {(props.task.task_state !== "closed") && (
+                        <button onClick={() => promoteProgress(props.task.task_state)}>
+                            <MdArrowRight />
+                        </button>
+                    )}
                 </div>
             </div>
             <div className="flex flex-col items-start p-1 mb-2">

@@ -208,7 +208,7 @@ const updateTaskState = catchAsyncErrors(async(req, res) => {
         } else {
             res.status(201).send({
                 success: true,
-                message: 'Task updated successfully',
+                message: `The task of task_id "${task_id}" was updated to "${task_state}"`,
                 data: {
                     task_id: task_id,
                     task_state: task_state,
