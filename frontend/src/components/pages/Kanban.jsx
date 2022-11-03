@@ -9,6 +9,7 @@ import TaskCard from "../shared/TaskCard"
 function Kanban() {
     const [loadingAppData, setLoadingAppData] = useState(true)
     const [loadingTasksData, setLoadingTasksData] = useState(true)
+    const [taskUpdateCount, setTaskUpdateCount] = useState(0)
     const [app, setApp] = useState({})
     const [tasks, setTasks] = useState([])
     const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
@@ -56,7 +57,7 @@ function Kanban() {
         // Fetch all tasks associated with the application
         fetchAppData()
         fetchTasks()
-    }, [])
+    }, [taskUpdateCount])
 
     if (loadingAppData && loadingTasksData) {
         return <Spinner />
@@ -93,7 +94,11 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "open") {
-                                    return <TaskCard key={task.task_id} task={task}  />
+                                    return <TaskCard
+                                        key={task.task_id}
+                                        task={task}
+                                        taskUpdateCount={taskUpdateCount}
+                                        setTaskUpdateCount={setTaskUpdateCount} />
                                 }
                             })}
                         </div>
@@ -102,7 +107,11 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "todo") {
-                                    return <TaskCard key={task.task_id} task={task}  />
+                                    return <TaskCard
+                                        key={task.task_id}
+                                        task={task}
+                                        taskUpdateCount={taskUpdateCount}
+                                        setTaskUpdateCount={setTaskUpdateCount} />
                                 }
                             })}
                         </div>
@@ -111,7 +120,11 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "doing") {
-                                    return <TaskCard key={task.task_id} task={task} />
+                                    return <TaskCard
+                                        key={task.task_id}
+                                        task={task}
+                                        taskUpdateCount={taskUpdateCount}
+                                        setTaskUpdateCount={setTaskUpdateCount} />
                                 }
                             })}
                         </div>
@@ -120,7 +133,11 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "done") {
-                                    return <TaskCard key={task.task_id} task={task}  />
+                                    return <TaskCard
+                                        key={task.task_id}
+                                        task={task}
+                                        taskUpdateCount={taskUpdateCount}
+                                        setTaskUpdateCount={setTaskUpdateCount} />
                                 }
                             })}
                         </div>
@@ -129,7 +146,11 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state == "closed") {
-                                    return <TaskCard key={task.task_id} task={task} />
+                                    return <TaskCard
+                                        key={task.task_id}
+                                        task={task}
+                                        taskUpdateCount={taskUpdateCount}
+                                        setTaskUpdateCount={setTaskUpdateCount} />
                                 }
                             })}
                         </div>

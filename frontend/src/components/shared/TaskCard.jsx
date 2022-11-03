@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import Axios from "axios"
 import { MdArrowLeft, MdArrowRight } from "react-icons/md" 
+import { toast } from "react-toastify"
 
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
@@ -24,6 +25,26 @@ function TaskCard(props) {
         }
     }
 
+    const updateTaskState = async (updated_task_state) => {
+        // Send put request to update a task's task_state
+        try {
+            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/updateState`, { task_state: updated_task_state }, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                   
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("There was a problem")
+        }
+
+    }
+
     useEffect(() => {
         // Get plan_color from plans, based on the task's task_plan
         if (props.task.task_plan !== "") {
@@ -33,17 +54,22 @@ function TaskCard(props) {
 
     const promoteProgress = (task_state) => {
         // Check the current task_state
-        const currentState = task_state
         // Change the task_state to the one after it
         // - if closed, don't do anything to the task_state - remain as "closed"
         if (task_state === "open") {
-            //props.task.task_state = "todo"
+            updateTaskState("todo")
+            props.setTaskUpdateCount(prevState => prevState + 1)
+        } else if (task_state === "todo") {
+            updateTaskState("doing")
+            props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "doing") {
-            //props.task.task_state = "done"
+            updateTaskState("done")
+            props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "done") {
-            //props.task.task_state = "closed"
+            updateTaskState("closed")
+            props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "closed") {
-            //props.task.task_state = "closed"
+            toast.warning("The task is closed")
         }
     }
 
@@ -51,7 +77,26 @@ function TaskCard(props) {
         // Check the current task_state
         // - if open, don't do anything to the task_state
         // Change the task_state to the one before it
+        if (task_state === "open") {
+            toast.warning("This task cannot be demoted")
+        } else if (task_state === "todo") {
+            updateTaskState("open")
+            props.setTaskUpdateCount(prevState => prevState + 1)
+        } else if (task_state === "doing") {
+            updateTaskState("todo")
+            props.setTaskUpdateCount(prevState => prevState + 1)
+        } else if (task_state === "done") {
+            updateTaskState("doing")
+            props.setTaskUpdateCount(prevState => prevState + 1)
+        } else if (task_state === "closed") {
+            updateTaskState("done")
+            props.setTaskUpdateCount(prevState => prevState + 1)
+        }
 
+    }
+
+    const demoteClickTest = (task_state) => {
+        toast.warning(task_state)
     }
 
     return (
@@ -61,10 +106,10 @@ function TaskCard(props) {
             <div className="flex flex-col items-center md:flex-row justify-between gap-2 p-1">
                 <div className="small-text text-gray-500">{props.task.task_id}</div>
                 <div className="flex text-2xl">
-                    <button onClick={promoteProgress(props.task.task_state)}>
+                    <button onClick={() => demoteProgress(props.task.task_state)}>
                         <MdArrowLeft />
                     </button>
-                    <button onClick={demoteProgress(props.task.task_state)}>
+                    <button onClick={() => promoteProgress(props.task.task_state)}>
                         <MdArrowRight />
                     </button>
                 </div>
