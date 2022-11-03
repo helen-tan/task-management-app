@@ -8,6 +8,7 @@ import { SliderPicker } from 'react-color'
 function SideMenu(props) {
     const [plans, setPlans] = useState([])
     const [newPlanCount, setNewPlanCount] = useState(0)
+    const [newTaskCount, setNewTaskCount] = useState(0)
     const [loading, setLoading] = useState(true)
 
     // Modal states
@@ -154,8 +155,7 @@ function SideMenu(props) {
                     setCreateTaskDescriptionInput("")
 
                     // increment count state (to induce re render of Plan list to include new Plan instantly)
-                    //setNewPlanCount(prevState => prevState + 1)
-                    //console.log(new_plan)
+                    setNewTaskCount(prevState => prevState + 1)
                 } else {
                     toast.warning(response.data.message)
                 }
