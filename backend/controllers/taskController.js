@@ -159,6 +159,31 @@ const getAppTaskIds = (app_acronym) => {
 }
 
 
+// @desc    Get all tasks specific to an application
+// @route   /api//tasks/:app_acronym
+// @access  Private
+const getAllTasksByApp = catchAsyncErrors(async(req, res) => {
+    // Get app_acronym (app identifier) of app of interest (from the params)
+    const task_app_acronym = req.params.app_acronym
+
+    db.query(`select * from taks where task_app_acronym = ?`, [task_app_acronym], (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                count: results.length,
+                data: results
+            })
+        }
+    })
+})
+
+
 module.exports = {
-    createTask
+    createTask,
+    getAllTasksByApp
 }

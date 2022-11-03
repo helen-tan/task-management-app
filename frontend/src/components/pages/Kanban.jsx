@@ -7,7 +7,7 @@ import Spinner from "../utils/Spinner"
 import TaskCard from "../shared/TaskCard"
 
 function Kanban() {
-    const [loading, setLoading] = useState(true)
+    const [loadingAppData, setLoadingAppData] = useState(true)
     const [app, setApp] = useState({})
     const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
 
@@ -27,7 +27,7 @@ function Kanban() {
                 // console.log(response.data)
                 // console.log(response.data.data[0])
                 setApp(response.data.data[0])
-                setLoading(false)
+                setLoadingAppData(false)
             }
 
         } catch (err) {
@@ -35,13 +35,21 @@ function Kanban() {
         }
     }
 
+    const fetchTasks = async () => {
+        console.log("Fetch tasks")
+    }
 
     useEffect(() => {
         // Fetch application details (to display app name & use selected details - r_number)
         fetchAppData()
     }, [])
 
-    if (loading) {
+    if (!loadingAppData) {
+        // Fetch all tasks associated with the application
+        fetchTasks()
+    }
+
+    if (loadingAppData) {
         return <Spinner />
     } else {
         return (
@@ -74,6 +82,18 @@ function Kanban() {
                     <div className="grid grid-cols-5 grid-flow-col px-5 pt-2 gap-2 h-80">
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             <TaskCard />
+                        </div>
+                        <div className="border border-slate-300 rounded overflow-y-auto">
+                            
+                        </div>
+                        <div className="border border-slate-300 rounded overflow-y-auto">
+                            
+                        </div>
+                        <div className="border border-slate-300 rounded overflow-y-auto">
+                           
+                        </div>
+                        <div className="border border-slate-300 rounded overflow-y-auto">
+                           
                         </div>
                     </div>
                 </div>
