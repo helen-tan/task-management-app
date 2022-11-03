@@ -1,6 +1,13 @@
-import { MdArrowLeft, MdArrowRight } from "react-icons/md"
+import { useState, useEffect } from "react"
+import { MdArrowLeft, MdArrowRight } from "react-icons/md" 
 
 function TaskCard(props) {
+    const [planColor, setPlanColor] = useState("")
+
+    useEffect(() => {
+        // Get plan_color from plans, based on the task's task_plan
+    }, [])
+
     return (
         <div className="card-shadow rounded bg-white mx-auto mt-2 w-11/12 p-2">
             <div className="flex flex-col items-center md:flex-row justify-between gap-2 p-1">

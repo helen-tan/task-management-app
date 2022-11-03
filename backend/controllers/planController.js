@@ -4,7 +4,7 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 // @desc    Create a plan
 // @route   /api/plans
 // @access  Private
-const createPlan = catchAsyncErrors(async(req, res) => {
+const createPlan = catchAsyncErrors(async (req, res) => {
     let {
         plan_mvp_name,
         plan_startdate,
@@ -73,7 +73,7 @@ const createPlan = catchAsyncErrors(async(req, res) => {
 // @desc    Get all plans (by their app - plan_app_acronym)
 // @route   /api/plans/:app_acronym
 // @access  Private
-const getAllPlansByApp = catchAsyncErrors(async(req, res) => {
+const getAllPlansByApp = catchAsyncErrors(async (req, res) => {
     // Get app_acronym (app identifier) of app of interest (from the params)
     const plan_app_acronym = req.params.app_acronym
 
@@ -93,7 +93,35 @@ const getAllPlansByApp = catchAsyncErrors(async(req, res) => {
     })
 })
 
+// @desc    Get plan color by plan_mvp_name (task_plan in tasks table) & plan_app_acronym
+// @route   /api/plans/planColor/:plan_app_acronym/:plan_mvp_name
+// @access  Private
+const getPlanColorByAppAndPlan = catchAsyncErrors(async (req, res) => {
+    // Get app_acronym (app identifier) of app of interest (from the params)
+    const plan_app_acronym = req.params.plan_app_acronym
+    const plan_mvp_name = req.params.plan_mvp_name
+
+    db.query(`select plan_color from plans 
+        where plan_app_acronym = ?
+        and plan_mvp_name = ?`
+        , [plan_app_acronym, plan_mvp_name]
+        , (err, results) => {
+            if (err) {
+                res.status(400).send({
+                    success: false,
+                    message: err.code
+                })
+            } else {
+                res.status(200).send({
+                    success: true,
+                    data: results
+                })
+            }
+        })
+})
+
 module.exports = {
     createPlan,
-    getAllPlansByApp
+    getAllPlansByApp,
+    getPlanColorByAppAndPlan
 }
