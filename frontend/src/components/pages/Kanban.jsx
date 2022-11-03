@@ -53,13 +53,10 @@ function Kanban() {
 
     useEffect(() => {
         // Fetch application details (to display app name & use selected details - r_number)
-        fetchAppData()
-    }, [])
-
-    if (!loadingAppData) {
         // Fetch all tasks associated with the application
+        fetchAppData()
         fetchTasks()
-    }
+    }, [])
 
     if (loadingAppData && loadingTasksData) {
         return <Spinner />
