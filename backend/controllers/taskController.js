@@ -162,7 +162,7 @@ const getAppTaskIds = (app_acronym) => {
 // @desc    Get all tasks specific to an application
 // @route   /api/tasks/:app_acronym
 // @access  Private
-const getAllTasksByApp = catchAsyncErrors(async(req, res) => {
+const getAllTasksByApp = catchAsyncErrors(async (req, res) => {
     // Get app_acronym (app identifier) of app of interest (from the params)
     const task_app_acronym = req.params.app_acronym
 
@@ -182,10 +182,38 @@ const getAllTasksByApp = catchAsyncErrors(async(req, res) => {
     })
 })
 
+// @desc    Get task specific to an application, by task_id
+// @route   /api/tasks/:task_app_acronym/:task_id
+// @access  Private
+const getOneTask = catchAsyncErrors(async (req, res) => {
+    // Get app_acronym (app identifier) of app of interest (from the params)
+    const task_app_acronym = req.params.task_app_acronym
+    // Get task_id (task identifier) of task (from the params)
+    const task_id = req.params.task_id
+
+    db.query(`select * from tasks 
+        where task_app_acronym = ?
+        and task_id = ?`
+        , [task_app_acronym, task_id], (err, results) => {
+            if (err) {
+                res.status(400).send({
+                    success: false,
+                    message: err.code
+                })
+            } else {
+                res.status(200).send({
+                    success: true,
+                    count: results.length,
+                    data: results
+                })
+            }
+        })
+})
+
 // @desc    Update Task's State (identified by unique task_id) - Also updates the task_owner to the logged in user
 // @route   /api/tasks/:task_id/updateState
 // @access  Private
-const updateTaskState = catchAsyncErrors(async(req, res) => {
+const updateTaskState = catchAsyncErrors(async (req, res) => {
     // Get task_id (task identifier) of task (from the params)
     const task_id = req.params.task_id
 
@@ -194,10 +222,10 @@ const updateTaskState = catchAsyncErrors(async(req, res) => {
     const loggedInUser = req.username
     const task_owner = loggedInUser
 
-     // User inputs
-     const { task_state } = req.body
+    // User inputs
+    const { task_state } = req.body
 
-     db.query(`UPDATE tasks 
+    db.query(`UPDATE tasks 
         SET task_state = ?, task_owner = ?
         WHERE task_id = ?`, [task_state, task_owner, task_id], (err, results) => {
         if (err) {
@@ -224,5 +252,6 @@ const updateTaskState = catchAsyncErrors(async(req, res) => {
 module.exports = {
     createTask,
     getAllTasksByApp,
+    getOneTask,
     updateTaskState
 }
