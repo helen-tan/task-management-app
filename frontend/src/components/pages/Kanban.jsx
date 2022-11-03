@@ -23,7 +23,7 @@ function Kanban() {
         try {
             const response = await Axios.get(`http://localhost:5000/api/applications/${params.app_acronym}`, config)
             if (response.data) {
-                console.log(response.data)
+                // console.log(response.data)
                 // console.log(response.data.data[0])
                 setApp(response.data.data[0])
                 setLoading(false)
