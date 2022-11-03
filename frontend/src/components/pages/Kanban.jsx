@@ -41,9 +41,9 @@ function Kanban() {
         try {
             const response = await Axios.get(`http://localhost:5000/api/tasks/${params.app_acronym}`, config)
             if (response.data) {
-               console.log(response.data.data)
-               setTasks(response.data.data)
-               setLoadingTasksData(false)
+                console.log(response.data.data)
+                setTasks(response.data.data)
+                setLoadingTasksData(false)
             }
 
         } catch (err) {
@@ -89,22 +89,49 @@ function Kanban() {
                     </div>
 
                     <div className="grid grid-cols-5 grid-flow-col px-5 pt-2 gap-2 h-80">
+                        {/* Open */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
-                            {tasks.map((task) => (
-                                <TaskCard key={task.task_id} task={task} />
-                            ))}
+                            {tasks.map((task) => {
+                                if (task.task_state == "open") {
+                                    return <TaskCard key={task.task_id} task={task} />
+                                }
+                            })}
                         </div>
+
+                        {/* Todo */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
-                            
+                            {tasks.map((task) => {
+                                if (task.task_state == "todo") {
+                                    return <TaskCard key={task.task_id} task={task} />
+                                }
+                            })}
                         </div>
+
+                        {/* Doing */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
-                            
+                            {tasks.map((task) => {
+                                if (task.task_state == "doing") {
+                                    return <TaskCard key={task.task_id} task={task} />
+                                }
+                            })}
                         </div>
+
+                        {/* Done */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
-                           
+                            {tasks.map((task) => {
+                                if (task.task_state == "done") {
+                                    return <TaskCard key={task.task_id} task={task} />
+                                }
+                            })}
                         </div>
+
+                        {/* Closed */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
-                           
+                            {tasks.map((task) => {
+                                if (task.task_state == "closed") {
+                                    return <TaskCard key={task.task_id} task={task} />
+                                }
+                            })}
                         </div>
                     </div>
                 </div>
