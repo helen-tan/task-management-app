@@ -8,10 +8,10 @@ function TaskCard() {
             </div>
             <div className="bg-gray-700 h-px mb-2"></div>
             <div className="flex flex-col md:flex-row justify-end gap-2 p-1">
-                <button className="btn btn-outline text-xs btn-sm">
+                <button className="btn btn-outline text-xs btn-xs">
                     View
                 </button>
-                <button className="btn btn-black text-xs btn-sm">
+                <button className="btn btn-black text-xs btn-xs">
                     Edit
                 </button>
             </div>

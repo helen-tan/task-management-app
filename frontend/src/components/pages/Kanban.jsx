@@ -75,10 +75,6 @@ function Kanban() {
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             <TaskCard />
                         </div>
-                        <div className="border border-slate-300 rounded">tasks</div>
-                        <div className="border border-slate-300 rounded">tasks</div>
-                        <div className="border border-slate-300 rounded">tasks</div>
-                        <div className="border border-slate-300 rounded">tasks</div>
                     </div>
                 </div>
             </div>

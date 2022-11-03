@@ -166,7 +166,7 @@ function SideMenu(props) {
     }
 
     return (
-        <div className="bg-customBlack text-white w-1/5 p-4">
+        <div className="bg-customBlack text-white w-2/12 p-4">
             {/* Create Task button */}
             <button onClick={openCreateTaskModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
                 <BsPlusLg /> New Task
@@ -188,7 +188,7 @@ function SideMenu(props) {
                             }}>
                                 <p className="text-xs font-semibold p-1">{plan.plan_mvp_name}</p>
                                 <div className="mt-4 lg:mt-0 ">
-                                    <button onClick={() => openViewPlanModal(plan)} className="btn btn-outline text-xs btn-sm">
+                                    <button onClick={() => openViewPlanModal(plan)} className="btn btn-outline text-xs btn-xs">
                                         View
                                     </button>
                                 </div>
