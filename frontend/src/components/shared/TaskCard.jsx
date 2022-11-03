@@ -118,7 +118,7 @@ function TaskCard(props) {
                 <div className="text-xs font-bold mb-1">{props.task.task_name}</div>
                 <div className="small-text text-gray-500">Owner: {props.task.task_owner}</div>
             </div>
-            <div className="bg-gray-700 h-px mb-2"></div>
+            <div className="bg-slate-500 mb-2" style={{ height: "0.5px" }}></div>
             <div className="flex flex-col md:flex-row justify-end gap-2 p-1">
                 <button className="btn btn-outline text-xs btn-xs">
                     View
