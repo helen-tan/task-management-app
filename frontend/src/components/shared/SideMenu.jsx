@@ -14,12 +14,17 @@ function SideMenu(props) {
     const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
     const [viewPlanModalIsOpen, setViewPlanModalIsOpen] = useState(false)
     const [planToView, setPlanToView] = useState({})
+    const [createTaskModalIsOpen, setCreateTaskModalIsOpen] = useState(false)
 
     // Create Plan form inputs
     const [createPlanNameInput, setCreatePlanNameInput] = useState("")
     const [createPlanStartdateInput, setCreatePlanStartdateInput] = useState("")
     const [createPlanEnddateInput, setCreatePlanEnddateInput] = useState("")
     const [createPlanColorInput, setCreatePlanColorInput] = useState("")
+
+    // Create Task form inputs
+    const [createTaskNameInput, setCreateTaskNameInput] = useState("")
+    const [createTaskDescriptionInput, setCreateTaskDescriptionInput] = useState("")
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -125,10 +130,45 @@ function SideMenu(props) {
         setPlanToView({})
     }
 
+    // Modal: Create Task
+    const openCreateTaskModal = (plan) => setCreateTaskModalIsOpen(true)
+    const closeCreateTaskModal = (plan) => setCreateTaskModalIsOpen(false)
+
+    const handleTaskCreateSubmit = async (e) => {
+        e.preventDefault()
+
+        const new_task = {
+            task_name: createTaskNameInput,
+            task_description: createTaskDescriptionInput,
+        }
+
+        // Send post request to create new task
+        try {
+            const response = await Axios.post(`http://localhost:5000/api/tasks/${props.app_acronym}`, new_task, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                    // clear user input
+                    setCreateTaskNameInput("")
+                    setCreateTaskDescriptionInput("")
+
+                    // increment count state (to induce re render of Plan list to include new Plan instantly)
+                    //setNewPlanCount(prevState => prevState + 1)
+                    //console.log(new_plan)
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <div className="bg-customBlack text-white w-1/5 p-4">
             {/* Create Task button */}
-            <button className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
+            <button onClick={openCreateTaskModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
                 <BsPlusLg /> New Task
             </button>
 
@@ -261,6 +301,48 @@ function SideMenu(props) {
                         <p>{planToView.plan_color}</p>
                     </div>
                 </div>
+
+            </Modal>
+
+            {/* Create Task Modal */}
+            <Modal
+                scrollable={true}
+                isOpen={createTaskModalIsOpen}
+                onRequestClose={closeCreateTaskModal}
+                style={customStyles}
+                contentLabel="Create New Task"
+            >
+                <div className="flex justify-between mb-5">
+                    <h2 className="font-bold text-xl">Create new Task</h2>
+                    <button onClick={closeCreateTaskModal}><strong>X</strong></button>
+                </div>
+
+                <form onSubmit={handleTaskCreateSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="create-task-name" className="font-semibold">Task Name:</label>
+                        <input
+                            className="form-control"
+                            onChange={(e) => setCreateTaskNameInput(e.target.value)}
+                            type="text"
+                            placeholder="Enter a task name here"
+                            value={createTaskNameInput}
+                            id="create-task-name"
+                            required
+                        />
+
+                        <label htmlFor="create-task-description" className="font-semibold">Description:</label>
+                        <textarea
+                            id="create-task-description"
+                            cols="30"
+                            rows="5"
+                            placeholder="Describe the task as detailed as you can"
+                            value={createTaskDescriptionInput}
+                            onChange={(e) => setCreateTaskDescriptionInput(e.target.value)}
+                        ></textarea>
+
+                        <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
+                    </div>
+                </form>
 
             </Modal>
         </div>
