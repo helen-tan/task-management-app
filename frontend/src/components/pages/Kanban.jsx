@@ -10,6 +10,7 @@ function Kanban() {
     const [loadingAppData, setLoadingAppData] = useState(true)
     const [loadingTasksData, setLoadingTasksData] = useState(true)
     const [taskUpdateCount, setTaskUpdateCount] = useState(0)
+    const [newTaskCount, setNewTaskCount] = useState(0)
     const [app, setApp] = useState({})
     const [tasks, setTasks] = useState([])
     const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
@@ -57,14 +58,17 @@ function Kanban() {
         // Fetch all tasks associated with the application
         fetchAppData()
         fetchTasks()
-    }, [taskUpdateCount])
+    }, [taskUpdateCount, newTaskCount])
 
     if (loadingAppData && loadingTasksData) {
         return <Spinner />
     } else {
         return (
             <div className="flex justify-between h-screen">
-                <SideMenu app_acronym={app_acronym} />
+                <SideMenu 
+                    app_acronym={app_acronym} 
+                    setNewTaskCount={setNewTaskCount}
+                />
 
                 <div className="grow columns-bg">
                     {/* Kanban board header */}
