@@ -3,10 +3,12 @@ import Axios from "axios"
 import { MdArrowLeft, MdArrowRight } from "react-icons/md"
 import Modal from 'react-modal'
 import { toast } from "react-toastify"
+import { FaNotesMedical } from "react-icons/fa"
 
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
     const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
+    const [notesArr, setNotesArr] = useState([])
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -51,6 +53,13 @@ function TaskCard(props) {
         if (props.task.task_plan !== "") {
             getPlanColor()
         }
+        // Store the comma-separated notes into an array (with no leading or trailing whitespaces)
+        let arr = props.task.task_notes.split(",")
+        arr.forEach((item, index) => {
+            arr[index] = item.trim()
+        })
+        //console.log(arr)
+        setNotesArr(arr)
     }, [])
 
     const promoteProgress = (task_state) => {
@@ -220,7 +229,11 @@ function TaskCard(props) {
 
                 <div className="flex flex-col mb-3">
                     <p className="font-bold mb-3">Notes </p>
-                    <div className="card-shadow bg-amber-100 rounded p-3">{props.task.task_notes}</div>
+                    <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
+                        {notesArr.map((note, index) => (
+                            <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">{note}</div>
+                        ))}
+                    </div>
                 </div>
             </Modal>
         </div>
