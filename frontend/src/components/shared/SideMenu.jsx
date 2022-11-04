@@ -179,7 +179,7 @@ function SideMenu(props) {
                 <div>Loading...</div>
                 :
                 <div className="bg-zinc-100 p-3 rounded">
-                    {(plans === []) ?
+                    {(plans.length < 1) ?
                         <h3 className="text-black">There are no plans yet.</h3>
                         :
                         plans.map((plan) => (
