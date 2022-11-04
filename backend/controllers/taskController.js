@@ -247,11 +247,86 @@ const updateTaskState = catchAsyncErrors(async (req, res) => {
     })
 })
 
+// @desc    Update Task's Notes (identified by unique task_id) - Also updates the task_owner to the logged in user
+// @route   /api/tasks/:task_id/updateNotes
+// @access  Private
+const updateTaskNotes = catchAsyncErrors(async (req, res) => {
+    // Get task_id (task identifier) of task (from the params)
+    const task_id = req.params.task_id
+
+    // task_owner must be changed to the last user to interact with the task
+    // which is the loggedInUser (from unique username in jwt token authMiddleware) who updated the task state 
+    const loggedInUser = req.username
+    const task_owner = loggedInUser
+
+    // User inputs
+    const { new_note_input } = req.body
+
+    // Get existing task_notes of the task and append the new_note to the string of task_notes
+    const response = await getAppTaskNotes(task_id)
+    const existing_notes = response[0].task_notes
+
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    let hours = today.getHours()
+    let mins = today.getMinutes()
+    let seconds = today.getSeconds()
+
+    today = yyyy + '-' + mm + '-' + dd;
+
+    // Construct string for new note
+    const new_note = `, ${new_note_input} [${today} ${hours}:${mins}:${seconds}]`
+    // Append new string to current notes
+    const updated_task_notes = existing_notes + new_note
+
+    db.query(`UPDATE tasks 
+        SET task_notes = ?, task_owner = ?
+        WHERE task_id = ?`, [updated_task_notes, task_owner, task_id], (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(201).send({
+                success: true,
+                message: `Note successfully added`,
+                data: {
+                    task_id: task_id,
+                    task_notes: updated_task_notes,
+                    task_owner: task_owner
+                },
+            })
+        }
+    })
+})
+
+// Helper method to return the task_notes of an application
+const getAppTaskNotes = (task_id) => {
+    return new Promise((resolve, reject) => {
+        db.query('select task_notes from tasks where task_id = ?', [task_id], (err, results) => {
+            if (err) {
+                reject(false)
+            } else {
+                try {
+                    resolve(results)
+                } catch (err) {
+                    reject(false)
+                }
+            }
+        })
+    })
+}
+
 
 
 module.exports = {
     createTask,
     getAllTasksByApp,
     getOneTask,
-    updateTaskState
+    updateTaskState,
+    updateTaskNotes
 }
