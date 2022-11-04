@@ -220,7 +220,7 @@ function TaskCard(props) {
 
                 <div className="flex flex-col mb-3">
                     <p className="font-bold mb-3">Notes </p>
-                    <div>{props.task.task_notes}</div>
+                    <div className="card-shadow bg-amber-100 rounded p-3">{props.task.task_notes}</div>
                 </div>
             </Modal>
         </div>
