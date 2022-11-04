@@ -4,11 +4,15 @@ import { MdArrowLeft, MdArrowRight } from "react-icons/md"
 import Modal from 'react-modal'
 import { toast } from "react-toastify"
 import { FaNotesMedical } from "react-icons/fa"
+import { BsPencilSquare } from "react-icons/bs"
 
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
     const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
     const [notesArr, setNotesArr] = useState([])
+
+    // Add new notes input
+    const [newNoteInput, setNewNoteInput] = useState("")
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -131,7 +135,33 @@ function TaskCard(props) {
     const openViewTaskModal = () => setViewTaskModalIsOpen(true)
     const closeViewTaskModal = () => setViewTaskModalIsOpen(false)
 
+    const handleNewNoteSubmit = async (e) => {
+        e.preventDefault()
 
+        const new_note = {
+            new_note_input: newNoteInput,
+        }
+
+        // Send post request to update task_notes
+        try {
+            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/updateNotes`, new_note, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                    // clear user input
+                    setNewNoteInput("")
+
+                    // increment count state (to induce re render of Plan list to include new Plan instantly)
+                    //props.setNewTaskCount(prevState => prevState + 1)
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <div className="card-shadow rounded bg-white mx-auto mt-2 w-11/12 p-2" style={{
@@ -235,6 +265,28 @@ function TaskCard(props) {
                         ))}
                     </div>
                 </div>
+
+                {/* TODO: Create form to add notes */}
+                <form onSubmit={handleNewNoteSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
+                        <textarea
+                            id="update-task-notes"
+                            cols="30"
+                            rows="3"
+                            placeholder="Say something..."
+                            value={newNoteInput}
+                            onChange={(e) => setNewNoteInput(e.target.value)}
+                        ></textarea>
+                    </div>
+
+                    <div className="flex justify-end">
+                        <button className="btn btn-sm gap-2" type="submit">
+                            <BsPencilSquare/>
+                            Add Note
+                        </button>
+                    </div>
+                </form>
             </Modal>
         </div>
     )
