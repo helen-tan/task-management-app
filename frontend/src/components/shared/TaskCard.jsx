@@ -3,13 +3,13 @@ import Axios from "axios"
 import { MdArrowLeft, MdArrowRight } from "react-icons/md"
 import Modal from 'react-modal'
 import { toast } from "react-toastify"
-import { FaNotesMedical } from "react-icons/fa"
 import { BsPencilSquare } from "react-icons/bs"
 
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
     const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
     const [notesArr, setNotesArr] = useState([])
+    const [newNoteCount, setNewNoteCount] = useState(0)
 
     // Add new notes input
     const [newNoteInput, setNewNoteInput] = useState("")
@@ -64,7 +64,7 @@ function TaskCard(props) {
         })
         //console.log(arr)
         setNotesArr(arr)
-    }, [])
+    }, [newNoteCount])
 
     const promoteProgress = (task_state) => {
         // Check the current task_state
@@ -149,11 +149,11 @@ function TaskCard(props) {
                 console.log(response.data)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
+                    // increment count state (to induce re render of Notes to include new note instantly)
+                    setNewNoteCount(prevState => prevState + 1)
+
                     // clear user input
                     setNewNoteInput("")
-
-                    // increment count state (to induce re render of Plan list to include new Plan instantly)
-                    //props.setNewTaskCount(prevState => prevState + 1)
                 } else {
                     toast.warning(response.data.message)
                 }
@@ -202,7 +202,7 @@ function TaskCard(props) {
                 isOpen={viewTaskModalIsOpen}
                 onRequestClose={closeViewTaskModal}
                 style={customStyles}
-                contentLabel="Create New Plan"
+                contentLabel="View Task Details"
             >
                 <div className="flex justify-between mb-5">
                     <div>
@@ -266,7 +266,7 @@ function TaskCard(props) {
                     </div>
                 </div>
 
-                {/* TODO: Create form to add notes */}
+                {/* Form to add notes */}
                 <form onSubmit={handleNewNoteSubmit}>
                     <div className="form-group">
                         <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
