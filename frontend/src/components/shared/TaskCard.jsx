@@ -261,7 +261,10 @@ function TaskCard(props) {
                     <p className="font-bold mb-3">Notes </p>
                     <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
                         {notesArr.map((note, index) => (
-                            <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">{note}</div>
+                            <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
+                                {/* name of note creator */}
+                                {note}
+                            </div>
                         ))}
                     </div>
                 </div>

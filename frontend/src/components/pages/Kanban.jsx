@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import SideMenu from "../shared/SideMenu"
 import BackLink from "../utils/BackLink"
 import Axios from "axios"
@@ -7,6 +7,7 @@ import Spinner from "../utils/Spinner"
 import TaskCard from "../shared/TaskCard"
 
 function Kanban() {
+    const [loggedInUser, setLoggedInUser] = useState("")
     const [loadingAppData, setLoadingAppData] = useState(true)
     const [loadingTasksData, setLoadingTasksData] = useState(true)
     const [taskUpdateCount, setTaskUpdateCount] = useState(0)
@@ -16,11 +17,27 @@ function Kanban() {
     const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
 
     const params = useParams()
+    const navigate = useNavigate()
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
         headers: {
             Authorization: bearer_token
+        }
+    }
+    // Send request to get identity of logged in user
+    async function authenticate() {
+        try {
+            const response = await Axios.get(`http://localhost:5000/api/users/authuser`, config)
+            if (response.data) {
+                setLoggedInUser(response.data.loggedInUser)
+
+                console.log(response.data)
+            }
+        } catch (err) {
+            console.log("There was a problem")
+            console.log(err)
+            navigate('/dashboard')
         }
     }
 
@@ -54,6 +71,7 @@ function Kanban() {
     }
 
     useEffect(() => {
+        authenticate()
         // Fetch application details (to display app name & use selected details - r_number)
         // Fetch all tasks associated with the application
         fetchAppData()
@@ -65,8 +83,8 @@ function Kanban() {
     } else {
         return (
             <div className="flex justify-between h-screen">
-                <SideMenu 
-                    app_acronym={app_acronym} 
+                <SideMenu
+                    app_acronym={app_acronym}
                     setNewTaskCount={setNewTaskCount}
                 />
 
@@ -102,7 +120,8 @@ function Kanban() {
                                         key={task.task_id}
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
-                                        setTaskUpdateCount={setTaskUpdateCount} />
+                                        setTaskUpdateCount={setTaskUpdateCount}
+                                        loggedInUser={loggedInUser} />
                                 }
                             })}
                         </div>
@@ -115,7 +134,8 @@ function Kanban() {
                                         key={task.task_id}
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
-                                        setTaskUpdateCount={setTaskUpdateCount} />
+                                        setTaskUpdateCount={setTaskUpdateCount}
+                                        loggedInUser={loggedInUser} />
                                 }
                             })}
                         </div>
@@ -128,7 +148,8 @@ function Kanban() {
                                         key={task.task_id}
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
-                                        setTaskUpdateCount={setTaskUpdateCount} />
+                                        setTaskUpdateCount={setTaskUpdateCount}
+                                        loggedInUser={loggedInUser} />
                                 }
                             })}
                         </div>
@@ -141,7 +162,8 @@ function Kanban() {
                                         key={task.task_id}
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
-                                        setTaskUpdateCount={setTaskUpdateCount} />
+                                        setTaskUpdateCount={setTaskUpdateCount}
+                                        loggedInUser={loggedInUser} />
                                 }
                             })}
                         </div>
@@ -154,7 +176,8 @@ function Kanban() {
                                         key={task.task_id}
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
-                                        setTaskUpdateCount={setTaskUpdateCount} />
+                                        setTaskUpdateCount={setTaskUpdateCount}
+                                        loggedInUser={loggedInUser} />
                                 }
                             })}
                         </div>
