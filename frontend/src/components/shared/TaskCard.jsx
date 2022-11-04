@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import Axios from "axios"
-import { MdArrowLeft, MdArrowRight } from "react-icons/md" 
+import { MdArrowLeft, MdArrowRight } from "react-icons/md"
+import Modal from 'react-modal'
 import { toast } from "react-toastify"
 
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
+    const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -33,7 +35,7 @@ function TaskCard(props) {
                 console.log(response.data)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
-                   
+
                 } else {
                     toast.warning(response.data.message)
                 }
@@ -42,7 +44,6 @@ function TaskCard(props) {
             console.log(err)
             toast.error("There was a problem")
         }
-
     }
 
     useEffect(() => {
@@ -50,7 +51,6 @@ function TaskCard(props) {
         if (props.task.task_plan !== "") {
             getPlanColor()
         }
-        // Todo: Get data of this task
     }, [])
 
     const promoteProgress = (task_state) => {
@@ -96,6 +96,34 @@ function TaskCard(props) {
 
     }
 
+    // Modal: View Task Details
+    Modal.setAppElement('#root');
+
+    const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            width: '50%',
+            height: '90vh',
+            borderRadius: ".5em",
+            overflowY: "auto",
+        },
+        overlay: {
+            zIndex: 1000,
+            background: "rgba(0, 0, 0, 0.5)",
+            //overflowY: "auto"
+        }
+    };
+
+    const openViewTaskModal = () => setViewTaskModalIsOpen(true)
+    const closeViewTaskModal = () => setViewTaskModalIsOpen(false)
+
+
+
     return (
         <div className="card-shadow rounded bg-white mx-auto mt-2 w-11/12 p-2" style={{
             borderLeft: `5px solid ${planColor}`
@@ -121,13 +149,80 @@ function TaskCard(props) {
             </div>
             <div className="bg-slate-500 mb-2" style={{ height: "0.5px" }}></div>
             <div className="flex flex-col md:flex-row justify-end gap-2 p-1">
-                <button className="btn btn-outline text-xs btn-xs">
+                <button onClick={() => openViewTaskModal()} className="btn btn-outline text-xs btn-xs">
                     View
                 </button>
                 <button className="btn btn-black text-xs btn-xs">
                     Edit
                 </button>
             </div>
+
+            {/* View Task Modal */}
+            <Modal
+                scrollable={true}
+                isOpen={viewTaskModalIsOpen}
+                onRequestClose={closeViewTaskModal}
+                style={customStyles}
+                contentLabel="Create New Plan"
+            >
+                <div className="flex justify-between mb-5">
+                    <div>
+                        <h2 className="font-bold text-2xl">{props.task.task_name}</h2>
+                        <p className="text-sm text-gray-500">{props.task.task_id}</p>
+                    </div>
+                    <button onClick={closeViewTaskModal}><strong>X</strong></button>
+                </div>
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Status </div>
+                    <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
+                </div>
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Plan </div>
+                    {(props.task.task_plan.length < 1) ?
+                        <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
+                        :
+                        <div className="px-1 ml-3" style={{
+                            border: `2px solid ${planColor}`,
+                            borderRadius: '5px',
+                            backgroundColor: `${planColor}`
+                        }}>
+                            {props.task.task_plan}
+                        </div>
+                    }
+                </div>
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Task Owner </div>
+                    <p className="ml-3">{props.task.task_owner}</p>
+                </div>
+
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Created by </div>
+                    <p className="ml-3">{props.task.task_creator}</p>
+                </div>
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Created On </div>
+                    <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
+                </div>
+
+                <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
+
+                <div className="flex flex-col mb-3">
+                    <p className="font-bold mb-3">Description </p>
+                    <div className="h-28" style={{ overflowY: 'scroll' }}>{props.task.task_description}</div>
+                </div>
+
+                <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
+
+                <div className="flex flex-col mb-3">
+                    <p className="font-bold mb-3">Notes </p>
+                    <div>{props.task.task_notes}</div>
+                </div>
+            </Modal>
         </div>
     )
 }
