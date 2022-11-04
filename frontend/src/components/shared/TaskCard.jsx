@@ -149,6 +149,7 @@ function TaskCard(props) {
                 console.log(response.data)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
+
                     // increment count state (to induce re render of Notes to include new note instantly)
                     setNewNoteCount(prevState => prevState + 1)
 
@@ -262,7 +263,6 @@ function TaskCard(props) {
                     <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
                         {notesArr.map((note, index) => (
                             <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
-                                {/* name of note creator */}
                                 {note}
                             </div>
                         ))}

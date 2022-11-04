@@ -278,7 +278,7 @@ const updateTaskNotes = catchAsyncErrors(async (req, res) => {
     today = yyyy + '-' + mm + '-' + dd;
 
     // Construct string for new note
-    const new_note = `, ${new_note_input} [${today} ${hours}:${mins}:${seconds}]`
+    const new_note = `, ${loggedInUser}: ${new_note_input} [${today} ${hours}:${mins}:${seconds}]`
     // Append new string to current notes
     const updated_task_notes = existing_notes + new_note
 
