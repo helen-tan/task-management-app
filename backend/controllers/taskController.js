@@ -297,7 +297,8 @@ const updateTaskNotes = catchAsyncErrors(async (req, res) => {
                 data: {
                     task_id: task_id,
                     task_notes: updated_task_notes,
-                    task_owner: task_owner
+                    task_owner: task_owner,
+                    timestamp: `${today} ${hours}:${mins}:${seconds}`
                 },
             })
         }
