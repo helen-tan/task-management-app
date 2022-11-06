@@ -211,9 +211,9 @@ const getOneTask = catchAsyncErrors(async (req, res) => {
 })
 
 // @desc    Update Task's State (identified by unique task_id) - Also updates the task_owner to the logged in user
-// @route   /api/tasks/:task_id/updateState
+// @route   /api/tasks/:task_id/promoteState
 // @access  Private
-const updateTaskState = catchAsyncErrors(async (req, res) => {
+const promoteTaskState = catchAsyncErrors(async (req, res) => {
     // Get task_id (task identifier) of task (from the params)
     const task_id = req.params.task_id
 
@@ -223,11 +223,50 @@ const updateTaskState = catchAsyncErrors(async (req, res) => {
     const task_owner = loggedInUser
 
     // User inputs
-    const { task_state } = req.body
+    //const { task_state } = req.body
+
+    // Get existing task_notes of the task to append the new_note to the string of task_notes
+    const response1 = await getAppTaskNotes(task_id)
+    const existing_notes = response1[0].task_notes
+
+    // Get current state of task
+    const response2 = await getAppTaskState(task_id)
+    const current_state = response2[0].task_state
+
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    let hours = today.getHours()
+    let mins = today.getMinutes()
+    let seconds = today.getSeconds()
+
+    today = yyyy + '-' + mm + '-' + dd;
+
+    // Determine updated state + Construct string for new note
+    let new_state = "" 
+    let new_note = ""
+    if (current_state === "open") {
+        new_state = "todo"
+        new_note = `, ${loggedInUser} has changed the task from "Open" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
+    } else if (current_state === "todo") {
+        new_state = "doing"
+        new_note = `, ${loggedInUser} has changed the task from "Todo" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
+    } else if (current_state === "doing") {
+        new_state = "done"
+        new_note = `, ${loggedInUser} has changed the task from "Doing" to "Done" [${today} ${hours}:${mins}:${seconds}]`
+    } else if (current_state === "done") {
+        new_state = "closed"
+        new_note = `, ${loggedInUser} has changed the task from "Done" to "Closed" [${today} ${hours}:${mins}:${seconds}]`
+    }
+
+    // Append new string to current notes
+    const updated_task_notes = existing_notes + new_note
 
     db.query(`UPDATE tasks 
-        SET task_state = ?, task_owner = ?
-        WHERE task_id = ?`, [task_state, task_owner, task_id], (err, results) => {
+        SET task_state = ?, task_owner = ?, task_notes = ?
+        WHERE task_id = ?`, [new_state, task_owner, updated_task_notes, task_id], (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,
@@ -236,11 +275,12 @@ const updateTaskState = catchAsyncErrors(async (req, res) => {
         } else {
             res.status(201).send({
                 success: true,
-                message: `The task of task_id "${task_id}" was updated to "${task_state}"`,
+                message: `The task of task_id "${task_id}" was updated to "${new_state}"`,
                 data: {
                     task_id: task_id,
-                    task_state: task_state,
-                    task_owner: task_owner
+                    task_state: new_state,
+                    task_owner: task_owner,
+                    task_notes: updated_task_notes
                 },
             })
         }
@@ -418,7 +458,7 @@ module.exports = {
     createTask,
     getAllTasksByApp,
     getOneTask,
-    updateTaskState,
+    promoteTaskState,
     updateTaskNotes,
     updateTaskStatePromoteNotes
 }
