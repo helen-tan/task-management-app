@@ -8,8 +8,9 @@ import { BsPencilSquare } from "react-icons/bs"
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
     const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
-    const [notesArr, setNotesArr] = useState([])
+    const [originalNotes, setOriginalNotes] = useState([])
     const [newNoteCount, setNewNoteCount] = useState(0)
+    const [newNotes, setNewNotes] = useState([])
 
     // Add new notes input
     const [newNoteInput, setNewNoteInput] = useState("")
@@ -63,7 +64,10 @@ function TaskCard(props) {
             arr[index] = item.trim()
         })
         //console.log(arr)
-        setNotesArr(arr)
+        setOriginalNotes(arr)
+        // Note: If count is 0, set as state given from parent 
+        //console.log(props.task.task_notes)
+        //setOriginalNotes(props.task.task_notes)
     }, [newNoteCount])
 
     const promoteProgress = (task_state) => {
@@ -146,9 +150,18 @@ function TaskCard(props) {
         try {
             const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/updateNotes`, new_note, config)
             if (response) {
-                console.log(response.data)
+                // console.log(response.data)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
+
+                    const newNotes = response.data.data.task_notes
+                    // Store the comma-separated notes into an array (with no leading or trailing whitespaces)
+                    let arr = newNotes.split(",")
+                    arr.forEach((item, index) => {
+                        arr[index] = item.trim()
+                    })
+                    setNewNotes(arr)
+                    //console.log(arr)
 
                     // increment count state (to induce re render of Notes to include new note instantly)
                     setNewNoteCount(prevState => prevState + 1)
@@ -261,17 +274,36 @@ function TaskCard(props) {
                 <div className="flex flex-col mb-3">
                     <p className="font-bold mb-3">Notes </p>
                     <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
-                        {notesArr.map((note, index) => (
-                            <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
-                                {note}
-                            </div>
-                        ))}
+                        {(newNoteCount === 0) ?
+                            originalNotes.map((note, index) => (
+                                <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
+                                    {note}
+                                </div>
+                            ))
+                            :
+                            newNotes.map((note, index) => (
+                                <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
+                                    {note}
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
 
                 {/* Form to add notes */}
                 <form onSubmit={handleNewNoteSubmit}>
                     <div className="form-group">
+                        {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
+                        {/* <textarea
+                            id="task_notes"
+                            cols="30"
+                            rows="10"
+                            value={(newNoteCount==0)?originalNotes:newNotes}
+                            disabled
+                            style={{ overflowY: 'scroll' }} 
+                        >
+                        </textarea> */}
+
                         <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
                         <textarea
                             id="update-task-notes"
@@ -285,7 +317,7 @@ function TaskCard(props) {
 
                     <div className="flex justify-end">
                         <button className="btn btn-sm gap-2" type="submit">
-                            <BsPencilSquare/>
+                            <BsPencilSquare />
                             Add Note
                         </button>
                     </div>
