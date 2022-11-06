@@ -344,80 +344,6 @@ const updateTaskNotes = catchAsyncErrors(async (req, res) => {
     })
 })
 
-// @desc    Update Task's Notes when task_state is changed (identified by unique task_id) - Also updates the task_owner to the logged in user
-// @route   /api/tasks/:task_id/updateStateNotes
-// @access  Private
-const updateTaskStatePromoteNotes = catchAsyncErrors(async (req, res) => {
-    // Get task_id (task identifier) of task (from the params)
-    const task_id = req.params.task_id
-
-    // task_owner must be changed to the last user to interact with the task
-    // which is the loggedInUser (from unique username in jwt token authMiddleware) who updated the task state 
-    const loggedInUser = req.username
-    const task_owner = loggedInUser
-
-
-    // Get existing task_notes of the task to append the new_note to the string of task_notes
-    const response1 = await getAppTaskNotes(task_id)
-    const existing_notes = response1[0].task_notes
-
-    const response2 = await getAppTaskState(task_id)
-    const current_state = response2[0].task_state
-
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = today.getFullYear();
-
-    let hours = today.getHours()
-    let mins = today.getMinutes()
-    let seconds = today.getSeconds()
-
-    today = yyyy + '-' + mm + '-' + dd;
-
-    // Construct string for new note
-    let new_note = ""
-    if (current_state === "open") {
-        new_note = `, ${loggedInUser} has changed the task from "Open" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
-    } else if (current_state === "todo") {
-        new_note = `, ${loggedInUser} has changed the task from "Todo" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
-    } else if (current_state === "doing") {
-        new_note = `, ${loggedInUser} has changed the task from "Doing" to "Done" [${today} ${hours}:${mins}:${seconds}]`
-    } else if (current_state === "done") {
-        new_note = `, ${loggedInUser} has changed the task from "Todo" to "Closed" [${today} ${hours}:${mins}:${seconds}]`
-    }
-
-    // Append new string to current notes
-    const updated_task_notes = existing_notes + new_note
-
-    res.send({
-        task_id: task_id,
-        task_notes: updated_task_notes,
-        task_owner: task_owner
-    })
-
-    db.query(`UPDATE tasks 
-        SET task_notes = ?, task_owner = ?
-        WHERE task_id = ?`, [updated_task_notes, task_owner, task_id], (err, results) => {
-        if (err) {
-            res.status(400).send({
-                success: false,
-                message: err.code
-            })
-        } else {
-            res.status(201).send({
-                success: true,
-                message: `Task state update note successfully added`,
-                data: {
-                    task_id: task_id,
-                    task_notes: updated_task_notes,
-                    task_owner: task_owner
-                }
-            })
-        }
-    })
-})
-
 // Helper method to return the task_notes of a task of an App
 const getAppTaskNotes = (task_id) => {
     return new Promise((resolve, reject) => {
@@ -459,6 +385,5 @@ module.exports = {
     getAllTasksByApp,
     getOneTask,
     promoteTaskState,
-    updateTaskNotes,
-    updateTaskStatePromoteNotes
+    updateTaskNotes
 }
