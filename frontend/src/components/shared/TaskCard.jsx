@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Axios from "axios"
 import { MdArrowLeft, MdArrowRight } from "react-icons/md"
 import Modal from 'react-modal'
@@ -11,6 +11,7 @@ function TaskCard(props) {
     const [originalNotes, setOriginalNotes] = useState([])
     const [newNoteCount, setNewNoteCount] = useState(0)
     const [newNotes, setNewNotes] = useState([])
+    const bottomRef = useRef(null)
 
     // Add new notes input
     const [newNoteInput, setNewNoteInput] = useState("")
@@ -68,6 +69,9 @@ function TaskCard(props) {
         // Note: If count is 0, set as state given from parent 
         //console.log(props.task.task_notes)
         //setOriginalNotes(props.task.task_notes)
+
+        // scroll to bottom every time newNoteCount change
+        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
     }, [newNoteCount])
 
     const promoteProgress = (task_state) => {
@@ -287,6 +291,7 @@ function TaskCard(props) {
                                 </div>
                             ))
                         }
+                        <div ref={bottomRef} />
                     </div>
                 </div>
 
