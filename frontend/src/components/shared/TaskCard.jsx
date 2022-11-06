@@ -35,10 +35,29 @@ function TaskCard(props) {
         }
     }
 
-    const promoteTaskState = async (updated_task_state) => {
+    const promoteTaskState = async () => {
         // Send put request to update a task's task_state
         try {
-            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/promoteState`, { task_state: updated_task_state }, config)
+            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/promoteState`, {}, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("There was a problem")
+        }
+    }
+
+    const demoteTaskState = async () => {
+        // Send put request to update a task's task_state
+        try {
+            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/demoteState`, {}, config)
             if (response) {
                 console.log(response.data)
                 if (response.data.success === true) {
@@ -79,16 +98,16 @@ function TaskCard(props) {
         // Change the task_state to the one after it
         // - if closed, don't do anything to the task_state - remain as "closed"
         if (task_state === "open") {
-            promoteTaskState("todo")
+            promoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "todo") {
-            promoteTaskState("doing")
+            promoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "doing") {
-            promoteTaskState("done")
+            promoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "done") {
-            promoteTaskState("closed")
+            promoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "closed") {
             toast.warning("The task is closed")
@@ -102,16 +121,16 @@ function TaskCard(props) {
         if (task_state === "open") {
             toast.warning("This task cannot be demoted")
         } else if (task_state === "todo") {
-            //updateTaskState("open")
+            demoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "doing") {
-            //updateTaskState("todo")
+            demoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "done") {
-            //updateTaskState("doing")
+            demoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         } else if (task_state === "closed") {
-            //updateTaskState("done")
+            demoteTaskState()
             props.setTaskUpdateCount(prevState => prevState + 1)
         }
 
