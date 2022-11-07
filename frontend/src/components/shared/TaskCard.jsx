@@ -90,50 +90,17 @@ function TaskCard(props) {
         //setOriginalNotes(props.task.task_notes)
 
         // scroll to bottom every time newNoteCount change
-        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [newNoteCount])
 
-    const promoteProgress = (task_state) => {
-        // Check the current task_state
-        // Change the task_state to the one after it
-        // - if closed, don't do anything to the task_state - remain as "closed"
-        if (task_state === "open") {
-            promoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        } else if (task_state === "todo") {
-            promoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        } else if (task_state === "doing") {
-            promoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        } else if (task_state === "done") {
-            promoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        } else if (task_state === "closed") {
-            toast.warning("The task is closed")
-        }
+    const promoteProgress = () => {
+        promoteTaskState()
+        props.setTaskUpdateCount(prevState => prevState + 1)
     }
 
-    const demoteProgress = (task_state) => {
-        // Check the current task_state
-        // - if open, don't do anything to the task_state
-        // Change the task_state to the one before it
-        if (task_state === "open") {
-            toast.warning("This task cannot be demoted")
-        } else if (task_state === "todo") {
-            demoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        } else if (task_state === "doing") {
-            demoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        } else if (task_state === "done") {
-            demoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        } else if (task_state === "closed") {
-            demoteTaskState()
-            props.setTaskUpdateCount(prevState => prevState + 1)
-        }
-
+    const demoteProgress = () => {
+        demoteTaskState()
+        props.setTaskUpdateCount(prevState => prevState + 1)
     }
 
     // Modal: View Task Details

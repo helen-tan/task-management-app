@@ -244,6 +244,7 @@ const promoteTaskState = catchAsyncErrors(async (req, res) => {
 
     today = yyyy + '-' + mm + '-' + dd;
 
+    // Check the current task_state
     // Determine updated state + Construct string for new note
     let new_state = "" 
     let new_note = ""
@@ -321,6 +322,7 @@ const demoteTaskState = catchAsyncErrors(async (req, res) => {
 
     today = yyyy + '-' + mm + '-' + dd;
 
+    // Check the current task_state
     // Determine updated state + Construct string for new note
     let new_state = "" 
     let new_note = ""
