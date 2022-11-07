@@ -13,6 +13,7 @@ function Kanban() {
     const [taskUpdateCount, setTaskUpdateCount] = useState(0)
     const [newTaskCount, setNewTaskCount] = useState(0)
     const [app, setApp] = useState({})
+    const [plans, setPlans] = useState([])
     const [tasks, setTasks] = useState([])
     const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
 
@@ -86,6 +87,8 @@ function Kanban() {
                 <SideMenu
                     app_acronym={app_acronym}
                     setNewTaskCount={setNewTaskCount}
+                    plans={plans}
+                    setPlans={setPlans}
                 />
 
                 <div className="grow columns-bg">
@@ -121,7 +124,8 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} />
+                                        loggedInUser={loggedInUser}
+                                        plans={plans} />
                                 }
                             })}
                         </div>
@@ -135,7 +139,8 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} />
+                                        loggedInUser={loggedInUser} 
+                                        plans={plans}/>
                                 }
                             })}
                         </div>
@@ -149,7 +154,8 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} />
+                                        loggedInUser={loggedInUser} 
+                                        plans={plans}/>
                                 }
                             })}
                         </div>
@@ -163,7 +169,8 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} />
+                                        loggedInUser={loggedInUser} 
+                                        plans={plans}/>
                                 }
                             })}
                         </div>
@@ -177,7 +184,8 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} />
+                                        loggedInUser={loggedInUser} 
+                                        plans={plans}/>
                                 }
                             })}
                         </div>

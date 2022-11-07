@@ -7,14 +7,21 @@ import { BsPencilSquare } from "react-icons/bs"
 
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
-    const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
     const [originalNotes, setOriginalNotes] = useState([])
     const [newNoteCount, setNewNoteCount] = useState(0)
     const [newNotes, setNewNotes] = useState([])
     const bottomRef = useRef(null)
 
+    // Modal states
+    const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
+    const [editTaskModalIsOpen, setEditTaskModalIsOpen] = useState(false)
+
     // Add new notes input
     const [newNoteInput, setNewNoteInput] = useState("")
+
+    // Edit Task form inputs
+    const [editTaskDescriptionInput, setEditTaskDescriptionInput] = useState("")
+    const [editTaskPlanColorInput, setEditTaskPlanColorInput] = useState("")
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -78,6 +85,7 @@ function TaskCard(props) {
         if (props.task.task_plan !== "") {
             getPlanColor()
         }
+        //console.log(props.task.task_notes)
         // Store the comma-separated notes into an array (with no leading or trailing whitespaces)
         let arr = props.task.task_notes.split(",")
         arr.forEach((item, index) => {
@@ -85,12 +93,13 @@ function TaskCard(props) {
         })
         //console.log(arr)
         setOriginalNotes(arr)
-        // Note: If count is 0, set as state given from parent 
-        //console.log(props.task.task_notes)
-        //setOriginalNotes(props.task.task_notes)
 
         // scroll to bottom every time newNoteCount change
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+        // Set initial states for edit task form fields
+        setEditTaskDescriptionInput(props.task.task_description)
+        setEditTaskPlanColorInput(props.task.task_plan)
     }, [newNoteCount])
 
     const promoteProgress = () => {
@@ -167,6 +176,16 @@ function TaskCard(props) {
         }
     }
 
+    // Modal: Edit Task
+    const openEditTaskModal = () => setEditTaskModalIsOpen(true)
+    const closeEditTaskModal = () => setEditTaskModalIsOpen(false)
+
+    const handleEditTaskSubmit = async (e) => {
+        e.preventDefault()
+        console.log("Edit Task Submit")
+    }
+
+
     return (
         <div className="card-shadow rounded bg-white mx-auto mt-2 w-11/12 p-2" style={{
             borderLeft: `5px solid ${planColor}`
@@ -195,7 +214,7 @@ function TaskCard(props) {
                 <button onClick={() => openViewTaskModal()} className="btn btn-outline text-xs btn-xs">
                     View
                 </button>
-                <button className="btn btn-black text-xs btn-xs">
+                <button onClick={() => openEditTaskModal()} className="btn btn-black text-xs btn-xs">
                     Edit
                 </button>
             </div>
@@ -295,6 +314,138 @@ function TaskCard(props) {
                         >
                         </textarea> */}
 
+                        <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
+                        <textarea
+                            id="update-task-notes"
+                            cols="30"
+                            rows="3"
+                            placeholder="Say something..."
+                            value={newNoteInput}
+                            onChange={(e) => setNewNoteInput(e.target.value)}
+                        ></textarea>
+                    </div>
+
+                    <div className="flex justify-end">
+                        <button className="btn btn-sm gap-2" type="submit">
+                            <BsPencilSquare />
+                            Add Note
+                        </button>
+                    </div>
+                </form>
+            </Modal>
+
+            {/* Edit Task Modal */}
+            <Modal
+                scrollable={true}
+                isOpen={editTaskModalIsOpen}
+                onRequestClose={closeEditTaskModal}
+                style={customStyles}
+                contentLabel="Edit Task Details"
+            >
+                <div className="flex justify-between mb-5">
+                    <div>
+                        <h2 className="font-bold text-2xl">Edit Task - {props.task.task_name}</h2>
+                        <p className="text-sm text-gray-500">{props.task.task_id}</p>
+                    </div>
+                    <button onClick={closeEditTaskModal}><strong>X</strong></button>
+                </div>
+
+                {/* Display current Task data */}
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Status </div>
+                    <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
+                </div>
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Plan </div>
+                    {(props.task.task_plan.length < 1) ?
+                        <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
+                        :
+                        <div className="px-1 ml-3" style={{
+                            border: `2px solid ${planColor}`,
+                            borderRadius: '5px',
+                            backgroundColor: `${planColor}`
+                        }}>
+                            {props.task.task_plan}
+                        </div>
+                    }
+                </div>
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Task Owner </div>
+                    <p className="ml-3">{props.task.task_owner}</p>
+                </div>
+
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Created by </div>
+                    <p className="ml-3">{props.task.task_creator}</p>
+                </div>
+
+                <div className="flex w-8/12 justify-between mb-3">
+                    <div className="font-semibold text-gray-400">Created On </div>
+                    <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
+                </div>
+
+                <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
+
+                {/* Edit Task form - plan, description only */}
+                <form onSubmit={handleEditTaskSubmit}>
+                    <div className="form-group">
+                        {/* Change Plan color input - Dropdown to show available plans*/}
+                        <label htmlFor="edit-task-plan-color" className="font-semibold">Change Plan:</label>
+                        <select id="edit-task-plan-color" value={editTaskPlanColorInput} onChange={(e) => setEditTaskPlanColorInput(e.target.value)}>
+                            <option value="" disabled>Choose a plan...</option>
+                            {props.plans.map((plan) => (
+                                <option key={plan.plan_mvp_name} style={{
+                                    backgroundColor: `${plan.plan_color}`
+                                }}>
+                                    {plan.plan_mvp_name}
+                                </option>
+                            ))}
+                        </select>
+
+                        {/*Task Description input */}
+                        <label htmlFor="edit-task-description" className="font-semibold">Description:</label>
+                        <textarea
+                            id="edit-task-description"
+                            cols="30"
+                            rows="5"
+                            placeholder="Say a few words about the task..."
+                            value={editTaskDescriptionInput}
+                            onChange={(e) => setEditTaskDescriptionInput(e.target.value)}
+                        ></textarea>
+                    </div>
+                    <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
+                </form>
+
+                {/* Notes section */}
+
+                <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
+
+                <div className="flex flex-col mb-3">
+                    <p className="font-bold text-2xl mb-3">Notes </p>
+                    <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
+                        {(newNoteCount === 0) ?
+                            originalNotes.map((note, index) => (
+                                <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
+                                    {note}
+                                </div>
+                            ))
+                            :
+                            newNotes.map((note, index) => (
+                                <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
+                                    {note}
+                                </div>
+                            ))
+                        }
+                        <div ref={bottomRef} />
+                    </div>
+                </div>
+
+                {/* Form to add notes */}
+                <form onSubmit={handleNewNoteSubmit}>
+                    <div className="form-group">
                         <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
                         <textarea
                             id="update-task-notes"

@@ -6,9 +6,9 @@ import { BsPlusLg } from "react-icons/bs"
 import { SliderPicker } from 'react-color'
 
 function SideMenu(props) {
-    const [plans, setPlans] = useState([])
+   // const [plans, setPlans] = useState([]) // Moved to parent
     const [newPlanCount, setNewPlanCount] = useState(0)
-   // const [newTaskCount, setNewTaskCount] = useState(0)
+   // const [newTaskCount, setNewTaskCount] = useState(0) // Moved to parent
     const [loading, setLoading] = useState(true)
 
     // Modal states
@@ -38,7 +38,7 @@ function SideMenu(props) {
         try {
             const response = await Axios.get(`http://localhost:5000/api/plans/${props.app_acronym}`, config)
             if (response.data) {
-                setPlans(response.data.data)
+                props.setPlans(response.data.data)
                 setLoading(false)
                 //console.log(response.data.data)
             }
@@ -179,10 +179,10 @@ function SideMenu(props) {
                 <div>Loading...</div>
                 :
                 <div className="bg-zinc-100 p-3 rounded">
-                    {(plans.length < 1) ?
+                    {(props.plans.length < 1) ?
                         <h3 className="text-black">There are no plans yet.</h3>
                         :
-                        plans.map((plan) => (
+                        props.plans.map((plan) => (
                             <div key={plan.plan_mvp_name} className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
                                 borderLeft: `10px solid ${plan.plan_color}`
                             }}>
