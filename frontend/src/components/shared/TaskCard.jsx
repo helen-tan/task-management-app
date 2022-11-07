@@ -351,43 +351,45 @@ function TaskCard(props) {
                 </div>
 
                 {/* Display current Task data */}
-                <div className="flex w-8/12 justify-between mb-3">
-                    <div className="font-semibold text-gray-400">Status </div>
-                    <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
+                <div className="mb-10">
+                    <div className="flex w-8/12 justify-between mb-3">
+                        <div className="font-semibold text-gray-400">Status </div>
+                        <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
+                    </div>
+
+                    <div className="flex w-8/12 justify-between mb-3">
+                        <div className="font-semibold text-gray-400">Plan </div>
+                        {(props.task.task_plan.length < 1) ?
+                            <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
+                            :
+                            <div className="px-1 ml-3" style={{
+                                border: `2px solid ${planColor}`,
+                                borderRadius: '5px',
+                                backgroundColor: `${planColor}`
+                            }}>
+                                {props.task.task_plan}
+                            </div>
+                        }
+                    </div>
+
+                    <div className="flex w-8/12 justify-between mb-3">
+                        <div className="font-semibold text-gray-400">Task Owner </div>
+                        <p className="ml-3">{props.task.task_owner}</p>
+                    </div>
+
+
+                    <div className="flex w-8/12 justify-between mb-3">
+                        <div className="font-semibold text-gray-400">Created by </div>
+                        <p className="ml-3">{props.task.task_creator}</p>
+                    </div>
+
+                    <div className="flex w-8/12 justify-between mb-3">
+                        <div className="font-semibold text-gray-400">Created On </div>
+                        <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
+                    </div>
                 </div>
 
-                <div className="flex w-8/12 justify-between mb-3">
-                    <div className="font-semibold text-gray-400">Plan </div>
-                    {(props.task.task_plan.length < 1) ?
-                        <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
-                        :
-                        <div className="px-1 ml-3" style={{
-                            border: `2px solid ${planColor}`,
-                            borderRadius: '5px',
-                            backgroundColor: `${planColor}`
-                        }}>
-                            {props.task.task_plan}
-                        </div>
-                    }
-                </div>
-
-                <div className="flex w-8/12 justify-between mb-3">
-                    <div className="font-semibold text-gray-400">Task Owner </div>
-                    <p className="ml-3">{props.task.task_owner}</p>
-                </div>
-
-
-                <div className="flex w-8/12 justify-between mb-3">
-                    <div className="font-semibold text-gray-400">Created by </div>
-                    <p className="ml-3">{props.task.task_creator}</p>
-                </div>
-
-                <div className="flex w-8/12 justify-between mb-3">
-                    <div className="font-semibold text-gray-400">Created On </div>
-                    <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
-                </div>
-
-                <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
+                
 
                 {/* Edit Task form - plan, description only */}
                 <form onSubmit={handleEditTaskSubmit}>
