@@ -8,10 +8,12 @@ import { BsPencilSquare } from "react-icons/bs"
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
     const [originalNotes, setOriginalNotes] = useState([])
-    const [newNoteCount, setNewNoteCount] = useState(0)
     const [newNotes, setNewNotes] = useState([])
     const bottomRef = useRef(null)
-
+    
+    const [newNoteCount, setNewNoteCount] = useState(0)
+    const [editTaskCount, setEditTaskCount] = useState(0)
+    
     // Modal states
     const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
     const [editTaskModalIsOpen, setEditTaskModalIsOpen] = useState(false)
@@ -100,7 +102,7 @@ function TaskCard(props) {
         // Set initial states for edit task form fields
         setEditTaskDescriptionInput(props.task.task_description)
         setEditTaskPlanInput(props.task.task_plan)
-    }, [newNoteCount])
+    }, [newNoteCount, editTaskCount])
 
     const promoteProgress = () => {
         promoteTaskState()
@@ -207,6 +209,8 @@ function TaskCard(props) {
 
                     setEditTaskPlanInput(response.data.data.task_plan)
                     setEditTaskDescriptionInput(response.data.data.task_description)
+
+                    setEditTaskCount(prevState => prevState + 1)
 
                     // increment count state (to induce re render of Notes to include new note instantly)
                     setNewNoteCount(prevState => prevState + 1)
