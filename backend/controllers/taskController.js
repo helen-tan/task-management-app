@@ -460,11 +460,12 @@ const getAppTaskState = (task_id) => {
 
 // @desc    Update Task's plan & description only (identified by unique task_id) 
 // - Also updates the task_owner to the logged in user + Add a note to say what was changed
-// @route   /api/tasks/:task_id/updateTask
+// @route   /api/tasks/:app_acronym/:task_id/updateTask
 // @access  Private
 const updateTask = catchAsyncErrors(async (req, res) => {
     // Get task_id (task identifier) of task (from the params)
     const task_id = req.params.task_id
+    const app_acronym = req.params.app_acronym
 
     // task_owner must be changed to the last user to interact with the task
     // which is the loggedInUser (from unique username in jwt token authMiddleware) who updated the task state 
@@ -488,6 +489,10 @@ const updateTask = catchAsyncErrors(async (req, res) => {
     // Get current task_description of the task for comparison 
     const response3 = await getAppTaskDescription(task_id)
     const existing_description = response3[0].task_description
+
+    // Get plan color of plan_name that user has given
+    const response4 = await getAppPlanColor(task_plan, app_acronym)
+    const new_plan_color = response4[0].plan_color
 
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
@@ -569,6 +574,7 @@ const updateTask = catchAsyncErrors(async (req, res) => {
                 data: {
                     task_id: task_id,
                     task_plan: task_plan,
+                    task_color: new_plan_color,
                     task_description: task_description,
                     task_notes: updated_task_notes,
                     task_owner: task_owner
@@ -612,6 +618,25 @@ const getAppTaskDescription = (task_id) => {
     })
 }
 
+// Helper method to return the task_color of a plan of an App
+const getAppPlanColor = (plan_name, plan_app_acronym) => {
+    return new Promise((resolve, reject) => {
+        db.query(`
+            select plan_color from plans 
+            where plan_mvp_name = ? and plan_app_acronym = ?`, 
+        [plan_name, plan_app_acronym], (err, results) => {
+            if (err) {
+                reject(false)
+            } else {
+                try {
+                    resolve(results)
+                } catch (err) {
+                    reject(false)
+                }
+            }
+        })
+    })
+}
 
 
 module.exports = {

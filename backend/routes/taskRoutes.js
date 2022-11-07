@@ -10,6 +10,6 @@ router.get('/:task_app_acronym/:task_id', protect, getOneTask)
 router.put('/:task_id/promoteState', protect, promoteTaskState)
 router.put('/:task_id/demoteState', protect, demoteTaskState)
 router.put('/:task_id/updateNotes', protect, updateTaskNotes)
-router.put('/:task_id/updateTask', protect, updateTask)
+router.put('/:app_acronym/:task_id/updateTask', protect, updateTask)
 
 module.exports = router

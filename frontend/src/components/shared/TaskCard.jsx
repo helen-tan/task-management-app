@@ -10,10 +10,10 @@ function TaskCard(props) {
     const [originalNotes, setOriginalNotes] = useState([])
     const [newNotes, setNewNotes] = useState([])
     const bottomRef = useRef(null)
-    
+
     const [newNoteCount, setNewNoteCount] = useState(0)
     const [editTaskCount, setEditTaskCount] = useState(0)
-    
+
     // Modal states
     const [viewTaskModalIsOpen, setViewTaskModalIsOpen] = useState(false)
     const [editTaskModalIsOpen, setEditTaskModalIsOpen] = useState(false)
@@ -24,6 +24,11 @@ function TaskCard(props) {
     // Edit Task form inputs
     const [editTaskDescriptionInput, setEditTaskDescriptionInput] = useState("")
     const [editTaskPlanInput, setEditTaskPlanInput] = useState("")
+
+    // States to store new values on task edit, for instant display on update
+    const [newTaskPlanColor, setNewTaskPlanColor] = useState("")
+    const [newTaskPlanName, setNewTaskPlanName] = useState("")
+    const [newTaskOwner, setNewTaskOwner] = useState("")
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -189,10 +194,10 @@ function TaskCard(props) {
             task_plan: editTaskPlanInput,
             task_description: editTaskDescriptionInput
         }
-        
+
         // Send put request to update task_notes
         try {
-            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/updateTask`, editedFields , config)
+            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_app_acronym}/${props.task.task_id}/updateTask`, editedFields, config)
             if (response) {
                 console.log(response.data)
                 if (response.data.success === true) {
@@ -204,14 +209,19 @@ function TaskCard(props) {
                     arr.forEach((item, index) => {
                         arr[index] = item.trim()
                     })
-                    setNewNotes(arr)
                     //console.log(arr)
+                    setNewNotes(arr)
 
+                    setNewTaskPlanColor(response.data.data.task_color)
+                    setNewTaskPlanName(response.data.data.task_plan)
+                    setNewTaskOwner(response.data.data.task_owner)
+
+                    // Set the form initial input values to the new values
                     setEditTaskPlanInput(response.data.data.task_plan)
                     setEditTaskDescriptionInput(response.data.data.task_description)
 
+                    // increment count state (induce instant re-render in edit task modal)
                     setEditTaskCount(prevState => prevState + 1)
-
                     // increment count state (to induce re render of Notes to include new note instantly)
                     setNewNoteCount(prevState => prevState + 1)
 
@@ -403,19 +413,31 @@ function TaskCard(props) {
                         {(props.task.task_plan.length < 1) ?
                             <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
                             :
-                            <div className="px-1 ml-3" style={{
-                                border: `2px solid ${planColor}`,
-                                borderRadius: '5px',
-                                backgroundColor: `${planColor}`
-                            }}>
-                                {props.task.task_plan}
-                            </div>
+                            (editTaskCount === 0) ?
+                                <div className="px-1 ml-3" style={{
+                                    border: `2px solid ${planColor}`,
+                                    borderRadius: '5px',
+                                    backgroundColor: `${planColor}`
+                                }}>
+                                    {props.task.task_plan}
+                                </div>
+                                :
+                                <div className="px-1 ml-3" style={{
+                                    border: `2px solid ${newTaskPlanColor}`,
+                                    borderRadius: '5px',
+                                    backgroundColor: `${newTaskPlanColor}`
+                                }}>
+                                    {/*Name of Plan */}
+                                    {(editTaskCount === 0) ? props.task.task_plan : newTaskPlanName}
+                                </div>
                         }
                     </div>
 
                     <div className="flex w-8/12 justify-between mb-3">
                         <div className="font-semibold text-gray-400">Task Owner </div>
-                        <p className="ml-3">{props.task.task_owner}</p>
+                        <p className="ml-3">
+                            {(editTaskCount === 0) ? props.task.task_owner : newTaskOwner }
+                        </p>
                     </div>
 
                     <div className="flex w-8/12 justify-between mb-3">
@@ -429,7 +451,7 @@ function TaskCard(props) {
                     </div>
                 </div>
 
-                
+
 
                 {/* Edit Task form - plan, description only */}
                 <form onSubmit={handleEditTaskSubmit}>
