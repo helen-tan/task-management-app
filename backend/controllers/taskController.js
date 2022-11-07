@@ -482,8 +482,12 @@ const updateTask = catchAsyncErrors(async (req, res) => {
     const existing_notes = response1[0].task_notes
 
     // Get current task_description of the task for comparison 
-    const response2 = await getAppTaskDescription(task_id)
-    const existing_description = response2[0].task_description
+    const response2 = await getAppTaskPlan(task_id)
+    const existing_plan = response2[0].task_plan
+
+    // Get current task_description of the task for comparison 
+    const response3 = await getAppTaskDescription(task_id)
+    const existing_description = response3[0].task_description
 
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
@@ -504,7 +508,7 @@ const updateTask = catchAsyncErrors(async (req, res) => {
     if (task_plan.length < 1 && task_description.length < 1) {
         return res.status(200).send({
             success: false,
-            message: 'No changes were detected'
+            message: 'No fields were filled'
         })
         // If only task_plan was filled  (+ change task_owner to logged-in user)
     } else if (task_plan.length > 0 && task_description.length < 1) {
@@ -536,8 +540,15 @@ const updateTask = catchAsyncErrors(async (req, res) => {
 
         // Both task_plan && task_description were filled (+ change task_owner to logged-in user)
     } else if (task_plan.length > 0 && task_description.length > 0) {
-        // Check if task_description (from user) is any different from the exisitng task_description
-        if (task_description.trim() === existing_description) {
+        // Check if task_description & task_plan (from user) is any different from their existing values
+        // No diff from value in DB
+        if (task_plan === existing_plan && task_description.trim() === existing_description) {
+            return res.status(200).send({
+                success: false,
+                message: 'No changes were detected'
+            })
+            // Only Plan is diff
+        } else if (task_plan !== existing_plan && task_description.trim() === existing_description) {
             // Construct string for new note
             let new_note = `\n ${loggedInUser} has updated the task plan [${today} ${hours}:${mins}:${seconds}]`
             // Append new string to current notes
@@ -549,12 +560,26 @@ const updateTask = catchAsyncErrors(async (req, res) => {
             task_owner = "${task_owner}", 
             task_notes = "${updated_task_notes}"
             WHERE task_id = "${task_id}"`
-        } else {
+            // Only Description is diff
+        } else if (task_plan === existing_plan && task_description.trim() !== existing_description) {
+            // Construct string for new note
+            let new_note = `\n ${loggedInUser} has updated the task description [${today} ${hours}:${mins}:${seconds}]`
+            // Append new string to current notes
+            updated_task_notes = existing_notes + new_note
+
+            message = `Task description was updated`
+            sql = `UPDATE tasks 
+            SET task_description = "${task_description}", 
+            task_owner = "${task_owner}", 
+            task_notes = "${updated_task_notes}"
+            WHERE task_id = "${task_id}"`
+            // Both are diff from values in DB
+        } else if (task_plan !== existing_plan && task_description.trim() !== existing_description){
             // Construct string for new note
             let new_note = `\n ${loggedInUser} has updated the task plan and task description [${today} ${hours}:${mins}:${seconds}]`
             // Append new string to current notes
             updated_task_notes = existing_notes + new_note
-    
+
             message = `Task plan and description was updated`
             sql = `UPDATE tasks 
                 SET task_plan = "${task_plan}", 
@@ -563,10 +588,7 @@ const updateTask = catchAsyncErrors(async (req, res) => {
                 task_notes = "${updated_task_notes}"
                 WHERE task_id = "${task_id}"`
         }
-
-
     }
-
 
     db.query(sql, (err, results) => {
         if (err) {
@@ -589,6 +611,23 @@ const updateTask = catchAsyncErrors(async (req, res) => {
         }
     })
 })
+
+// Helper method to return the task_plan of a task of an App
+const getAppTaskPlan = (task_id) => {
+    return new Promise((resolve, reject) => {
+        db.query('select task_plan from tasks where task_id = ?', [task_id], (err, results) => {
+            if (err) {
+                reject(false)
+            } else {
+                try {
+                    resolve(results)
+                } catch (err) {
+                    reject(false)
+                }
+            }
+        })
+    })
+}
 
 // Helper method to return the task_description of a task of an App
 const getAppTaskDescription = (task_id) => {
