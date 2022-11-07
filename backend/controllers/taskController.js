@@ -246,7 +246,7 @@ const promoteTaskState = catchAsyncErrors(async (req, res) => {
 
     // Check the current task_state
     // Determine updated state + Construct string for new note
-    let new_state = "" 
+    let new_state = ""
     let new_note = ""
     if (current_state === "open") {
         new_state = "todo"
@@ -324,7 +324,7 @@ const demoteTaskState = catchAsyncErrors(async (req, res) => {
 
     // Check the current task_state
     // Determine updated state + Construct string for new note
-    let new_state = "" 
+    let new_state = ""
     let new_note = ""
     if (current_state === "closed") {
         new_state = "done"
@@ -477,50 +477,76 @@ const updateTask = catchAsyncErrors(async (req, res) => {
         task_description
     } = req.body
 
-     // Get existing task_notes of the task to append the new_note to the string of task_notes
-     const response1 = await getAppTaskNotes(task_id)
-     const existing_notes = response1[0].task_notes
-     let new_note_desc = "" // To be set based on what data the user updates
+    // Get existing task_notes of the task to append the new_note to the string of task_notes
+    const response1 = await getAppTaskNotes(task_id)
+    const existing_notes = response1[0].task_notes
+    let new_note_desc = "" // To be set based on what data the user updates
 
-     let today = new Date();
-     let dd = String(today.getDate()).padStart(2, '0');
-     let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-     let yyyy = today.getFullYear();
- 
-     let hours = today.getHours()
-     let mins = today.getMinutes()
-     let seconds = today.getSeconds()
- 
-     today = yyyy + '-' + mm + '-' + dd;
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
 
-     let sql = ""
-     let message = ""
-     // If only task_plan was filled  (+ change task_owner to logged-in user)
-     if (task_plan.length > 0 && task_description.length < 1) {
-        sql = `UPDATE tasks SET task_plan = "${task_plan}", task_owner = "${task_owner}" WHERE task_id = "${task_id}"`
-        message = `Task plan was updated`
-        new_note_desc = "has updated the task plan"
+    let hours = today.getHours()
+    let mins = today.getMinutes()
+    let seconds = today.getSeconds()
 
-        // If only task_description was filled (+ change task_owner to logged-in user)
-     } else if (task_plan.length < 1 && task_description.length > 0) {
-        sql = `UPDATE tasks SET task_description = "${task_description}", task_owner = "${task_owner}" WHERE task_id = "${task_id}"`
-        message = `Task description was updated`
-        new_note_desc = "has updated the task description"
+    today = yyyy + '-' + mm + '-' + dd;
 
-        // Both task_plan && task_description were filled (+ change task_owner to logged-in user)
-     } else if (task_plan.length > 0 && task_description.length > 0) {
-        sql = `UPDATE tasks SET task_plan = "${task_plan}", task_description = "${task_description}", task_owner = "${task_owner}" WHERE task_id = "${task_id}"`
-        message = `Task plan and description was updated`
-        new_note_desc = "has updated the task plan and task description"
-     }
-  
-     // Construct string for new note
-     const new_note = `\n ${loggedInUser} ${new_note_desc} [${today} ${hours}:${mins}:${seconds}]`
-     // Append new string to current notes
-     const updated_task_notes = existing_notes + new_note
+    let sql = ""
+    let message = ""
+    let updated_task_notes = ""
+    // If only task_plan was filled  (+ change task_owner to logged-in user)// If empty fields were sent
+    if (task_plan.length < 1 && task_description.length < 1) {
+        return res.status(200).send({
+            success: false,
+            message: 'No changes were detected'
+        })
+    } else if (task_plan.length > 0 && task_description.length < 1) {
+            // Construct string for new note
+            let new_note = `\n ${loggedInUser} has updated the task plan [${today} ${hours}:${mins}:${seconds}]`
+            // Append new string to current notes
+            updated_task_notes = existing_notes + new_note
+
+            message = `Task plan was updated`
+            sql = `UPDATE tasks 
+                SET task_plan = "${task_plan}", 
+                task_owner = "${task_owner}", 
+                task_notes = "${updated_task_notes}" 
+                WHERE task_id = "${task_id}"`
+
+            // If only task_description was filled (+ change task_owner to logged-in user)
+        } else if (task_plan.length < 1 && task_description.length > 0) {
+            // Construct string for new note
+            let new_note = `\n ${loggedInUser} has updated the task description [${today} ${hours}:${mins}:${seconds}]`
+            // Append new string to current notes
+            updated_task_notes = existing_notes + new_note
+
+            message = `Task description was updated`
+            sql = `UPDATE tasks 
+            SET task_description = "${task_description}", 
+            task_owner = "${task_owner}", 
+            task_notes = "${updated_task_notes}" 
+            WHERE task_id = "${task_id}"`
+
+            // Both task_plan && task_description were filled (+ change task_owner to logged-in user)
+        } else if (task_plan.length > 0 && task_description.length > 0) {
+            // Construct string for new note
+            let new_note = `\n ${loggedInUser} has updated the task plan and task description [${today} ${hours}:${mins}:${seconds}]`
+            // Append new string to current notes
+            updated_task_notes = existing_notes + new_note
+
+            message = `Task plan and description was updated`
+            sql = `UPDATE tasks 
+            SET task_plan = "${task_plan}", 
+            task_description = "${task_description}", 
+            task_owner = "${task_owner}", 
+            task_notes = "${updated_task_notes}"
+            WHERE task_id = "${task_id}"`
+        }
 
 
-     db.query(sql, (err, results) => {
+    db.query(sql, (err, results) => {
         if (err) {
             res.status(400).send({
                 success: false,

@@ -21,7 +21,7 @@ function TaskCard(props) {
 
     // Edit Task form inputs
     const [editTaskDescriptionInput, setEditTaskDescriptionInput] = useState("")
-    const [editTaskPlanColorInput, setEditTaskPlanColorInput] = useState("")
+    const [editTaskPlanInput, setEditTaskPlanInput] = useState("")
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -86,7 +86,7 @@ function TaskCard(props) {
             getPlanColor()
         }
         //console.log(props.task.task_notes)
-        // Store the comma-separated notes into an array (with no leading or trailing whitespaces)
+        // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
         let arr = props.task.task_notes.split("\n")
         arr.forEach((item, index) => {
             arr[index] = item.trim()
@@ -99,7 +99,7 @@ function TaskCard(props) {
 
         // Set initial states for edit task form fields
         setEditTaskDescriptionInput(props.task.task_description)
-        setEditTaskPlanColorInput(props.task.task_plan)
+        setEditTaskPlanInput(props.task.task_plan)
     }, [newNoteCount])
 
     const promoteProgress = () => {
@@ -145,7 +145,7 @@ function TaskCard(props) {
             new_note_input: newNoteInput,
         }
 
-        // Send post request to update task_notes
+        // Send put request to update task_notes
         try {
             const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/updateNotes`, new_note, config)
             if (response) {
@@ -154,7 +154,7 @@ function TaskCard(props) {
                     toast.success(response.data.message)
 
                     const newNotes = response.data.data.task_notes
-                    // Store the comma-separated notes into an array (with no leading or trailing whitespaces)
+                    // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
                     let arr = newNotes.split("\n")
                     arr.forEach((item, index) => {
                         arr[index] = item.trim()
@@ -182,7 +182,41 @@ function TaskCard(props) {
 
     const handleEditTaskSubmit = async (e) => {
         e.preventDefault()
-        console.log("Edit Task Submit")
+
+        const editedFields = {
+            task_plan: editTaskPlanInput,
+            task_description: editTaskDescriptionInput
+        }
+        
+        // Send put request to update task_notes
+        try {
+            const response = await Axios.put(`http://localhost:5000/api/tasks/${props.task.task_id}/updateTask`, editedFields , config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+
+                    const newNotes = response.data.data.task_notes
+                    // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
+                    let arr = newNotes.split("\n")
+                    arr.forEach((item, index) => {
+                        arr[index] = item.trim()
+                    })
+                    setNewNotes(arr)
+                    //console.log(arr)
+
+                    // increment count state (to induce re render of Notes to include new note instantly)
+                    setNewNoteCount(prevState => prevState + 1)
+
+                    // clear user input
+                    setNewNoteInput("")
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
     }
 
 
@@ -377,7 +411,6 @@ function TaskCard(props) {
                         <p className="ml-3">{props.task.task_owner}</p>
                     </div>
 
-
                     <div className="flex w-8/12 justify-between mb-3">
                         <div className="font-semibold text-gray-400">Created by </div>
                         <p className="ml-3">{props.task.task_creator}</p>
@@ -395,8 +428,8 @@ function TaskCard(props) {
                 <form onSubmit={handleEditTaskSubmit}>
                     <div className="form-group">
                         {/* Change Plan color input - Dropdown to show available plans*/}
-                        <label htmlFor="edit-task-plan-color" className="font-semibold">Change Plan:</label>
-                        <select id="edit-task-plan-color" value={editTaskPlanColorInput} onChange={(e) => setEditTaskPlanColorInput(e.target.value)}>
+                        <label htmlFor="edit-task-plan" className="font-semibold">Change Plan:</label>
+                        <select id="edit-task-plan" value={editTaskPlanInput} onChange={(e) => setEditTaskPlanInput(e.target.value)}>
                             <option value="" disabled>Choose a plan...</option>
                             {props.plans.map((plan) => (
                                 <option key={plan.plan_mvp_name} style={{
