@@ -87,7 +87,7 @@ function TaskCard(props) {
         }
         //console.log(props.task.task_notes)
         // Store the comma-separated notes into an array (with no leading or trailing whitespaces)
-        let arr = props.task.task_notes.split(",")
+        let arr = props.task.task_notes.split("\n")
         arr.forEach((item, index) => {
             arr[index] = item.trim()
         })
@@ -155,7 +155,7 @@ function TaskCard(props) {
 
                     const newNotes = response.data.data.task_notes
                     // Store the comma-separated notes into an array (with no leading or trailing whitespaces)
-                    let arr = newNotes.split(",")
+                    let arr = newNotes.split("\n")
                     arr.forEach((item, index) => {
                         arr[index] = item.trim()
                     })

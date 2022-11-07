@@ -250,16 +250,16 @@ const promoteTaskState = catchAsyncErrors(async (req, res) => {
     let new_note = ""
     if (current_state === "open") {
         new_state = "todo"
-        new_note = `, ${loggedInUser} has promoted the task from "Open" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has promoted the task from "Open" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "todo") {
         new_state = "doing"
-        new_note = `, ${loggedInUser} has promoted the task from "Todo" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has promoted the task from "Todo" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "doing") {
         new_state = "done"
-        new_note = `, ${loggedInUser} has promoted the task from "Doing" to "Done" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has promoted the task from "Doing" to "Done" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "done") {
         new_state = "closed"
-        new_note = `, ${loggedInUser} has promoted the task from "Done" to "Closed" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has promoted the task from "Done" to "Closed" [${today} ${hours}:${mins}:${seconds}]`
     }
 
     // Append new string to current notes
@@ -328,16 +328,16 @@ const demoteTaskState = catchAsyncErrors(async (req, res) => {
     let new_note = ""
     if (current_state === "closed") {
         new_state = "done"
-        new_note = `, ${loggedInUser} has demoted the task from "Closed" to "Done" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has demoted the task from "Closed" to "Done" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "done") {
         new_state = "doing"
-        new_note = `, ${loggedInUser} has demoted the task from "Done" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has demoted the task from "Done" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "doing") {
         new_state = "todo"
-        new_note = `, ${loggedInUser} has demoted the task from "Doing" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has demoted the task from "Doing" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "todo") {
         new_state = "open"
-        new_note = `, ${loggedInUser} has demoted the task from "Todo" to "Open" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n ${loggedInUser} has demoted the task from "Todo" to "Open" [${today} ${hours}:${mins}:${seconds}]`
     }
 
     // Append new string to current notes
@@ -397,7 +397,7 @@ const updateTaskNotes = catchAsyncErrors(async (req, res) => {
     today = yyyy + '-' + mm + '-' + dd;
 
     // Construct string for new note
-    const new_note = `, ${loggedInUser}: ${new_note_input} [${today} ${hours}:${mins}:${seconds}]`
+    const new_note = `\n ${loggedInUser}: ${new_note_input} [${today} ${hours}:${mins}:${seconds}]`
     // Append new string to current notes
     const updated_task_notes = existing_notes + new_note
 
