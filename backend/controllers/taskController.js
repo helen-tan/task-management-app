@@ -471,11 +471,75 @@ const updateTask = catchAsyncErrors(async (req, res) => {
     const loggedInUser = req.username
     const task_owner = loggedInUser
 
+    // User inputs
+    const {
+        task_plan,
+        task_description
+    } = req.body
+
      // Get existing task_notes of the task to append the new_note to the string of task_notes
      const response1 = await getAppTaskNotes(task_id)
      const existing_notes = response1[0].task_notes
+     let new_note_desc = "" // To be set based on what data the user updates
 
-    res.send("Hello from the update task route")
+     let today = new Date();
+     let dd = String(today.getDate()).padStart(2, '0');
+     let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+     let yyyy = today.getFullYear();
+ 
+     let hours = today.getHours()
+     let mins = today.getMinutes()
+     let seconds = today.getSeconds()
+ 
+     today = yyyy + '-' + mm + '-' + dd;
+
+     let sql = ""
+     let message = ""
+     // If only task_plan was filled  (+ change task_owner to logged-in user)
+     if (task_plan.length > 0 && task_description.length < 1) {
+        sql = `UPDATE tasks SET task_plan = "${task_plan}", task_owner = "${task_owner}" WHERE task_id = "${task_id}"`
+        message = `Task plan was updated`
+        new_note_desc = "has updated the task plan"
+
+        // If only task_description was filled (+ change task_owner to logged-in user)
+     } else if (task_plan.length < 1 && task_description.length > 0) {
+        sql = `UPDATE tasks SET task_description = "${task_description}", task_owner = "${task_owner}" WHERE task_id = "${task_id}"`
+        message = `Task description was updated`
+        new_note_desc = "has updated the task description"
+
+        // Both task_plan && task_description were filled (+ change task_owner to logged-in user)
+     } else if (task_plan.length > 0 && task_description.length > 0) {
+        sql = `UPDATE tasks SET task_plan = "${task_plan}", task_description = "${task_description}", task_owner = "${task_owner}" WHERE task_id = "${task_id}"`
+        message = `Task plan and description was updated`
+        new_note_desc = "has updated the task plan and task description"
+     }
+  
+     // Construct string for new note
+     const new_note = `\n ${loggedInUser} ${new_note_desc} [${today} ${hours}:${mins}:${seconds}]`
+     // Append new string to current notes
+     const updated_task_notes = existing_notes + new_note
+
+
+     db.query(sql, (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(201).send({
+                success: true,
+                message: message,
+                data: {
+                    task_id: task_id,
+                    task_plan: task_plan,
+                    task_description: task_description,
+                    task_notes: updated_task_notes,
+                    task_owner: task_owner
+                }
+            })
+        }
+    })
 })
 
 
