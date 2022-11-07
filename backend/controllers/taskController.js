@@ -457,6 +457,26 @@ const getAppTaskState = (task_id) => {
     })
 }
 
+// @desc    Update Task's plan & description only (identified by unique task_id) 
+// - Also updates the task_owner to the logged in user + Add a note to say what was changed
+// @route   /api/tasks/:task_id/updateTask
+// @access  Private
+const updateTask = catchAsyncErrors(async (req, res) => {
+    // Get task_id (task identifier) of task (from the params)
+    const task_id = req.params.task_id
+
+    // task_owner must be changed to the last user to interact with the task
+    // which is the loggedInUser (from unique username in jwt token authMiddleware) who updated the task state 
+    const loggedInUser = req.username
+    const task_owner = loggedInUser
+
+     // Get existing task_notes of the task to append the new_note to the string of task_notes
+     const response1 = await getAppTaskNotes(task_id)
+     const existing_notes = response1[0].task_notes
+
+    res.send("Hello from the update task route")
+})
+
 
 
 module.exports = {
@@ -465,5 +485,6 @@ module.exports = {
     getOneTask,
     promoteTaskState,
     demoteTaskState,
-    updateTaskNotes
+    updateTaskNotes,
+    updateTask
 }
