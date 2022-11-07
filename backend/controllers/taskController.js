@@ -379,7 +379,8 @@ const updateTaskNotes = catchAsyncErrors(async (req, res) => {
     const task_owner = loggedInUser
 
     // User inputs
-    const { new_note_input } = req.body
+    let { new_note_input } = req.body
+    new_note_input = new_note_input.replace(/(\r\n|\n|\r)/g, "") // remove any line breaks in the string from the user (caused by pressing enter)
 
     // Get existing task_notes of the task and append the new_note to the string of task_notes
     const response = await getAppTaskNotes(task_id)
