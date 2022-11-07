@@ -205,6 +205,9 @@ function TaskCard(props) {
                     setNewNotes(arr)
                     //console.log(arr)
 
+                    setEditTaskPlanInput(response.data.data.task_plan)
+                    setEditTaskDescriptionInput(response.data.data.task_description)
+
                     // increment count state (to induce re render of Notes to include new note instantly)
                     setNewNoteCount(prevState => prevState + 1)
 
