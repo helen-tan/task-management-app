@@ -8,6 +8,7 @@ import Axios from "axios"
 function Dashboard() {
   const [loggedInUser, setLoggedInUser] = useState()
   const [loggedInUserGroups, setLoggedInUserGroups] = useState([])
+
   const [loadingAuth, setLoadingAuth] = useState(true)
   const [loadingCheckgroup, setLoadingCheckgroup] = useState(true)
 
@@ -44,7 +45,7 @@ function Dashboard() {
       try {
         const response = await Axios.get(`http://localhost:5000/api/groups/${loggedInUser}`, config)
         if (response.data) {
-          // console.log(response.data.data[0].groupz)
+          console.log(response.data.data[0].groupz)
           setLoggedInUserGroups(response.data.data[0].groupz)
           setLoadingCheckgroup(false)
         }
@@ -65,7 +66,7 @@ function Dashboard() {
         <div>
           <h1 className="text-2xl">Welcome <strong>{loggedInUser}</strong></h1>
         </div>
-        <AppList />
+        <AppList loggedInUserGroups={loggedInUserGroups}/>
       </Page>
     )
   }

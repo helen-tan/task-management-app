@@ -6,13 +6,14 @@ import Axios from "axios"
 import Modal from 'react-modal'
 import { BsPlusLg } from "react-icons/bs"
 
-function AppList() {
+function AppList(props) {
     const [apps, setApps] = useState([])
     const [createAppModalIsOpen, setCreateAppModalIsOpen] = useState(false)
     const [editAppModalIsOpen, setEditAppModalIsOpen] = useState(false)
     const [appToEdit, setAppToEdit] = useState("")
     const [groupOptions, setGroupOptions] = useState([])
     const [newAppCount, setNewAppCount] = useState(0)
+    const [isProjectLead, setIsProjectLead] = useState(false)
 
     // Create App form inputs
     const [createAppNameInput, setCreateAppNameInput] = useState("")
@@ -60,7 +61,10 @@ function AppList() {
     useEffect(() => {
         fetchAllApps()
         fetchAllGroups()
-    }, [newAppCount])
+        // Check if user is in the group 'projectlead'
+        setIsProjectLead(props.loggedInUserGroups.includes('projectlead')) // somehow double quotes "" will give false even if its true
+        //console.log(props.loggedInUserGroups.includes('projectlead'))
+    }, [props.loggedInUserGroups, newAppCount])
 
     // Modal: Create New Application
     Modal.setAppElement('#root');
@@ -158,10 +162,12 @@ function AppList() {
                         <p className="mb-4 ml-4 text-left">Select an application to view its Kanban board.</p>
                     </div>
                     {/*Create new app button */}
-                    <button onClick={openCreateAppModal} className="btn btn-sm mr-4 gap-2">
-                        <BsPlusLg />
-                        Create App
-                    </button>
+                    {isProjectLead && (
+                        <button onClick={openCreateAppModal} className="btn btn-sm mr-4 gap-2">
+                            <BsPlusLg />
+                            Create App
+                        </button>
+                    )}
                 </div>
 
                 <table className="table w-full">
@@ -183,10 +189,11 @@ function AppList() {
                                             View
                                         </button>
                                     </Link>
-                                
-                                    <button onClick={e => openEditAppModal(e, app.app_acronym)} className="btn btn-sm">
-                                        Edit
-                                    </button>
+                                    {isProjectLead && (
+                                        <button onClick={e => openEditAppModal(e, app.app_acronym)} className="btn btn-sm">
+                                            Edit
+                                        </button>
+                                    )}
                                 </td>
                             </tr>
                         ))}
