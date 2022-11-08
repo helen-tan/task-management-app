@@ -491,8 +491,18 @@ const updateTask = catchAsyncErrors(async (req, res) => {
     const existing_description = response3[0].task_description
 
     // Get plan color of plan_name that user has given
-    const response4 = await getAppPlanColor(task_plan, app_acronym)
-    const new_plan_color = response4[0].plan_color
+    let response4 = ""
+    let new_plan_color = ""
+    if (task_plan.length < 1) {
+        new_plan_color = "#FFF"
+        console.log(task_plan === existing_plan)
+    } else {
+        response4 = await getAppPlanColor(task_plan, app_acronym)
+        new_plan_color = response4[0].plan_color
+    }
+
+    // const response4 = await getAppPlanColor(task_plan, app_acronym)
+    // const new_plan_color = response4[0].plan_color
 
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
@@ -565,7 +575,7 @@ const updateTask = catchAsyncErrors(async (req, res) => {
         if (err) {
             res.status(400).send({
                 success: false,
-                message: err.code
+                message: err
             })
         } else {
             res.status(201).send({

@@ -12,7 +12,6 @@ function Kanban() {
 
     const [loadingAppData, setLoadingAppData] = useState(true)
     const [loadingTasksData, setLoadingTasksData] = useState(true)
-   // const [loadingGetUserGroups, setLoadingGetUserGroups] = useState(true)
 
     // Permission States
     // const [appPermitCreate, setAppPermitCreate] = useState("")
@@ -109,7 +108,6 @@ function Kanban() {
                     //console.log(response.data.data[0])
                     console.log(response.data.data[0].groupz)
                     setLoggedInUserGroups(response.data.data[0].groupz)
-                   // setLoadingGetUserGroups(false)
                 }
             } catch (err) {
                 console.log("There was a problem")
@@ -172,7 +170,9 @@ function Kanban() {
                                         loggedInUser={loggedInUser}
                                         plans={plans}
                                         setChange={setChange}
-                                        app={app}
+                                        loggedInUserGroups={loggedInUserGroups}
+                                        app_permit_create={app_permit_create}
+                                        app_permit_open={app_permit_open}
                                     />
                                 }
                             })}
@@ -190,7 +190,7 @@ function Kanban() {
                                         loggedInUser={loggedInUser}
                                         plans={plans}
                                         setChange={setChange}
-                                        app={app}
+                                        loggedInUserGroups={loggedInUserGroups}
                                     />
                                 }
                             })}
@@ -207,7 +207,7 @@ function Kanban() {
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser}
                                         setChange={setChange}
-                                        app={app}
+                                        loggedInUserGroups={loggedInUserGroups}
                                     />
                                 }
                             })}
@@ -225,7 +225,7 @@ function Kanban() {
                                         loggedInUser={loggedInUser}
                                         plans={plans}
                                         setChange={setChange}
-                                        app={app}
+                                        loggedInUserGroups={loggedInUserGroups}
                                     />
                                 }
                             })}
@@ -243,7 +243,8 @@ function Kanban() {
                                         loggedInUser={loggedInUser}
                                         plans={plans}
                                         setChange={setChange}
-                                        app={app}
+                                        loggedInUserGroups={loggedInUserGroups}
+                                        app_permit_create={app_permit_create}
                                     />
                                 }
                             })}
