@@ -8,11 +8,18 @@ import TaskCard from "../shared/TaskCard"
 
 function Kanban() {
     const [loggedInUser, setLoggedInUser] = useState("")
-    const[loggedInUserGroups, setLoggedInUserGroups] = useState([])
+    const [loggedInUserGroups, setLoggedInUserGroups] = useState([])
 
     const [loadingAppData, setLoadingAppData] = useState(true)
     const [loadingTasksData, setLoadingTasksData] = useState(true)
-    const [loadingGetUserGroups, setLoadingGetUserGroups] = useState(true)
+   // const [loadingGetUserGroups, setLoadingGetUserGroups] = useState(true)
+
+    // Permission States
+    // const [appPermitCreate, setAppPermitCreate] = useState("")
+    // const [appPermitOpen, setAppPermitOpen] = useState("")
+    // const [appPermitTodolist, setAppPermitTodolist] = useState("")
+    // const [appPermitDoing, setAppPermitDoing] = useState("")
+    // const [appPermitDone, setAppPermitDone] = useState("")
 
     const [taskUpdateCount, setTaskUpdateCount] = useState(0)
     const [newTaskCount, setNewTaskCount] = useState(0)
@@ -64,7 +71,7 @@ function Kanban() {
             const response = await Axios.get(`http://localhost:5000/api/applications/${params.app_acronym}`, config)
             if (response.data) {
                 // console.log(response.data)
-                console.log(response.data.data[0])
+                // console.log(response.data.data[0])
                 setApp(response.data.data[0])
                 setLoadingAppData(false)
             }
@@ -98,10 +105,11 @@ function Kanban() {
         async function getUserGroups() {
             try {
                 const response = await Axios.get(`http://localhost:5000/api/groups/${loggedInUser}`, config)
-                if (response.data) {
+                if (response) {
+                    //console.log(response.data.data[0])
                     console.log(response.data.data[0].groupz)
                     setLoggedInUserGroups(response.data.data[0].groupz)
-                    setLoadingGetUserGroups(false)
+                   // setLoadingGetUserGroups(false)
                 }
             } catch (err) {
                 console.log("There was a problem")
@@ -113,7 +121,7 @@ function Kanban() {
         console.log("Refetching")
     }, [loggedInUser, taskUpdateCount, newTaskCount, change])
 
-    if (loadingAppData && loadingTasksData && loadingGetUserGroups) {
+    if (loadingAppData && loadingTasksData && (loggedInUserGroups !== [])) {
         return <Spinner />
     } else {
         return (
@@ -123,6 +131,9 @@ function Kanban() {
                     setNewTaskCount={setNewTaskCount}
                     plans={plans}
                     setPlans={setPlans}
+                    loggedInUserGroups={loggedInUserGroups}
+                    app_permit_create={app_permit_create}
+                    app_permit_open={app_permit_open}
                 />
 
                 <div className="grow columns-bg">
@@ -161,6 +172,7 @@ function Kanban() {
                                         loggedInUser={loggedInUser}
                                         plans={plans}
                                         setChange={setChange}
+                                        app={app}
                                     />
                                 }
                             })}
@@ -177,7 +189,9 @@ function Kanban() {
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser}
                                         plans={plans}
-                                        setChange={setChange} />
+                                        setChange={setChange}
+                                        app={app}
+                                    />
                                 }
                             })}
                         </div>
@@ -192,7 +206,9 @@ function Kanban() {
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser}
-                                        setChange={setChange} />
+                                        setChange={setChange}
+                                        app={app}
+                                    />
                                 }
                             })}
                         </div>
@@ -208,7 +224,9 @@ function Kanban() {
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser}
                                         plans={plans}
-                                        setChange={setChange} />
+                                        setChange={setChange}
+                                        app={app}
+                                    />
                                 }
                             })}
                         </div>
@@ -224,7 +242,9 @@ function Kanban() {
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser}
                                         plans={plans}
-                                        setChange={setChange} />
+                                        setChange={setChange}
+                                        app={app}
+                                    />
                                 }
                             })}
                         </div>

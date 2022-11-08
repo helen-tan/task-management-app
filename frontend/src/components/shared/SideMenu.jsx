@@ -6,10 +6,13 @@ import { BsPlusLg } from "react-icons/bs"
 import { SliderPicker } from 'react-color'
 
 function SideMenu(props) {
-   // const [plans, setPlans] = useState([]) // Moved to parent
+    // const [plans, setPlans] = useState([]) // Moved to parent
     const [newPlanCount, setNewPlanCount] = useState(0)
-   // const [newTaskCount, setNewTaskCount] = useState(0) // Moved to parent
+    // const [newTaskCount, setNewTaskCount] = useState(0) // Moved to parent
     const [loading, setLoading] = useState(true)
+
+    // Permission States
+    const [canCreateTasks, setCanCreateTasks] = useState(false)
 
     // Modal states
     const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
@@ -47,10 +50,16 @@ function SideMenu(props) {
         }
     }
 
+    const checkIfProjectLead = () => {
+
+    }
+
     useEffect(() => {
         // Fetch all existing plans of an application
         fetchAllPlans()
-    }, [newPlanCount])
+        checkIfProjectLead()
+        console.log(props.loggedInUserGroups)
+    }, [props.loggedInUserGroups, newPlanCount])
 
     // Modal: Create New Plan
     Modal.setAppElement('#root');
@@ -165,188 +174,198 @@ function SideMenu(props) {
         }
     }
 
-    return (
-        <div className="bg-customBlack text-white w-2/12 p-4">
-            {/* Create Task button */}
-            <button onClick={openCreateTaskModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
-                <BsPlusLg /> New Task
-            </button>
+    if (props.loggedInUserGroups === undefined) {
+        return <div>Loading...</div>
+    } else {
+        return (
+            <div className="bg-customBlack text-white w-2/12 p-4">
+                {/* Create Task button */}
+                {(props.loggedInUserGroups.includes(props.app_permit_create)) && (
+                    <button onClick={openCreateTaskModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
+                        <BsPlusLg /> New Task
+                    </button>
+                )}
+                {/* <button onClick={openCreateTaskModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
+                        <BsPlusLg /> New Task
+                    </button> */}
 
-            {/* Select Plans */}
-            <div className="text-start mt-5 mb-2">Plans</div>
+                {/* Select Plans */}
+                <div className="text-start mt-5 mb-2">Plans</div>
 
-            {loading ?
-                <div>Loading...</div>
-                :
-                <div className="bg-zinc-100 p-3 rounded">
-                    {(props.plans.length < 1) ?
-                        <h3 className="text-black">There are no plans yet.</h3>
-                        :
-                        props.plans.map((plan) => (
-                            <div key={plan.plan_mvp_name} className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
-                                borderLeft: `10px solid ${plan.plan_color}`
-                            }}>
-                                <p className="text-xs font-semibold p-1">{plan.plan_mvp_name}</p>
-                                <div className="mt-4 lg:mt-0 ">
-                                    <button onClick={() => openViewPlanModal(plan)} className="btn btn-outline text-xs btn-xs">
-                                        View
-                                    </button>
+                {loading ?
+                    <div>Loading...</div>
+                    :
+                    <div className="bg-zinc-100 p-3 rounded">
+                        {(props.plans.length < 1) ?
+                            <h3 className="text-black">There are no plans yet.</h3>
+                            :
+                            props.plans.map((plan) => (
+                                <div key={plan.plan_mvp_name} className="flex flex-col justify-between items-center md:flex-col lg:flex-row text-black bg-white rounded p-4 text-start mb-2" style={{
+                                    borderLeft: `10px solid ${plan.plan_color}`
+                                }}>
+                                    <p className="text-xs font-semibold p-1">{plan.plan_mvp_name}</p>
+                                    <div className="mt-4 lg:mt-0 ">
+                                        <button onClick={() => openViewPlanModal(plan)} className="btn btn-outline text-xs btn-xs">
+                                            View
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                }
+
+
+                {/* Create Plan button */}
+                <button onClick={openCreatePlanModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white mt-4 gap-2">
+                    <BsPlusLg /> New Plan
+                </button>
+
+                {/* Create Plan Modal */}
+                <Modal
+                    scrollable={true}
+                    isOpen={createPlanModalIsOpen}
+                    onRequestClose={closeCreatePlanModal}
+                    style={customStyles}
+                    contentLabel="Create New Plan"
+                >
+                    <div className="flex justify-between mb-5">
+                        <h2 className="font-bold text-xl">Create new Plan</h2>
+                        <button onClick={closeCreatePlanModal}><strong>X</strong></button>
+                    </div>
+
+                    <form onSubmit={handlePlanCreateSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="create-plan-name" className="font-semibold">Plan Name:</label>
+                            <input
+                                className="form-control"
+                                onChange={(e) => setCreatePlanNameInput(e.target.value)}
+                                type="text"
+                                placeholder="Enter a new plan name here"
+                                value={createPlanNameInput}
+                                id="create-plan-name"
+                                required
+                            />
+
+                            {/*Start & End Date input */}
+                            <div className="flex flex-col md:flex-row justify-between gap-1">
+                                <div className="w-full">
+                                    <label htmlFor="create-plan-startdate" className="font-semibold">Start Date:</label>
+                                    <input
+                                        onChange={(e) => setCreatePlanStartdateInput(e.target.value)}
+                                        type="date"
+                                        value={createPlanStartdateInput}
+                                        id="create-plan-startdate"
+                                        required
+                                    />
+                                </div>
+                                <div className="w-full">
+                                    <label htmlFor="create-plan-enddate" className="font-semibold">End Date:</label>
+                                    <input
+                                        onChange={(e) => setCreatePlanEnddateInput(e.target.value)}
+                                        type="date"
+                                        value={createPlanEnddateInput}
+                                        id="create-plan-enddate"
+                                        required
+                                    />
                                 </div>
                             </div>
-                        ))
-                    }
-                </div>
-            }
 
-
-            {/* Create Plan button */}
-            <button onClick={openCreatePlanModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white mt-4 gap-2">
-                <BsPlusLg /> New Plan
-            </button>
-
-            {/* Create Plan Modal */}
-            <Modal
-                scrollable={true}
-                isOpen={createPlanModalIsOpen}
-                onRequestClose={closeCreatePlanModal}
-                style={customStyles}
-                contentLabel="Create New Plan"
-            >
-                <div className="flex justify-between mb-5">
-                    <h2 className="font-bold text-xl">Create new Plan</h2>
-                    <button onClick={closeCreatePlanModal}><strong>X</strong></button>
-                </div>
-
-                <form onSubmit={handlePlanCreateSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="create-plan-name" className="font-semibold">Plan Name:</label>
-                        <input
-                            className="form-control"
-                            onChange={(e) => setCreatePlanNameInput(e.target.value)}
-                            type="text"
-                            placeholder="Enter a new plan name here"
-                            value={createPlanNameInput}
-                            id="create-plan-name"
-                            required
-                        />
-
-                        {/*Start & End Date input */}
-                        <div className="flex flex-col md:flex-row justify-between gap-1">
-                            <div className="w-full">
-                                <label htmlFor="create-plan-startdate" className="font-semibold">Start Date:</label>
-                                <input
-                                    onChange={(e) => setCreatePlanStartdateInput(e.target.value)}
-                                    type="date"
-                                    value={createPlanStartdateInput}
-                                    id="create-plan-startdate"
-                                    required
-                                />
-                            </div>
-                            <div className="w-full">
-                                <label htmlFor="create-plan-enddate" className="font-semibold">End Date:</label>
-                                <input
-                                    onChange={(e) => setCreatePlanEnddateInput(e.target.value)}
-                                    type="date"
-                                    value={createPlanEnddateInput}
-                                    id="create-plan-enddate"
-                                    required
-                                />
-                            </div>
+                            <label htmlFor="create-plan-color" className="font-semibold">Plan Color:</label>
+                            <SliderPicker
+                                color={createPlanColorInput}
+                                onChange={(data) => setCreatePlanColorInput(data.hex)}
+                                className="mb-10"
+                            />
                         </div>
 
-                        <label htmlFor="create-plan-color" className="font-semibold">Plan Color:</label>
-                        <SliderPicker
-                            color={createPlanColorInput}
-                            onChange={(data) => setCreatePlanColorInput(data.hex)}
-                            className="mb-10"
-                        />
-                    </div>
-
-                    <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
-                </form>
-            </Modal>
-
-            {/* View Plan Modal */}
-            <Modal
-                scrollable={true}
-                isOpen={viewPlanModalIsOpen}
-                onRequestClose={closeViewPlanModal}
-                style={customStyles}
-                contentLabel="View a plan"
-            >
-                <div>
-                    <div className="flex justify-between mb-5">
-                        <h2 className="font-bold text-xl">Plan: <span className="font-medium ml-2">{planToView.plan_mvp_name}</span></h2>
-                        <button onClick={closeViewPlanModal}><strong>X</strong></button>
-                    </div>
-
-                    <div className="flex gap-5 mb-4">
-                        <p className="font-semibold text-stone-500 ">Start Date</p>
-                        <p>{planToView.plan_startdate}</p>
-                    </div>
-
-                    <div className="flex gap-5 mb-4">
-                        <p className="font-semibold text-stone-500 ">End Date</p>
-                        <p>{planToView.plan_enddate}</p>
-                    </div>
-
-                    <div className="flex gap-5 mb-4">
-                        <p className="font-semibold text-stone-500 ">Color</p>
-                        <div style={{
-                            width: '100px',
-                            height: '25px',
-                            backgroundColor: `${planToView.plan_color}`,
-                            border: `1px solid black`
-                        }}></div>
-                        <p>{planToView.plan_color}</p>
-                    </div>
-                </div>
-
-            </Modal>
-
-            {/* Create Task Modal */}
-            <Modal
-                scrollable={true}
-                isOpen={createTaskModalIsOpen}
-                onRequestClose={closeCreateTaskModal}
-                style={customStyles}
-                contentLabel="Create New Task"
-            >
-                <div className="flex justify-between mb-5">
-                    <h2 className="font-bold text-xl">Create new Task</h2>
-                    <button onClick={closeCreateTaskModal}><strong>X</strong></button>
-                </div>
-
-                <form onSubmit={handleTaskCreateSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="create-task-name" className="font-semibold">Task Name:</label>
-                        <input
-                            className="form-control"
-                            onChange={(e) => setCreateTaskNameInput(e.target.value)}
-                            type="text"
-                            placeholder="Enter a task name here"
-                            value={createTaskNameInput}
-                            id="create-task-name"
-                            required
-                        />
-
-                        <label htmlFor="create-task-description" className="font-semibold">Description:</label>
-                        <textarea
-                            id="create-task-description"
-                            cols="30"
-                            rows="5"
-                            placeholder="Describe the task as detailed as you can"
-                            value={createTaskDescriptionInput}
-                            onChange={(e) => setCreateTaskDescriptionInput(e.target.value)}
-                        ></textarea>
-
                         <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
-                    </div>
-                </form>
+                    </form>
+                </Modal>
 
-            </Modal>
-        </div>
-    )
+                {/* View Plan Modal */}
+                <Modal
+                    scrollable={true}
+                    isOpen={viewPlanModalIsOpen}
+                    onRequestClose={closeViewPlanModal}
+                    style={customStyles}
+                    contentLabel="View a plan"
+                >
+                    <div>
+                        <div className="flex justify-between mb-5">
+                            <h2 className="font-bold text-xl">Plan: <span className="font-medium ml-2">{planToView.plan_mvp_name}</span></h2>
+                            <button onClick={closeViewPlanModal}><strong>X</strong></button>
+                        </div>
+
+                        <div className="flex gap-5 mb-4">
+                            <p className="font-semibold text-stone-500 ">Start Date</p>
+                            <p>{planToView.plan_startdate}</p>
+                        </div>
+
+                        <div className="flex gap-5 mb-4">
+                            <p className="font-semibold text-stone-500 ">End Date</p>
+                            <p>{planToView.plan_enddate}</p>
+                        </div>
+
+                        <div className="flex gap-5 mb-4">
+                            <p className="font-semibold text-stone-500 ">Color</p>
+                            <div style={{
+                                width: '100px',
+                                height: '25px',
+                                backgroundColor: `${planToView.plan_color}`,
+                                border: `1px solid black`
+                            }}></div>
+                            <p>{planToView.plan_color}</p>
+                        </div>
+                    </div>
+
+                </Modal>
+
+                {/* Create Task Modal */}
+                <Modal
+                    scrollable={true}
+                    isOpen={createTaskModalIsOpen}
+                    onRequestClose={closeCreateTaskModal}
+                    style={customStyles}
+                    contentLabel="Create New Task"
+                >
+                    <div className="flex justify-between mb-5">
+                        <h2 className="font-bold text-xl">Create new Task</h2>
+                        <button onClick={closeCreateTaskModal}><strong>X</strong></button>
+                    </div>
+
+                    <form onSubmit={handleTaskCreateSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="create-task-name" className="font-semibold">Task Name:</label>
+                            <input
+                                className="form-control"
+                                onChange={(e) => setCreateTaskNameInput(e.target.value)}
+                                type="text"
+                                placeholder="Enter a task name here"
+                                value={createTaskNameInput}
+                                id="create-task-name"
+                                required
+                            />
+
+                            <label htmlFor="create-task-description" className="font-semibold">Description:</label>
+                            <textarea
+                                id="create-task-description"
+                                cols="30"
+                                rows="5"
+                                placeholder="Describe the task as detailed as you can"
+                                value={createTaskDescriptionInput}
+                                onChange={(e) => setCreateTaskDescriptionInput(e.target.value)}
+                            ></textarea>
+
+                            <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
+                        </div>
+                    </form>
+
+                </Modal>
+            </div>
+        )
+
+    }
 }
 
 export default SideMenu
