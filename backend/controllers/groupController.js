@@ -107,8 +107,32 @@ const getAllGroups = catchAsyncErrors(async (req, res) => {
     })
 })
 
+// @desc    Check if user is in a group
+// @route   /api/groups/:username
+// @access  Private
+const getUserGroups = catchAsyncErrors(async (req, res) => {
+    // Get username from the params
+    const username = req.params.username
+
+    db.query(`select groupz from users where username = ?`, [username], (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(200).send({
+                success: true,
+                count: results.length,
+                data: results
+            })
+        }
+    })
+})
+
 module.exports = {
     createGroup,
     checkGroup,
-    getAllGroups
+    getAllGroups,
+    getUserGroups
 }
