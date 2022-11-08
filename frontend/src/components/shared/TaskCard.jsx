@@ -185,7 +185,10 @@ function TaskCard(props) {
 
     // Modal: Edit Task
     const openEditTaskModal = () => setEditTaskModalIsOpen(true)
-    const closeEditTaskModal = () => setEditTaskModalIsOpen(false)
+    const closeEditTaskModal = () => {
+        setEditTaskModalIsOpen(false)
+        window.location.reload(false)
+    }
 
     const handleEditTaskSubmit = async (e) => {
         e.preventDefault()

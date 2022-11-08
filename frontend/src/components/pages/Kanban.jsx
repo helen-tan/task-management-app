@@ -154,8 +154,7 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} 
-                                        plans={plans}/>
+                                        loggedInUser={loggedInUser} />
                                 }
                             })}
                         </div>
