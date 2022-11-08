@@ -185,9 +185,6 @@ function SideMenu(props) {
                         <BsPlusLg /> New Task
                     </button>
                 )}
-                {/* <button onClick={openCreateTaskModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
-                        <BsPlusLg /> New Task
-                    </button> */}
 
                 {/* Select Plans */}
                 <div className="text-start mt-5 mb-2">Plans</div>
@@ -217,9 +214,11 @@ function SideMenu(props) {
 
 
                 {/* Create Plan button */}
-                <button onClick={openCreatePlanModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white mt-4 gap-2">
-                    <BsPlusLg /> New Plan
-                </button>
+                {(props.loggedInUserGroups.includes(props.app_permit_open)) && (
+                    <button onClick={openCreatePlanModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white mt-4 gap-2">
+                        <BsPlusLg /> New Plan
+                    </button>
+                )}
 
                 {/* Create Plan Modal */}
                 <Modal
