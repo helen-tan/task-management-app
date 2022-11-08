@@ -15,6 +15,8 @@ function Kanban() {
     const [app, setApp] = useState({})
     const [plans, setPlans] = useState([])
     const [tasks, setTasks] = useState([])
+    const [change, setChange] = useState(false)
+
     const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
 
     const params = useParams()
@@ -77,7 +79,8 @@ function Kanban() {
         // Fetch all tasks associated with the application
         fetchAppData()
         fetchTasks()
-    }, [taskUpdateCount, newTaskCount])
+        console.log("Refetching")
+    }, [taskUpdateCount, newTaskCount, change])
 
     if (loadingAppData && loadingTasksData) {
         return <Spinner />
@@ -125,7 +128,9 @@ function Kanban() {
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser}
-                                        plans={plans} />
+                                        plans={plans}
+                                        setChange={setChange}
+                                         />
                                 }
                             })}
                         </div>

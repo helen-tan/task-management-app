@@ -89,6 +89,7 @@ function TaskCard(props) {
 
     useEffect(() => {
         // Get plan_color from plans, based on the task's task_plan
+        //console.log("Task " + props.task.task_name +" Plan: " + props.task.task_plan)
         if (props.task.task_plan !== "") {
             getPlanColor()
         }
@@ -107,7 +108,7 @@ function TaskCard(props) {
         // Set initial states for edit task form fields
         setEditTaskDescriptionInput(props.task.task_description)
         setEditTaskPlanInput(props.task.task_plan)
-    }, [newNoteCount, editTaskCount])
+    }, [newNoteCount, editTaskCount, props.task])
 
     const promoteProgress = () => {
         promoteTaskState()
@@ -185,10 +186,8 @@ function TaskCard(props) {
 
     // Modal: Edit Task
     const openEditTaskModal = () => setEditTaskModalIsOpen(true)
-    const closeEditTaskModal = () => {
-        setEditTaskModalIsOpen(false)
-        window.location.reload(false)
-    }
+    const closeEditTaskModal = () => setEditTaskModalIsOpen(false)
+   
 
     const handleEditTaskSubmit = async (e) => {
         e.preventDefault()
@@ -230,6 +229,7 @@ function TaskCard(props) {
 
                     // clear user input
                     setNewNoteInput("")
+                    props.setChange(response) // Prompt parent Kanban component to re-render and pass down updated task to this component, which is in the useEffect dependency arr
                 } else {
                     toast.warning(response.data.message)
                 }
