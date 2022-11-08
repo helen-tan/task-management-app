@@ -145,7 +145,8 @@ function Kanban() {
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser} 
-                                        plans={plans}/>
+                                        plans={plans}
+                                        setChange={setChange}/>
                                 }
                             })}
                         </div>
@@ -159,7 +160,8 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} />
+                                        loggedInUser={loggedInUser}
+                                        setChange={setChange} />
                                 }
                             })}
                         </div>
@@ -174,7 +176,8 @@ function Kanban() {
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser} 
-                                        plans={plans}/>
+                                        plans={plans}
+                                        setChange={setChange}/>
                                 }
                             })}
                         </div>
@@ -189,7 +192,8 @@ function Kanban() {
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser} 
-                                        plans={plans}/>
+                                        plans={plans}
+                                        setChange={setChange}/>
                                 }
                             })}
                         </div>
