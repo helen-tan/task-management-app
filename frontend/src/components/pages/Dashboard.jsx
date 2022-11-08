@@ -10,7 +10,7 @@ function Dashboard() {
   const [loggedInUserGroups, setLoggedInUserGroups] = useState([])
 
   const [loadingAuth, setLoadingAuth] = useState(true)
-  const [loadingCheckgroup, setLoadingCheckgroup] = useState(true)
+  const [loadingGetUserGroups, setLoadingGetUserGroups] = useState(true)
 
   const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ function Dashboard() {
         if (response.data) {
           console.log(response.data.data[0].groupz)
           setLoggedInUserGroups(response.data.data[0].groupz)
-          setLoadingCheckgroup(false)
+          setLoadingGetUserGroups(false)
         }
       } catch (err) {
         console.log("There was a problem")
@@ -58,7 +58,7 @@ function Dashboard() {
     getUserGroups()
   }, [loggedInUser])
 
-  if (loadingAuth && loadingCheckgroup) {
+  if (loadingAuth && loadingGetUserGroups) {
     return <Spinner /> 
   } else {
     return (

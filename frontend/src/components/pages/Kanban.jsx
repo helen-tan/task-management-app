@@ -8,16 +8,31 @@ import TaskCard from "../shared/TaskCard"
 
 function Kanban() {
     const [loggedInUser, setLoggedInUser] = useState("")
+    const[loggedInUserGroups, setLoggedInUserGroups] = useState([])
+
     const [loadingAppData, setLoadingAppData] = useState(true)
     const [loadingTasksData, setLoadingTasksData] = useState(true)
+    const [loadingGetUserGroups, setLoadingGetUserGroups] = useState(true)
+
     const [taskUpdateCount, setTaskUpdateCount] = useState(0)
     const [newTaskCount, setNewTaskCount] = useState(0)
+
     const [app, setApp] = useState({})
     const [plans, setPlans] = useState([])
     const [tasks, setTasks] = useState([])
     const [change, setChange] = useState(false)
 
-    const { app_acronym, app_rnumber, app_startdate, app_enddate } = app // Destructure some values returned and stored in 'app'
+    const {
+        app_acronym,
+        app_rnumber,
+        app_startdate,
+        app_enddate,
+        app_permit_create,
+        app_permit_open,
+        app_permit_todolist,
+        app_permit_done,
+        app_permit_close
+    } = app // Destructure some values returned and stored in 'app'
 
     const params = useParams()
     const navigate = useNavigate()
@@ -49,7 +64,7 @@ function Kanban() {
             const response = await Axios.get(`http://localhost:5000/api/applications/${params.app_acronym}`, config)
             if (response.data) {
                 // console.log(response.data)
-                // console.log(response.data.data[0])
+                console.log(response.data.data[0])
                 setApp(response.data.data[0])
                 setLoadingAppData(false)
             }
@@ -79,10 +94,26 @@ function Kanban() {
         // Fetch all tasks associated with the application
         fetchAppData()
         fetchTasks()
-        console.log("Refetching")
-    }, [taskUpdateCount, newTaskCount, change])
+        // Get the groups that the user is in
+        async function getUserGroups() {
+            try {
+                const response = await Axios.get(`http://localhost:5000/api/groups/${loggedInUser}`, config)
+                if (response.data) {
+                    console.log(response.data.data[0].groupz)
+                    setLoggedInUserGroups(response.data.data[0].groupz)
+                    setLoadingGetUserGroups(false)
+                }
+            } catch (err) {
+                console.log("There was a problem")
+                console.log(err)
+            }
+        }
+        getUserGroups()
 
-    if (loadingAppData && loadingTasksData) {
+        console.log("Refetching")
+    }, [loggedInUser, taskUpdateCount, newTaskCount, change])
+
+    if (loadingAppData && loadingTasksData && loadingGetUserGroups) {
         return <Spinner />
     } else {
         return (
@@ -130,7 +161,7 @@ function Kanban() {
                                         loggedInUser={loggedInUser}
                                         plans={plans}
                                         setChange={setChange}
-                                         />
+                                    />
                                 }
                             })}
                         </div>
@@ -144,9 +175,9 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} 
+                                        loggedInUser={loggedInUser}
                                         plans={plans}
-                                        setChange={setChange}/>
+                                        setChange={setChange} />
                                 }
                             })}
                         </div>
@@ -175,9 +206,9 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} 
+                                        loggedInUser={loggedInUser}
                                         plans={plans}
-                                        setChange={setChange}/>
+                                        setChange={setChange} />
                                 }
                             })}
                         </div>
@@ -191,9 +222,9 @@ function Kanban() {
                                         task={task}
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
-                                        loggedInUser={loggedInUser} 
+                                        loggedInUser={loggedInUser}
                                         plans={plans}
-                                        setChange={setChange}/>
+                                        setChange={setChange} />
                                 }
                             })}
                         </div>
