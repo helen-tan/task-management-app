@@ -24,13 +24,20 @@ transporter.verify(function (error, success) {
 // @route   /api/sendEmail
 // @access  Private
 const sendEmail = catchAsyncErrors(async (req, res) => {
+    // Get task_id, task_name, username of logged in user
+    const { task_id, task_name, loggedInUser } = req.body
+
+    // username, email of users in the group 'projectleads',
+
     // mailOptions object
     const mailOptions = {
         from: '"Task Management System" <smtp.mailtrap.io>', // sender address
         to: "test@gmail.com", // list of receivers
         subject: "Task Done Notification", // Subject line
         text: "Message sent with Nodemailer", // plain text body
-        html: "<b>Hi there</b><br>A new task has been promoted to Done<br/>", // html body
+        html: `<p><strong>Hi there</strong></p>
+                <p>The user ${loggedInUser} has promoted the task "${task_name}" (${task_id}) to the "Done" state.<p/>
+                <p>- The Task Management System</p>`, // html body
     }
 
     try {
@@ -41,7 +48,7 @@ const sendEmail = catchAsyncErrors(async (req, res) => {
             }
             console.log('Message sent: %s', info.messageId);
         })
-    
+
         res.status(200).send({
             success: true,
             message: "Email sent",
