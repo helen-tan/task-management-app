@@ -1,7 +1,6 @@
 const nodemailer = require("nodemailer")
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 
-
 // Create transporter object - contains the sender's info/ credentials for our server
 const transporter = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
@@ -21,7 +20,7 @@ transporter.verify(function (error, success) {
     }
 });
 
-// @desc    Send an email
+// @desc    Send an email - to the project leader (everyone in the group 'projectleader') when a team member has promoted a task to "Done" state
 // @route   /api/sendEmail
 // @access  Private
 const sendEmail = catchAsyncErrors(async (req, res) => {
