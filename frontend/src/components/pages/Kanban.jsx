@@ -247,7 +247,6 @@ function Kanban() {
                                         plans={plans}
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
-                                        permittedGroup={app_permit_done}
                                     />
                                 }
                             })}
