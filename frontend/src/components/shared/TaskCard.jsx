@@ -364,37 +364,39 @@ function TaskCard(props) {
                     </div>
 
                     {/* Form to add notes */}
-                    <form onSubmit={handleNewNoteSubmit}>
-                        <div className="form-group">
-                            {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
-                            {/* <textarea
-                                id="task_notes"
-                                cols="30"
-                                rows="10"
-                                value={(newNoteCount==0)?originalNotes:newNotes}
-                                disabled
-                                style={{ overflowY: 'scroll' }} 
-                            >
-                            </textarea> */}
+                    {props.loggedInUserGroups.includes(props.permittedGroup) && (
+                        <form onSubmit={handleNewNoteSubmit}>
+                            <div className="form-group">
+                                {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
+                                {/* <textarea
+                                    id="task_notes"
+                                    cols="30"
+                                    rows="10"
+                                    value={(newNoteCount==0)?originalNotes:newNotes}
+                                    disabled
+                                    style={{ overflowY: 'scroll' }} 
+                                >
+                                </textarea> */}
 
-                            <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
-                            <textarea
-                                id="update-task-notes"
-                                cols="30"
-                                rows="3"
-                                placeholder="Say something..."
-                                value={newNoteInput}
-                                onChange={(e) => setNewNoteInput(e.target.value)}
-                            ></textarea>
-                        </div>
+                                <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
+                                <textarea
+                                    id="update-task-notes"
+                                    cols="30"
+                                    rows="3"
+                                    placeholder="Say something..."
+                                    value={newNoteInput}
+                                    onChange={(e) => setNewNoteInput(e.target.value)}
+                                ></textarea>
+                            </div>
 
-                        <div className="flex justify-end">
-                            <button className="btn btn-sm gap-2" type="submit">
-                                <BsPencilSquare />
-                                Add Note
-                            </button>
-                        </div>
-                    </form>
+                            <div className="flex justify-end">
+                                <button className="btn btn-sm gap-2" type="submit">
+                                    <BsPencilSquare />
+                                    Add Note
+                                </button>
+                            </div>
+                        </form>
+                    )}
                 </Modal>
 
                 {/* Edit Task Modal */}
@@ -474,7 +476,7 @@ function TaskCard(props) {
                                 id="edit-task-plan"
                                 value={editTaskPlanInput}
                                 onChange={(e) => setEditTaskPlanInput(e.target.value)}
-                                className="disabled: bg-zinc-300"
+                                className="disabled:bg-zinc-300"
                                 disabled={!(props.loggedInUserGroups.includes("projectmanager"))}
                             >
                                 <option value="" disabled>Choose a plan...</option>

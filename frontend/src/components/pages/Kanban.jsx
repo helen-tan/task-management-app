@@ -143,8 +143,8 @@ function Kanban() {
                             <div className="text-sm mb-4"><span className="font-medium">R Number - </span>{app_rnumber}</div>
                         </div>
                         <div className="flex flex-col gap-3">
-                            <div className="text-sm"><span className="font-semibold">Start Date: </span>{app_startdate.split("T")[0]}</div>
-                            <div className="text-sm"><span className="font-semibold">End Date: </span>{app_enddate.split("T")[0]}</div>
+                            <div className="text-sm"><span className="font-semibold">Start Date: </span>{app_startdate}</div>
+                            <div className="text-sm"><span className="font-semibold">End Date: </span>{app_enddate}</div>
                         </div>
                     </div>
 
