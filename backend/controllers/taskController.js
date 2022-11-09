@@ -528,19 +528,18 @@ const updateTask = catchAsyncErrors(async (req, res) => {
             success: false,
             message: 'No changes were detected'
         })
+
         // Plan is diff, Description same
     } else if (task_plan !== existing_plan && task_description.trim() === existing_description) {
+        console.log("lolollololol")
         // Construct string for new note
         let new_note = `\n ${loggedInUser} has updated the task plan [${today} ${hours}:${mins}:${seconds}]`
         // Append new string to current notes
         updated_task_notes = existing_notes + new_note
 
         message = `Task plan was updated`
-        sql = `UPDATE tasks 
-            SET task_plan = "${task_plan}",
-            task_owner = "${task_owner}", 
-            task_notes = "${updated_task_notes}"
-            WHERE task_id = "${task_id}"`
+        sql = `UPDATE tasks SET task_plan = '${task_plan}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+
         // Plan same, Description is diff
     } else if (task_plan === existing_plan && task_description.trim() !== existing_description) {
         // Construct string for new note
@@ -549,11 +548,8 @@ const updateTask = catchAsyncErrors(async (req, res) => {
         updated_task_notes = existing_notes + new_note
 
         message = `Task description was updated`
-        sql = `UPDATE tasks 
-            SET task_description = "${task_description}", 
-            task_owner = "${task_owner}", 
-            task_notes = "${updated_task_notes}"
-            WHERE task_id = "${task_id}"`
+        sql = `UPDATE tasks SET task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+
         // Both are diff from values in DB
     } else if (task_plan !== existing_plan && task_description.trim() !== existing_description) {
         // Construct string for new note
@@ -562,12 +558,7 @@ const updateTask = catchAsyncErrors(async (req, res) => {
         updated_task_notes = existing_notes + new_note
 
         message = `Task plan and description was updated`
-        sql = `UPDATE tasks 
-                SET task_plan = "${task_plan}", 
-                task_description = "${task_description}", 
-                task_owner = "${task_owner}", 
-                task_notes = "${updated_task_notes}"
-                WHERE task_id = "${task_id}"`
+        sql = `UPDATE tasks SET task_plan = '${task_plan}', task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
     }
 
 

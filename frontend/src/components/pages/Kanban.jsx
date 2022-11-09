@@ -229,6 +229,7 @@ function Kanban() {
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
                                         permittedGroup={app_permit_done}
+                                        projectManagerCanEdit={true}
                                     />
                                 }
                             })}

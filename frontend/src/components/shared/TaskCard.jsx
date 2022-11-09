@@ -272,11 +272,13 @@ function TaskCard(props) {
                     <button onClick={() => openViewTaskModal()} className="btn btn-outline text-xs btn-xs">
                         View
                     </button>
-                    {(props.loggedInUserGroups.includes(props.permittedGroup) && (
+                    {/* For Project managers to update plans in 'Done', edit btn must appear in 'Done', and user must be in app_permit_done & be in the group 'projectmanager' */}
+                    {(props.loggedInUserGroups.includes(props.permittedGroup) || props.projectManagerCanEdit )&& (
                         <button onClick={() => openEditTaskModal()} className="btn btn-black text-xs btn-xs">
                             Edit
                         </button>
-                    ))}
+                    )}
+
                     {/* <button onClick={() => openEditTaskModal()} className="btn btn-black text-xs btn-xs">
                         Edit
                     </button> */}
