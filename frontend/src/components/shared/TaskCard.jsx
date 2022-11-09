@@ -248,18 +248,20 @@ function TaskCard(props) {
             }}>
                 <div className="flex flex-col items-center md:flex-row justify-between gap-2 p-1">
                     <div className="small-text text-gray-500">{props.task.task_id}</div>
-                    <div className="flex text-2xl">
-                        {(props.task.task_state !== "open") && (
-                            <button onClick={() => demoteProgress(props.task.task_state)}>
-                                <MdArrowLeft />
-                            </button>
-                        )}
-                        {(props.task.task_state !== "closed") && (
-                            <button onClick={() => promoteProgress(props.task.task_state)}>
-                                <MdArrowRight />
-                            </button>
-                        )}
-                    </div>
+                    {props.loggedInUserGroups.includes(props.permittedGroup) && (
+                        <div className="flex text-2xl">
+                            {(props.task.task_state !== "open" && props.task.task_state !== "todo" && props.task.task_state !== "closed") && (
+                                <button onClick={() => demoteProgress(props.task.task_state)}>
+                                    <MdArrowLeft />
+                                </button>
+                            )}
+                            {(props.task.task_state !== "closed") && (
+                                <button onClick={() => promoteProgress(props.task.task_state)}>
+                                    <MdArrowRight />
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <div className="flex flex-col items-start p-1 mb-2">
                     <div className="text-xs font-bold mb-1">{props.task.task_name}</div>
@@ -270,7 +272,7 @@ function TaskCard(props) {
                     <button onClick={() => openViewTaskModal()} className="btn btn-outline text-xs btn-xs">
                         View
                     </button>
-                    {(props.loggedInUserGroups.includes(props.app_permit_create) && (
+                    {(props.loggedInUserGroups.includes(props.permittedGroup) && (
                         <button onClick={() => openEditTaskModal()} className="btn btn-black text-xs btn-xs">
                             Edit
                         </button>
@@ -467,31 +469,13 @@ function TaskCard(props) {
                     <form onSubmit={handleEditTaskSubmit}>
                         <div className="form-group">
                             {/* Change Plan color input - Dropdown to show available plans*/}
-                            {/* {(props.loggedInUserGroups.includes(props.app_permit_open)) && (
-                                <>
-                                    <label htmlFor="edit-task-plan" className="font-semibold">Change Plan:</label>
-                                    <select
-                                        id="edit-task-plan"
-                                        value={editTaskPlanInput}
-                                        onChange={(e) => setEditTaskPlanInput(e.target.value)}
-                                    >
-                                        <option value="" disabled>Choose a plan...</option>
-                                        {props.plans.map((plan) => (
-                                            <option key={plan.plan_mvp_name} style={{
-                                                backgroundColor: `${plan.plan_color}`
-                                            }}>
-                                                {plan.plan_mvp_name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </>
-                            )} */}
                             <label htmlFor="edit-task-plan" className="font-semibold">Change Plan:</label>
                             <select
                                 id="edit-task-plan"
                                 value={editTaskPlanInput}
                                 onChange={(e) => setEditTaskPlanInput(e.target.value)}
-                                disabled={!(props.loggedInUserGroups.includes(props.app_permit_open))}
+                                className="disabled: bg-zinc-300"
+                                disabled={!(props.loggedInUserGroups.includes("projectmanager"))}
                             >
                                 <option value="" disabled>Choose a plan...</option>
                                 {props.plans.map((plan) => (

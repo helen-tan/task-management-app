@@ -36,8 +36,8 @@ function Kanban() {
         app_permit_create,
         app_permit_open,
         app_permit_todolist,
-        app_permit_done,
-        app_permit_close
+        app_permit_doing,
+        app_permit_done
     } = app // Destructure some values returned and stored in 'app'
 
     const params = useParams()
@@ -171,8 +171,7 @@ function Kanban() {
                                         plans={plans}
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
-                                        app_permit_create={app_permit_create}
-                                        app_permit_open={app_permit_open}
+                                        permittedGroup={app_permit_open}
                                     />
                                 }
                             })}
@@ -191,6 +190,7 @@ function Kanban() {
                                         plans={plans}
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
+                                        permittedGroup={app_permit_todolist}
                                     />
                                 }
                             })}
@@ -206,8 +206,10 @@ function Kanban() {
                                         taskUpdateCount={taskUpdateCount}
                                         setTaskUpdateCount={setTaskUpdateCount}
                                         loggedInUser={loggedInUser}
+                                        plans={plans}
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
+                                        permittedGroup={app_permit_doing}
                                     />
                                 }
                             })}
@@ -226,6 +228,7 @@ function Kanban() {
                                         plans={plans}
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
+                                        permittedGroup={app_permit_done}
                                     />
                                 }
                             })}
@@ -244,7 +247,7 @@ function Kanban() {
                                         plans={plans}
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
-                                        app_permit_create={app_permit_create}
+                                        permittedGroup={app_permit_done}
                                     />
                                 }
                             })}
