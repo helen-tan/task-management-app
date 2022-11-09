@@ -218,7 +218,7 @@ function Kanban() {
                         {/* Done */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
-                                if (task.task_state === "done") {
+                                if (task.task_state === "done" && loggedInUserGroups !== undefined) {
                                     return <TaskCard
                                         key={task.task_id}
                                         task={task}
@@ -229,7 +229,7 @@ function Kanban() {
                                         setChange={setChange}
                                         loggedInUserGroups={loggedInUserGroups}
                                         permittedGroup={app_permit_done}
-                                        projectManagerCanEdit={true}
+                                        projectManagerCanEdit={loggedInUserGroups.includes("projectmanager")}
                                     />
                                 }
                             })}
