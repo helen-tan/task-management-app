@@ -531,7 +531,6 @@ const updateTask = catchAsyncErrors(async (req, res) => {
 
         // Plan is diff, Description same
     } else if (task_plan !== existing_plan && task_description.trim() === existing_description) {
-        console.log("lolollololol")
         // Construct string for new note
         let new_note = `\n ${loggedInUser} has updated the task plan [${today} ${hours}:${mins}:${seconds}]`
         // Append new string to current notes
