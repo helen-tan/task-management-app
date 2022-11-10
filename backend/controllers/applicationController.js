@@ -22,21 +22,30 @@ const createApplication = catchAsyncErrors(async(req, res) => {
     const app_acronymRegexp = /^[a-zA-Z0-9]{2,20}$/             // only alphanumeric, no special chars, no spaces, min 2 max 20 chars
     const app_rnumberRegexp = /^([1-9][0-9]{0,3}|10000)$/  // Min 0, Max 10,000, no decimals, no negatives
 
+    // Todo: Check for empty fields
+    if (!app_acronym || !app_description || !app_rnumber || !app_startdate || !app_enddate || !app_permit_create || !app_permit_open | !app_permit_open || !app_permit_todolist || !app_permit_doing || !app_permit_done){
+        return res.status(200).send({
+            success: false,
+            message: 'Please fill in the required fields'
+        })
+    }
+
     if (!app_acronym.match(app_acronymRegexp)) {
         return res.status(200).send({
             success: false,
-            message: 'Please give a valid app acronym (only letters & numbers. No spaces)'
+            message: 'Please give a valid Application Name (only letters & numbers. No spaces)'
         })
     }
 
     if(!app_rnumber.match(app_rnumberRegexp)) {
         return res.status(200).send({
             success: false,
-            message: 'R number must be a number between 0 - 10,000'
+            message: 'R number must be a whole number between 0 - 10,000'
         })
     }
+    
 
-    new_application = {
+    let new_application = {
         app_acronym,
         app_description,
         app_rnumber,
