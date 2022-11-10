@@ -376,7 +376,7 @@ function TaskCard(props) {
                     <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
 
                     <div className="flex flex-col mb-3">
-                        <p className="font-bold mb-3">Notes </p>
+                        <p className="font-bold text-2xl mb-3">Notes </p>
                         <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
                             {(newNoteCount === 0) ?
                                 originalNotes.map((note, index) => (
@@ -410,7 +410,7 @@ function TaskCard(props) {
                                 >
                                 </textarea> */}
 
-                                <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
+                                {/* <label htmlFor="update-task-notes" className="font-semibold">Add a note</label> */}
                                 <textarea
                                     id="update-task-notes"
                                     cols="30"
@@ -532,7 +532,7 @@ function TaskCard(props) {
                                 onChange={(e) => setEditTaskDescriptionInput(e.target.value)}
                             ></textarea>
                         </div>
-                        <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
+                        <button className="btn btn-sm btn-block mb-14" type="submit">Submit</button>
                     </form>
 
                     {/* Notes section */}
@@ -562,7 +562,7 @@ function TaskCard(props) {
                     {/* Form to add notes */}
                     <form onSubmit={handleNewNoteSubmit}>
                         <div className="form-group">
-                            <label htmlFor="update-task-notes" className="font-semibold">Add a note</label>
+                            {/* <label htmlFor="update-task-notes" className="font-semibold">Add a note</label> */}
                             <textarea
                                 id="update-task-notes"
                                 cols="30"
