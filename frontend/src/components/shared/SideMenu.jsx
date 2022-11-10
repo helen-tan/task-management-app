@@ -11,9 +11,6 @@ function SideMenu(props) {
     // const [newTaskCount, setNewTaskCount] = useState(0) // Moved to parent
     const [loading, setLoading] = useState(true)
 
-    // Permission States
-    const [canCreateTasks, setCanCreateTasks] = useState(false)
-
     // Modal states
     const [createPlanModalIsOpen, setCreatePlanModalIsOpen] = useState(false)
     const [viewPlanModalIsOpen, setViewPlanModalIsOpen] = useState(false)
@@ -50,14 +47,10 @@ function SideMenu(props) {
         }
     }
 
-    const checkIfProjectLead = () => {
-
-    }
 
     useEffect(() => {
         // Fetch all existing plans of an application
         fetchAllPlans()
-        checkIfProjectLead()
         console.log(props.loggedInUserGroups)
     }, [props.loggedInUserGroups, newPlanCount])
 
