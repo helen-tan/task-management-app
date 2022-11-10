@@ -374,7 +374,13 @@ function TaskCard(props) {
 
                     <div className="flex flex-col mb-3">
                         <p className="font-bold mb-3">Description </p>
-                        <div className="h-28" style={{ overflowY: 'scroll' }}>{props.task.task_description}</div>
+                        <textarea
+                            className="h-28"
+                            style={{ overflowY: 'scroll' }}
+                            value={props.task.task_description}
+                            readOnly
+                        ></textarea>
+
                     </div>
 
                     <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
