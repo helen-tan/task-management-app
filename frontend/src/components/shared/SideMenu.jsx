@@ -165,6 +165,8 @@ function SideMenu(props) {
         } catch (err) {
             console.log(err)
         }
+
+        // TODO: Send put request to update Application R_number by 1 
     }
 
     if (props.loggedInUserGroups === undefined) {

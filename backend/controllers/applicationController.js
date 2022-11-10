@@ -207,9 +207,62 @@ const updateApplication = catchAsyncErrors((req,res) => {
     })
 })
 
+// @desc    Update application R_number by 1
+// @route   /api/applications/:app_acronym/updateAppRnum
+// @access  Private
+const updateAppRnum = catchAsyncErrors(async (req,res) => {
+    // Get the app_acronym from params
+    const app_acronym = req.params.app_acronym
+
+    // Get current R_number of App
+    const response = await getRnumber(app_acronym)
+    const original_app_rnumber = response[0].app_rnumber
+
+    const new_app_rnumber = original_app_rnumber + 1
+
+    db.query(`UPDATE applications 
+        SET app_rnumber = ?
+        WHERE app_acronym = ?`, [new_app_rnumber, app_acronym], (err, results) => {
+        if (err) {
+            res.status(400).send({
+                success: false,
+                message: err.code
+            })
+        } else {
+            res.status(201).send({
+                success: true,
+                message: 'Application r_number incremented by 1 successfully',
+                data: {
+                    app_acronym,
+                    new_app_rnumber
+                },
+            })
+            console.log(updated_app)
+        }
+    })
+})
+
+// Helper method to return R_number of application
+const getRnumber = (app_acronym) => {
+    return new Promise((resolve, reject) => {
+        db.query('select app_rnumber from applications where app_acronym = ?', [app_acronym], (err, results) => {
+            if (err) {
+                reject(false)
+            } else {
+                try {
+                    resolve(results)
+                } catch (err) {
+                    reject(false)
+                }
+            }
+        })
+    })
+}
+
 module.exports = {
     createApplication,
     getAllApplications,
     getApplication,
-    updateApplication
+    updateApplication,
+    updateAppRnum
 }
