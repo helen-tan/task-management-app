@@ -9,7 +9,7 @@ function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
     const [originalNotes, setOriginalNotes] = useState("")
     const [newNotes, setNewNotes] = useState("")
-    const bottomRef = useRef(null)
+    // const editModalNotesBottom = useRef()
 
     const [newNoteCount, setNewNoteCount] = useState(0)
     const [editTaskCount, setEditTaskCount] = useState(0)
@@ -49,6 +49,7 @@ function TaskCard(props) {
         }
     }
 
+
     useEffect(() => {
         // Get plan_color from plans, based on the task's task_plan
         //console.log("Task " + props.task.task_name +" Plan: " + props.task.task_plan)
@@ -66,7 +67,16 @@ function TaskCard(props) {
         setOriginalNotes(props.task.task_notes)
 
         // scroll to bottom every time newNoteCount change
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); // TODO -------------------------------------------------------------------------------------------
+        let editModalNotesTextarea = document.getElementById('update-task_notes3');
+        if (editModalNotesTextarea) {
+            editModalNotesTextarea.scrollTop = editModalNotesTextarea.scrollHeight;
+        }
+
+        let viewModalNotesTextarea = document.getElementById('update-task_notes1');
+        if (viewModalNotesTextarea) {
+            viewModalNotesTextarea.scrollTop = viewModalNotesTextarea.scrollHeight;
+        }
+        // editModalNotesBottom.current?.scrollIntoView({ behavior: 'smooth' }); 
 
         // Set initial states for edit task form fields
         setEditTaskDescriptionInput(props.task.task_description)
@@ -413,7 +423,7 @@ function TaskCard(props) {
                         <div className="form-group">
                             {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
                             <textarea
-                                id="update-task_notes"
+                                id="update-task_notes1"
                                 cols="30"
                                 rows="10"
                                 value={(newNoteCount === 0) ? originalNotes : newNotes}
@@ -423,7 +433,7 @@ function TaskCard(props) {
                             </textarea>
                             {props.loggedInUserGroups.includes(props.permittedGroup) && (
                                 <textarea
-                                    id="update-task-notes"
+                                    id="update-task-notes2"
                                     cols="30"
                                     rows="3"
                                     placeholder="Say something..."
@@ -569,7 +579,6 @@ function TaskCard(props) {
                                     </div>
                                 ))
                             }
-                            <div ref={bottomRef} />
                         </div>
                     </div> */}
 
@@ -580,7 +589,7 @@ function TaskCard(props) {
                         <div className="form-group">
                             {/* <label htmlFor="update-task-notes" className="font-semibold">Add a note</label> */}
                             <textarea
-                                id="update-task_notes2"
+                                id="update-task_notes3"
                                 cols="30"
                                 rows="10"
                                 value={(newNoteCount === 0) ? originalNotes : newNotes}
@@ -589,7 +598,7 @@ function TaskCard(props) {
                             >
                             </textarea>
                             <textarea
-                                id="update-task-notes2"
+                                id="update-task-notes4"
                                 cols="30"
                                 rows="3"
                                 placeholder="Say something..."
