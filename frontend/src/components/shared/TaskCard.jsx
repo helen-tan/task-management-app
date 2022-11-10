@@ -49,6 +49,54 @@ function TaskCard(props) {
         }
     }
 
+    useEffect(() => {
+        // Get plan_color from plans, based on the task's task_plan
+        //console.log("Task " + props.task.task_name +" Plan: " + props.task.task_plan)
+        if (props.task.task_plan !== "") {
+            getPlanColor()
+        }
+        //console.log(props.task.task_notes)
+        // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
+        let arr = props.task.task_notes.split("\n")
+        arr.forEach((item, index) => {
+            arr[index] = item.trim()
+        })
+        //console.log(arr)
+        setOriginalNotes(arr)
+
+        // scroll to bottom every time newNoteCount change
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+        // Set initial states for edit task form fields
+        setEditTaskDescriptionInput(props.task.task_description)
+        setEditTaskPlanInput(props.task.task_plan)
+    }, [newNoteCount, editTaskCount, props.task, props.loggedInUserGroups])
+
+
+    const sendEmailToProjectLead = async () => {
+        const emailDetails = {
+            task_id: props.task.task_id,
+            task_name: props.task.task_name,
+            loggedInUser: props.loggedInUser
+        }
+
+        // Send post request to send email to users in the 'projectlead' group
+        try {
+            const response = await Axios.post(`http://localhost:5000/api/sendEmail`, emailDetails, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    toast.success(response.data.message)
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("There was a problem with sending the amil to project leads")
+        }
+    }
+
     const promoteTaskState = async () => {
         // Send put request to update a task's task_state
         try {
@@ -57,6 +105,11 @@ function TaskCard(props) {
                 console.log(response.data)
                 if (response.data.success === true) {
                     toast.success(response.data.message)
+
+                    // If original state of task is 'Doing' (passed from props), send an email to the Project lead as it is promoted to "Done"
+                    if (props.task.task_state === "doing") {
+                        sendEmailToProjectLead()
+                    }
 
                 } else {
                     toast.warning(response.data.message)
@@ -87,30 +140,7 @@ function TaskCard(props) {
         }
     }
 
-    useEffect(() => {
-        // Get plan_color from plans, based on the task's task_plan
-        //console.log("Task " + props.task.task_name +" Plan: " + props.task.task_plan)
-        if (props.task.task_plan !== "") {
-            getPlanColor()
-        }
-        //console.log(props.task.task_notes)
-        // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
-        let arr = props.task.task_notes.split("\n")
-        arr.forEach((item, index) => {
-            arr[index] = item.trim()
-        })
-        //console.log(arr)
-        setOriginalNotes(arr)
-
-        // scroll to bottom every time newNoteCount change
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-        // Set initial states for edit task form fields
-        setEditTaskDescriptionInput(props.task.task_description)
-        setEditTaskPlanInput(props.task.task_plan)
-    }, [newNoteCount, editTaskCount, props.task, props.loggedInUserGroups])
-
-    const promoteProgress = () => {
+    const promoteProgress = async () => {
         promoteTaskState()
         props.setTaskUpdateCount(prevState => prevState + 1)
     }
@@ -273,7 +303,7 @@ function TaskCard(props) {
                         View
                     </button>
                     {/* For Project managers to update plans in 'Done', edit btn must appear in 'Done', and user must be in app_permit_done & be in the group 'projectmanager' */}
-                    {(props.loggedInUserGroups.includes(props.permittedGroup) || props.projectManagerCanEdit )&& (
+                    {(props.loggedInUserGroups.includes(props.permittedGroup) || props.projectManagerCanEdit) && (
                         <button onClick={() => openEditTaskModal()} className="btn btn-black text-xs btn-xs">
                             Edit
                         </button>
