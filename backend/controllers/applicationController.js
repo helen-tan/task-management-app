@@ -237,7 +237,6 @@ const updateAppRnum = catchAsyncErrors(async (req,res) => {
                     new_app_rnumber
                 },
             })
-            console.log(updated_app)
         }
     })
 })

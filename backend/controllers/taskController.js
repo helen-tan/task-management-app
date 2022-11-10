@@ -32,7 +32,7 @@ const createTask = catchAsyncErrors(async (req, res) => {
     let r_num
     if (taskIdRnumArr.length < 1) {
         // Get r_number of app with helper method
-        r_num = await getRnumber(task_app_acronym)
+        r_num = await getRnumber(task_app_acronym) + 1
         // console.log(r_num)
     } else {
         r_num = Math.max(...taskIdRnumArr) + 1 // Increment the Rnumber based on the largest exisitng one

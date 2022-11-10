@@ -137,9 +137,7 @@ function SideMenu(props) {
     const openCreateTaskModal = (plan) => setCreateTaskModalIsOpen(true)
     const closeCreateTaskModal = (plan) => setCreateTaskModalIsOpen(false)
 
-    const handleTaskCreateSubmit = async (e) => {
-        e.preventDefault()
-
+    const createTask = async () => {
         const new_task = {
             task_name: createTaskNameInput,
             task_description: createTaskDescriptionInput,
@@ -165,8 +163,32 @@ function SideMenu(props) {
         } catch (err) {
             console.log(err)
         }
+    }
 
-        // TODO: Send put request to update Application R_number by 1 
+    const increaseAppRnum = async () => {
+        // Send put request to update Application R_number by 1 
+        try {
+            const response = await Axios.put(`http://localhost:5000/api/applications/${props.app_acronym}/updateAppRnum`, {}, config)
+            if (response) {
+                console.log(response.data)
+                if (response.data.success === true) {
+                    // toast.success(response.data.message)
+                } else {
+                    toast.warning(response.data.message)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleTaskCreateSubmit = async (e) => {
+        e.preventDefault()
+
+        // Send post request to create new task
+        createTask()
+        // Send put request to update Application R_number by 1 
+        increaseAppRnum()
     }
 
     if (props.loggedInUserGroups === undefined) {
