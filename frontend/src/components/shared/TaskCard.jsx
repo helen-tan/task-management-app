@@ -7,8 +7,8 @@ import { BsPencilSquare } from "react-icons/bs"
 
 function TaskCard(props) {
     const [planColor, setPlanColor] = useState("#FFF")
-    const [originalNotes, setOriginalNotes] = useState([])
-    const [newNotes, setNewNotes] = useState([])
+    const [originalNotes, setOriginalNotes] = useState("")
+    const [newNotes, setNewNotes] = useState("")
     const bottomRef = useRef(null)
 
     const [newNoteCount, setNewNoteCount] = useState(0)
@@ -57,15 +57,16 @@ function TaskCard(props) {
         }
         //console.log(props.task.task_notes)
         // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
-        let arr = props.task.task_notes.split("\n")
-        arr.forEach((item, index) => {
-            arr[index] = item.trim()
-        })
+        // let arr = props.task.task_notes.split("\n")
+        // arr.forEach((item, index) => {
+        //     arr[index] = item.trim()
+        // })
         //console.log(arr)
-        setOriginalNotes(arr)
+        //setOriginalNotes(arr)]
+        setOriginalNotes(props.task.task_notes)
 
         // scroll to bottom every time newNoteCount change
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); // TODO -------------------------------------------------------------------------------------------
 
         // Set initial states for edit task form fields
         setEditTaskDescriptionInput(props.task.task_description)
@@ -192,12 +193,14 @@ function TaskCard(props) {
                     toast.success(response.data.message)
 
                     const newNotes = response.data.data.task_notes
+                    console.log(newNotes)
                     // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
-                    let arr = newNotes.split("\n")
-                    arr.forEach((item, index) => {
-                        arr[index] = item.trim()
-                    })
-                    setNewNotes(arr)
+                    // let arr = newNotes.split("\n")
+                    // arr.forEach((item, index) => {
+                    //     arr[index] = item.trim()
+                    // })
+                    // setNewNotes(arr)
+                    setNewNotes(newNotes)
                     //console.log(arr)
 
                     // increment count state (to induce re render of Notes to include new note instantly)
@@ -237,12 +240,13 @@ function TaskCard(props) {
 
                     const newNotes = response.data.data.task_notes
                     // Store the newline-separated notes into an array (with no leading or trailing whitespaces)
-                    let arr = newNotes.split("\n")
-                    arr.forEach((item, index) => {
-                        arr[index] = item.trim()
-                    })
+                    // let arr = newNotes.split("\n")
+                    // arr.forEach((item, index) => {
+                    //     arr[index] = item.trim()
+                    // })
                     //console.log(arr)
-                    setNewNotes(arr)
+                    //setNewNotes(arr)
+                    setNewNotes(newNotes)
 
                     setNewTaskPlanColor(response.data.data.task_color)
                     setNewTaskPlanName(response.data.data.task_plan)
@@ -375,7 +379,7 @@ function TaskCard(props) {
 
                     <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
 
-                    <div className="flex flex-col mb-3">
+                    {/* <div className="flex flex-col mb-3">
                         <p className="font-bold text-2xl mb-3">Notes </p>
                         <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
                             {(newNoteCount === 0) ?
@@ -393,24 +397,25 @@ function TaskCard(props) {
                             }
                             <div ref={bottomRef} />
                         </div>
-                    </div>
+                    </div> */}
+
+                    <p className="font-bold text-2xl mb-3">Notes </p>
 
                     {/* Form to add notes */}
-                    {props.loggedInUserGroups.includes(props.permittedGroup) && (
-                        <form onSubmit={handleNewNoteSubmit}>
-                            <div className="form-group">
-                                {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
-                                {/* <textarea
-                                    id="task_notes"
-                                    cols="30"
-                                    rows="10"
-                                    value={(newNoteCount==0)?originalNotes:newNotes}
-                                    disabled
-                                    style={{ overflowY: 'scroll' }} 
-                                >
-                                </textarea> */}
 
-                                {/* <label htmlFor="update-task-notes" className="font-semibold">Add a note</label> */}
+                    <form onSubmit={handleNewNoteSubmit}>
+                        <div className="form-group">
+                            {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
+                            <textarea
+                                id="update-task_notes"
+                                cols="30"
+                                rows="10"
+                                value={(newNoteCount === 0) ? originalNotes : newNotes}
+                                disabled
+                                style={{ overflowY: 'scroll' }}
+                            >
+                            </textarea>
+                            {props.loggedInUserGroups.includes(props.permittedGroup) && (
                                 <textarea
                                     id="update-task-notes"
                                     cols="30"
@@ -419,16 +424,19 @@ function TaskCard(props) {
                                     value={newNoteInput}
                                     onChange={(e) => setNewNoteInput(e.target.value)}
                                 ></textarea>
-                            </div>
+                            )}
+                        </div>
 
+                        {props.loggedInUserGroups.includes(props.permittedGroup) && (
                             <div className="flex justify-end">
                                 <button className="btn btn-sm gap-2" type="submit">
                                     <BsPencilSquare />
                                     Add Note
                                 </button>
                             </div>
-                        </form>
-                    )}
+                        )}
+                    </form>
+
                 </Modal>
 
                 {/* Edit Task Modal */}
@@ -539,7 +547,7 @@ function TaskCard(props) {
 
                     <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
 
-                    <div className="flex flex-col mb-3">
+                    {/* <div className="flex flex-col mb-3">
                         <p className="font-bold text-2xl mb-3">Notes </p>
                         <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
                             {(newNoteCount === 0) ?
@@ -557,14 +565,25 @@ function TaskCard(props) {
                             }
                             <div ref={bottomRef} />
                         </div>
-                    </div>
+                    </div> */}
+
+                    <p className="font-bold text-2xl mb-3">Notes </p>
 
                     {/* Form to add notes */}
                     <form onSubmit={handleNewNoteSubmit}>
                         <div className="form-group">
                             {/* <label htmlFor="update-task-notes" className="font-semibold">Add a note</label> */}
                             <textarea
-                                id="update-task-notes"
+                                id="update-task_notes2"
+                                cols="30"
+                                rows="10"
+                                value={(newNoteCount === 0) ? originalNotes : newNotes}
+                                disabled
+                                style={{ overflowY: 'scroll' }}
+                            >
+                            </textarea>
+                            <textarea
+                                id="update-task-notes2"
                                 cols="30"
                                 rows="3"
                                 placeholder="Say something..."

@@ -250,16 +250,16 @@ const promoteTaskState = catchAsyncErrors(async (req, res) => {
     let new_note = ""
     if (current_state === "open") {
         new_state = "todo"
-        new_note = `\n ${loggedInUser} has promoted the task from "Open" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has promoted the task from "Open" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "todo") {
         new_state = "doing"
-        new_note = `\n ${loggedInUser} has promoted the task from "Todo" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has promoted the task from "Todo" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "doing") {
         new_state = "done"
-        new_note = `\n ${loggedInUser} has promoted the task from "Doing" to "Done" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has promoted the task from "Doing" to "Done" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "done") {
         new_state = "closed"
-        new_note = `\n ${loggedInUser} has promoted the task from "Done" to "Closed" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has promoted the task from "Done" to "Closed" [${today} ${hours}:${mins}:${seconds}]`
     }
 
     // Append new string to current notes
@@ -328,16 +328,16 @@ const demoteTaskState = catchAsyncErrors(async (req, res) => {
     let new_note = ""
     if (current_state === "closed") {
         new_state = "done"
-        new_note = `\n ${loggedInUser} has demoted the task from "Closed" to "Done" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has demoted the task from "Closed" to "Done" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "done") {
         new_state = "doing"
-        new_note = `\n ${loggedInUser} has demoted the task from "Done" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has demoted the task from "Done" to "Doing" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "doing") {
         new_state = "todo"
-        new_note = `\n ${loggedInUser} has demoted the task from "Doing" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has demoted the task from "Doing" to "Todo" [${today} ${hours}:${mins}:${seconds}]`
     } else if (current_state === "todo") {
         new_state = "open"
-        new_note = `\n ${loggedInUser} has demoted the task from "Todo" to "Open" [${today} ${hours}:${mins}:${seconds}]`
+        new_note = `\n\n--------\n\n ${loggedInUser} has demoted the task from "Todo" to "Open" [${today} ${hours}:${mins}:${seconds}]`
     }
 
     // Append new string to current notes
@@ -380,7 +380,17 @@ const updateTaskNotes = catchAsyncErrors(async (req, res) => {
 
     // User inputs
     let { new_note_input } = req.body
-    new_note_input = new_note_input.replace(/(\r\n|\n|\r)/g, "") // remove any line breaks in the string from the user (caused by pressing enter)
+
+    // Validations 
+    // Check for empty input
+    if (new_note_input.length < 1) {
+        return res.status(200).send({
+            success: false,
+            message: 'Please give an input'
+        })
+    }
+
+    // new_note_input = new_note_input.replace(/(\r\n|\n|\r)/g, "") // remove any line breaks in the string from the user (caused by pressing enter)
 
     // Get existing task_notes of the task and append the new_note to the string of task_notes
     const response = await getAppTaskNotes(task_id)
@@ -398,7 +408,8 @@ const updateTaskNotes = catchAsyncErrors(async (req, res) => {
     today = yyyy + '-' + mm + '-' + dd;
 
     // Construct string for new note
-    const new_note = `\n ${loggedInUser}: ${new_note_input} [${today} ${hours}:${mins}:${seconds}]`
+    const new_note = `\n\n--------\n\n ${loggedInUser} [${today} ${hours}:${mins}:${seconds}]: \n${new_note_input}
+                        `
     // Append new string to current notes
     const updated_task_notes = existing_notes + new_note
 
@@ -520,7 +531,7 @@ const updateTask = catchAsyncErrors(async (req, res) => {
     let updated_task_notes = ""
 
 
-    // Note: Task description will never be empty. No input mean supdating desc to be empty string
+    // Note: Task description will never be empty. No input means updating desc to be empty string
     // Check if task_description & task_plan (from user) is any different from their existing values
     // Both are same as values in DB
     if (task_plan === existing_plan && task_description.trim() === existing_description) {
@@ -532,56 +543,98 @@ const updateTask = catchAsyncErrors(async (req, res) => {
         // Plan is diff, Description same
     } else if (task_plan !== existing_plan && task_description.trim() === existing_description) {
         // Construct string for new note
-        let new_note = `\n ${loggedInUser} has updated the task plan [${today} ${hours}:${mins}:${seconds}]`
+        let new_note = `\n\n--------\n\n ${loggedInUser} has updated the task plan [${today} ${hours}:${mins}:${seconds}]`
         // Append new string to current notes
         updated_task_notes = existing_notes + new_note
 
         message = `Task plan was updated`
-        sql = `UPDATE tasks SET task_plan = '${task_plan}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+        //sql = `UPDATE tasks SET task_plan = '${task_plan}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+
+        db.query(`UPDATE tasks SET task_plan = ?, task_owner = ?, task_notes = ? WHERE task_id = ?`, [task_plan, task_owner, updated_task_notes, task_id], (err, results) => {
+            if (err) {
+                res.status(400).send({
+                    success: false,
+                    message: err
+                })
+            } else {
+                res.status(201).send({
+                    success: true,
+                    message: message,
+                    data: {
+                        task_id: task_id,
+                        task_plan: task_plan,
+                        task_color: new_plan_color,
+                        task_description: task_description,
+                        task_notes: updated_task_notes,
+                        task_owner: task_owner
+                    }
+                })
+            }
+        })
 
         // Plan same, Description is diff
     } else if (task_plan === existing_plan && task_description.trim() !== existing_description) {
         // Construct string for new note
-        let new_note = `\n ${loggedInUser} has updated the task description [${today} ${hours}:${mins}:${seconds}]`
+        let new_note = `\n\n--------\n\n ${loggedInUser} has updated the task description [${today} ${hours}:${mins}:${seconds}]`
         // Append new string to current notes
         updated_task_notes = existing_notes + new_note
 
         message = `Task description was updated`
-        sql = `UPDATE tasks SET task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+       // sql = `UPDATE tasks SET task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+        
+        db.query(`UPDATE tasks SET task_description = ?, task_owner = ?, task_notes = ? WHERE task_id = ?`, [task_description, task_owner, updated_task_notes, task_id], (err, results) => {
+            if (err) {
+                res.status(400).send({
+                    success: false,
+                    message: err
+                })
+            } else {
+                res.status(201).send({
+                    success: true,
+                    message: message,
+                    data: {
+                        task_id: task_id,
+                        task_plan: task_plan,
+                        task_color: new_plan_color,
+                        task_description: task_description,
+                        task_notes: updated_task_notes,
+                        task_owner: task_owner
+                    }
+                })
+            }
+        })
 
         // Both are diff from values in DB
     } else if (task_plan !== existing_plan && task_description.trim() !== existing_description) {
         // Construct string for new note
-        let new_note = `\n ${loggedInUser} has updated the task plan and task description [${today} ${hours}:${mins}:${seconds}]`
+        let new_note = `\n\n--------\n\n ${loggedInUser} has updated the task plan and task description [${today} ${hours}:${mins}:${seconds}]`
         // Append new string to current notes
         updated_task_notes = existing_notes + new_note
-
         message = `Task plan and description was updated`
-        sql = `UPDATE tasks SET task_plan = '${task_plan}', task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+        //sql = `UPDATE tasks SET task_plan = '${task_plan}', task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+
+        db.query(`UPDATE tasks SET task_plan = ?, task_description = ?, task_owner = ?, task_notes = ? WHERE task_id = ?`, [task_plan, task_description, task_owner, updated_task_notes, task_id], (err, results) => {
+            if (err) {
+                res.status(400).send({
+                    success: false,
+                    message: err
+                })
+            } else {
+                res.status(201).send({
+                    success: true,
+                    message: message,
+                    data: {
+                        task_id: task_id,
+                        task_plan: task_plan,
+                        task_color: new_plan_color,
+                        task_description: task_description,
+                        task_notes: updated_task_notes,
+                        task_owner: task_owner
+                    }
+                })
+            }
+        })
     }
-
-
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(400).send({
-                success: false,
-                message: err
-            })
-        } else {
-            res.status(201).send({
-                success: true,
-                message: message,
-                data: {
-                    task_id: task_id,
-                    task_plan: task_plan,
-                    task_color: new_plan_color,
-                    task_description: task_description,
-                    task_notes: updated_task_notes,
-                    task_owner: task_owner
-                }
-            })
-        }
-    })
 })
 
 // Helper method to return the task_plan of a task of an App
@@ -623,18 +676,18 @@ const getAppPlanColor = (plan_name, plan_app_acronym) => {
     return new Promise((resolve, reject) => {
         db.query(`
             select plan_color from plans 
-            where plan_mvp_name = ? and plan_app_acronym = ?`, 
-        [plan_name, plan_app_acronym], (err, results) => {
-            if (err) {
-                reject(false)
-            } else {
-                try {
-                    resolve(results)
-                } catch (err) {
+            where plan_mvp_name = ? and plan_app_acronym = ?`,
+            [plan_name, plan_app_acronym], (err, results) => {
+                if (err) {
                     reject(false)
+                } else {
+                    try {
+                        resolve(results)
+                    } catch (err) {
+                        reject(false)
+                    }
                 }
-            }
-        })
+            })
     })
 }
 
