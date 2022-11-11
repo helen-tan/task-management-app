@@ -115,7 +115,7 @@ function TaskCard(props) {
             if (response) {
                 console.log(response.data)
                 if (response.data.success === true) {
-                    toast.success(response.data.message)
+                    //toast.success(response.data.message)
 
                     // If original state of task is 'Doing' (passed from props), send an email to the Project lead as it is promoted to "Done"
                     if (props.task.task_state === "doing") {
@@ -139,7 +139,7 @@ function TaskCard(props) {
             if (response) {
                 console.log(response.data)
                 if (response.data.success === true) {
-                    toast.success(response.data.message)
+                    //toast.success(response.data.message)
 
                 } else {
                     toast.warning(response.data.message)
