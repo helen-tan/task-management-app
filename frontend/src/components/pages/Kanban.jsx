@@ -136,11 +136,11 @@ function Kanban() {
 
                 <div className="grow columns-bg">
                     {/* Kanban board header */}
-                    <div className="flex justify-between items-center bg-white pl-10 pr-40 pt-8 pb-4 text-start">
+                    <div className="flex justify-between items-center bg-white pl-10 pr-40 pt-5 pb-2 text-start">
                         <div>
                             <BackLink url='/dashboard' />
-                            <h1 className="font-bold text-xl mb-2 mt-6">{app_acronym}</h1>
-                            <div className="text-sm mb-4"><span className="font-medium">R Number - </span>{app_rnumber}</div>
+                            <h1 className="font-bold text-xl mb-1 mt-3">{app_acronym}</h1>
+                            <div className="text-xs mb-1"><span className="font-medium">R Number - </span>{app_rnumber}</div>
                         </div>
                         <div className="flex flex-col gap-3">
                             <div className="text-sm"><span className="font-semibold">Start Date: </span>{app_startdate}</div>
@@ -157,7 +157,7 @@ function Kanban() {
                         <div className="border border-slate-300 rounded text-start pl-5 py-1 font-semibold">Closed</div>
                     </div>
 
-                    <div className="grid grid-cols-5 grid-flow-col px-5 pt-2 gap-2 h-80">
+                    <div className="grid grid-cols-5 grid-flow-col px-5 pt-2 gap-2 h-4/6">
                         {/* Open */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {

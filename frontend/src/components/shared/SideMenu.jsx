@@ -195,7 +195,7 @@ function SideMenu(props) {
         return <div>Loading...</div>
     } else {
         return (
-            <div className="bg-customBlack text-white w-2/12 p-4">
+            <div className="bg-customBlack text-white w-2/12 p-4 overflow-y-auto">
                 {/* Create Task button */}
                 {(props.loggedInUserGroups.includes(props.app_permit_create)) && (
                     <button onClick={openCreateTaskModal} className="btn bg-emerald-500 btn-sm hover:bg-emerald-700 text-white gap-2">
