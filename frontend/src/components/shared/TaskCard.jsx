@@ -172,7 +172,7 @@ function TaskCard(props) {
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
-            width: '50%',
+            width: '80%',
             height: '90vh',
             borderRadius: ".5em",
             overflowY: "auto",
@@ -336,122 +336,114 @@ function TaskCard(props) {
                     style={customStyles}
                     contentLabel="View Task Details"
                 >
-                    <div className="flex justify-between mb-5">
-                        <div>
-                            <h2 className="font-bold text-2xl">{props.task.task_name}</h2>
-                            <p className="text-sm text-gray-500">{props.task.task_id}</p>
-                        </div>
-                        <button onClick={closeViewTaskModal}><strong>X</strong></button>
-                    </div>
-
-                    <div className="flex w-8/12 justify-between mb-3">
-                        <div className="font-semibold text-gray-400">Status </div>
-                        <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
-                    </div>
-
-                    <div className="flex w-8/12 justify-between mb-3">
-                        <div className="font-semibold text-gray-400">Plan </div>
-                        {(props.task.task_plan.length < 1) ?
-                            <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
-                            :
-                            <div className="px-1 ml-3" style={{
-                                border: `2px solid ${planColor}`,
-                                borderRadius: '5px',
-                                backgroundColor: `${planColor}`
-                            }}>
-                                {props.task.task_plan}
+                    <div className="flex">
+                        {/* left side */}
+                        <div className="w-1/2 p-3">
+                            <div className="flex mb-5">
+                                <div>
+                                    <h2 className="font-bold text-2xl">{props.task.task_name}</h2>
+                                    <p className="text-sm text-gray-500">{props.task.task_id}</p>
+                                </div>
                             </div>
-                        }
-                    </div>
 
-                    <div className="flex w-8/12 justify-between mb-3">
-                        <div className="font-semibold text-gray-400">Task Owner </div>
-                        <p className="ml-3">{props.task.task_owner}</p>
-                    </div>
+                            <div className="flex w-8/12 justify-between mb-3">
+                                <div className="font-semibold text-gray-400">Status </div>
+                                <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
+                            </div>
 
-
-                    <div className="flex w-8/12 justify-between mb-3">
-                        <div className="font-semibold text-gray-400">Created by </div>
-                        <p className="ml-3">{props.task.task_creator}</p>
-                    </div>
-
-                    <div className="flex w-8/12 justify-between mb-3">
-                        <div className="font-semibold text-gray-400">Created On </div>
-                        <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
-                    </div>
-
-                    <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
-
-                    <div className="flex flex-col mb-3">
-                        <p className="font-bold mb-3">Description </p>
-                        <textarea
-                            className="h-28"
-                            style={{ overflowY: 'scroll' }}
-                            value={props.task.task_description}
-                            readOnly
-                        ></textarea>
-
-                    </div>
-
-                    <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
-
-                    {/* <div className="flex flex-col mb-3">
-                        <p className="font-bold text-2xl mb-3">Notes </p>
-                        <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
-                            {(newNoteCount === 0) ?
-                                originalNotes.map((note, index) => (
-                                    <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
-                                        {note}
+                            <div className="flex w-8/12 justify-between mb-3">
+                                <div className="font-semibold text-gray-400">Plan </div>
+                                {(props.task.task_plan.length < 1) ?
+                                    <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
+                                    :
+                                    <div className="px-1 ml-3" style={{
+                                        border: `2px solid ${planColor}`,
+                                        borderRadius: '5px',
+                                        backgroundColor: `${planColor}`
+                                    }}>
+                                        {props.task.task_plan}
                                     </div>
-                                ))
-                                :
-                                newNotes.map((note, index) => (
-                                    <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
-                                        {note}
-                                    </div>
-                                ))
-                            }
-                            <div ref={bottomRef} />
-                        </div>
-                    </div> */}
+                                }
+                            </div>
 
-                    <p className="font-bold text-2xl mb-3">Notes </p>
+                            <div className="flex w-8/12 justify-between mb-3">
+                                <div className="font-semibold text-gray-400">Task Owner </div>
+                                <p className="ml-3">{props.task.task_owner}</p>
+                            </div>
 
-                    {/* Form to add notes */}
 
-                    <form onSubmit={handleNewNoteSubmit}>
-                        <div className="form-group">
-                            {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
-                            <textarea
-                                id="update-task_notes1"
-                                cols="30"
-                                rows="10"
-                                value={(newNoteCount === 0) ? originalNotes : newNotes}
-                                disabled
-                                style={{ overflowY: 'scroll' }}
-                            >
-                            </textarea>
-                            {props.loggedInUserGroups.includes(props.permittedGroup) && (
+                            <div className="flex w-8/12 justify-between mb-3">
+                                <div className="font-semibold text-gray-400">Created by </div>
+                                <p className="ml-3">{props.task.task_creator}</p>
+                            </div>
+
+                            <div className="flex w-8/12 justify-between mb-3">
+                                <div className="font-semibold text-gray-400">Created On </div>
+                                <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
+                            </div>
+
+                            <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
+
+                            <div className="flex flex-col mb-3">
+                                <p className="font-bold mb-3">Description </p>
                                 <textarea
-                                    id="update-task-notes2"
-                                    cols="30"
-                                    rows="3"
-                                    placeholder="Say something..."
-                                    value={newNoteInput}
-                                    onChange={(e) => setNewNoteInput(e.target.value)}
+                                    className="h-28"
+                                    style={{ overflowY: 'scroll' }}
+                                    value={props.task.task_description}
+                                    readOnly
                                 ></textarea>
-                            )}
+
+                            </div>
+                        </div>
+                        
+                        {/* right side */}
+                        <div className="w-1/2 p-3">
+                            <div className="flex justify-between items-center mb-3">
+                                <p className="font-bold text-2xl">Notes </p>
+                                <button onClick={closeViewTaskModal}><strong>X</strong></button>
+                            </div>
+
+                            {/* Form to add notes */}
+                            <form onSubmit={handleNewNoteSubmit}>
+                                <div className="form-group">
+                                    {/* If want to use textarea, change ',' separator to \n newline character in task controller */}
+                                    <textarea
+                                        id="update-task_notes1"
+                                        cols="30"
+                                        rows="10"
+                                        value={(newNoteCount === 0) ? originalNotes : newNotes}
+                                        className="!mb-0"
+                                        disabled
+                                        style={{ overflowY: 'scroll' }}
+                                    >
+                                    </textarea>
+                                    {props.loggedInUserGroups.includes(props.permittedGroup) && (
+                                        <textarea
+                                            id="update-task-notes2"
+                                            cols="30"
+                                            rows="3"
+                                            placeholder="Say something..."
+                                            className="!mb-0"
+                                            value={newNoteInput}
+                                            onChange={(e) => setNewNoteInput(e.target.value)}
+                                        ></textarea>
+                                    )}
+                                </div>
+
+                                {props.loggedInUserGroups.includes(props.permittedGroup) && (
+                                    <div className="flex justify-end">
+                                        <button className="btn btn-sm gap-2" type="submit">
+                                            <BsPencilSquare />
+                                            Add Note
+                                        </button>
+                                    </div>
+                                )}
+                            </form>
+
                         </div>
 
-                        {props.loggedInUserGroups.includes(props.permittedGroup) && (
-                            <div className="flex justify-end">
-                                <button className="btn btn-sm gap-2" type="submit">
-                                    <BsPencilSquare />
-                                    Add Note
-                                </button>
-                            </div>
-                        )}
-                    </form>
+                    </div>
+
 
                 </Modal>
 
