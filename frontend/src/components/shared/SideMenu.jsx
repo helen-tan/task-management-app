@@ -66,8 +66,8 @@ function SideMenu(props) {
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
-            width: '50%',
-            height: '90vh',
+            width: '70%',
+            height: 'auto',
             borderRadius: ".5em",
             overflowY: "auto",
         },
@@ -368,26 +368,31 @@ function SideMenu(props) {
                                 required
                             />
 
-                            <label htmlFor="create-task-description" className="font-semibold">Description:</label>
-                            <textarea
-                                id="create-task-description"
-                                cols="30"
-                                rows="5"
-                                placeholder="Describe the task as detailed as you can"
-                                value={createTaskDescriptionInput}
-                                onChange={(e) => setCreateTaskDescriptionInput(e.target.value)}
-                            ></textarea>
+                            <div className="flex gap-2">
+                                <div className="w-1/2">
+                                    <label htmlFor="create-task-description" className="font-semibold">Description:</label>
+                                    <textarea
+                                        id="create-task-description"
+                                        cols="30"
+                                        rows="5"
+                                        placeholder="Describe the task as detailed as you can"
+                                        value={createTaskDescriptionInput}
+                                        onChange={(e) => setCreateTaskDescriptionInput(e.target.value)}
+                                    ></textarea>
+                                </div>
 
-                            {/* Todo: Add a note */}
-                            <label htmlFor="create-task-notes" className="font-semibold">Add a note:</label>
-                            <textarea
-                                id="create-task-notes"
-                                cols="30"
-                                rows="3"
-                                placeholder="Say something..."
-                                value={createTaskNotesInput}
-                                onChange={(e) => setCreateTaskNotesInput(e.target.value)}
-                            ></textarea>
+                                <div className="w-1/2">
+                                    <label htmlFor="create-task-notes" className="font-semibold">Add a note:</label>
+                                    <textarea
+                                        id="create-task-notes"
+                                        cols="30"
+                                        rows="5"
+                                        placeholder="Say something..."
+                                        value={createTaskNotesInput}
+                                        onChange={(e) => setCreateTaskNotesInput(e.target.value)}
+                                    ></textarea>
+                                </div>
+                            </div>
 
                             <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
                         </div>
