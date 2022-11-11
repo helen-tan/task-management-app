@@ -238,6 +238,7 @@ function AppList(props) {
                                     className="form-control text-xs"
                                     onChange={(e) => setCreateAppRnumInput(e.target.value)}
                                     type="number"
+                                    min="1" step="1"
                                     placeholder="Enter a number to identify your app"
                                     value={createAppRnumInput}
                                     id="create-app-rnum"

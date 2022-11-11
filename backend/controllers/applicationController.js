@@ -23,7 +23,7 @@ const createApplication = catchAsyncErrors(async(req, res) => {
     const app_rnumberRegexp = /^([1-9][0-9]{0,3}|10000)$/  // Min 0, Max 10,000, no decimals, no negatives
 
     // Todo: Check for empty fields
-    if (!app_acronym || !app_description || !app_rnumber || !app_startdate || !app_enddate || !app_permit_create || !app_permit_open | !app_permit_open || !app_permit_todolist || !app_permit_doing || !app_permit_done){
+    if (!app_acronym || !app_rnumber || !app_startdate || !app_enddate || !app_permit_create || !app_permit_open | !app_permit_open || !app_permit_todolist || !app_permit_doing || !app_permit_done){
         return res.status(200).send({
             success: false,
             message: 'Please fill in the required fields'
