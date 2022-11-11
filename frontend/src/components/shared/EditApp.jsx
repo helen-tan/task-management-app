@@ -100,13 +100,13 @@ function EditApp(props) {
                 <div className="form-group">
                     {/*App Name */}
                     <div className="flex gap-2 mb-6 ml-1 mt-1">
-                        <div htmlFor="edit-app-name" className="font-semibold text-sm">Application Name:</div>
+                        <div htmlFor="edit-app-name" className="font-semibold text-gray-500 text-sm">Application Name:</div>
                         <div className="text-sm">{editAppNameInput}</div>
                     </div>
 
                     {/*R_number */}
                     <div className="flex gap-2 mb-6 ml-1 mt-1">
-                        <div htmlFor="edit-app-rnum" className="font-semibold text-sm">R Number:</div>
+                        <div htmlFor="edit-app-rnum" className="font-semibold text-gray-500 text-sm">R Number:</div>
                         <div className="text-sm">{editAppRnumInput}</div>
                     </div>
 
