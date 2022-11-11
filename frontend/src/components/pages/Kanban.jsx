@@ -116,6 +116,12 @@ function Kanban() {
         }
         getUserGroups()
 
+        // Column to auto scroll to latest created task at the bottom (prob: latest task does not add at the end)
+        // let openColumn = document.getElementById('open-column')
+        // if (openColumn) {
+        //     openColumn.scrollTop = openColumn.scrollHeight
+        // }
+
         console.log("Refetching")
     }, [loggedInUser, taskUpdateCount, newTaskCount, change])
 
@@ -159,7 +165,7 @@ function Kanban() {
 
                     <div className="grid grid-cols-5 grid-flow-col px-5 pt-2 gap-2 h-4/6">
                         {/* Open */}
-                        <div className="border border-slate-300 rounded overflow-y-auto">
+                        <div id='open-column' className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
                                 if (task.task_state === "open") {
                                     return <TaskCard
