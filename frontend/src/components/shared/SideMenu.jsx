@@ -252,7 +252,8 @@ function SideMenu(props) {
 
                     <form onSubmit={handlePlanCreateSubmit}>
                         <div className="form-group">
-                            <label htmlFor="create-plan-name" className="font-semibold">Plan Name:</label>
+                            <div className="mb-5 text-sm"><span className="text-rose-600">*</span> indicates a required field</div>
+                            <label htmlFor="create-plan-name" className="font-semibold">Plan Name <span className="text-rose-600">*</span></label>
                             <input
                                 className="form-control"
                                 onChange={(e) => setCreatePlanNameInput(e.target.value)}
@@ -266,7 +267,7 @@ function SideMenu(props) {
                             {/*Start & End Date input */}
                             <div className="flex flex-col md:flex-row justify-between gap-1">
                                 <div className="w-full">
-                                    <label htmlFor="create-plan-startdate" className="font-semibold">Start Date:</label>
+                                    <label htmlFor="create-plan-startdate" className="font-semibold">Start Date <span className="text-rose-600">*</span></label>
                                     <input
                                         onChange={(e) => setCreatePlanStartdateInput(e.target.value)}
                                         type="date"
@@ -276,7 +277,7 @@ function SideMenu(props) {
                                     />
                                 </div>
                                 <div className="w-full">
-                                    <label htmlFor="create-plan-enddate" className="font-semibold">End Date:</label>
+                                    <label htmlFor="create-plan-enddate" className="font-semibold">End Date <span className="text-rose-600">*</span></label>
                                     <input
                                         onChange={(e) => setCreatePlanEnddateInput(e.target.value)}
                                         type="date"
@@ -287,7 +288,7 @@ function SideMenu(props) {
                                 </div>
                             </div>
 
-                            <label htmlFor="create-plan-color" className="font-semibold">Plan Color:</label>
+                            <label htmlFor="create-plan-color" className="font-semibold">Plan Color <span className="text-rose-600">*</span></label>
                             <SliderPicker
                                 color={createPlanColorInput}
                                 onChange={(data) => setCreatePlanColorInput(data.hex)}
@@ -353,7 +354,7 @@ function SideMenu(props) {
                     <form onSubmit={handleTaskCreateSubmit}>
                         <div className="form-group">
                             <div className="mb-5 text-sm"><span className="text-rose-600">*</span> indicates a required field</div>
-                            <label htmlFor="create-task-name" className="font-semibold">Task Name <span className="text-rose-600">*</span></label> 
+                            <label htmlFor="create-task-name" className="font-semibold">Task Name <span className="text-rose-600">*</span></label>
                             <input
                                 className="form-control"
                                 onChange={(e) => setCreateTaskNameInput(e.target.value)}

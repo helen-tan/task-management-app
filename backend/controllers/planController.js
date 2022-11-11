@@ -14,11 +14,19 @@ const createPlan = catchAsyncErrors(async (req, res) => {
     } = req.body
 
     // plan_color to be white (#FFF) if there is no input from the user
-    if (plan_color === "") plan_color = '#FFF'
+    // if (plan_color === "") plan_color = '#FFF'
 
     // Validation: Regex to validate user input
     const plan_mvp_nameRegexp = /^[a-zA-Z0-9_.]{2,20}$/          // only alphanumeric, dots, underscores, no spaces, min 2 mx 20 chars
     const plan_app_acronymRegexp = /^[a-zA-Z0-9]{2,20}$/         // only alphanumeric, no special chars, no spaces, min 2 max 20 chars
+
+     // Validation: Check for empty inputs
+     if (!plan_app_acronym || !plan_startdate || !plan_enddate || !plan_color){
+        return res.status(200).send({
+            success: false,
+            message: 'Please fill in the required fields'
+        })
+    }
 
     if (!plan_app_acronym.match(plan_app_acronymRegexp)) {
         return res.status(200).send({
