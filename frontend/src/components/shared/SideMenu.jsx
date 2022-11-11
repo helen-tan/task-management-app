@@ -26,6 +26,7 @@ function SideMenu(props) {
     // Create Task form inputs
     const [createTaskNameInput, setCreateTaskNameInput] = useState("")
     const [createTaskDescriptionInput, setCreateTaskDescriptionInput] = useState("")
+    const [createTaskNotesInput, setCreateTaskNotesInput] = useState("")
 
     const bearer_token = `Bearer ${sessionStorage.getItem('token')}`
     const config = {
@@ -66,7 +67,7 @@ function SideMenu(props) {
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
             width: '50%',
-            // height: '90vh',
+            height: '90vh',
             borderRadius: ".5em",
             overflowY: "auto",
         },
@@ -141,6 +142,7 @@ function SideMenu(props) {
         const new_task = {
             task_name: createTaskNameInput,
             task_description: createTaskDescriptionInput,
+            task_notes_input: createTaskNotesInput
         }
 
         // Send post request to create new task
@@ -153,6 +155,7 @@ function SideMenu(props) {
                     // clear user input
                     setCreateTaskNameInput("")
                     setCreateTaskDescriptionInput("")
+                    setCreateTaskNotesInput("")
 
                     // increment count state (to induce re render of Plan list to include new Plan instantly)
                     props.setNewTaskCount(prevState => prevState + 1)
@@ -373,6 +376,17 @@ function SideMenu(props) {
                                 placeholder="Describe the task as detailed as you can"
                                 value={createTaskDescriptionInput}
                                 onChange={(e) => setCreateTaskDescriptionInput(e.target.value)}
+                            ></textarea>
+
+                            {/* Todo: Add a note */}
+                            <label htmlFor="create-task-notes" className="font-semibold">Add a note:</label>
+                            <textarea
+                                id="create-task-notes"
+                                cols="30"
+                                rows="3"
+                                placeholder="Say something..."
+                                value={createTaskNotesInput}
+                                onChange={(e) => setCreateTaskNotesInput(e.target.value)}
                             ></textarea>
 
                             <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>

@@ -13,7 +13,8 @@ const createTask = catchAsyncErrors(async (req, res) => {
     // task_owner - by deafult the user who created
     const {
         task_name,
-        task_description
+        task_description,
+        task_notes_input
     } = req.body
 
     // Get app_acronym (app identifier) of app of interest (from the params)
@@ -65,7 +66,15 @@ const createTask = catchAsyncErrors(async (req, res) => {
         })
     }
 
-    let task_notes = `${loggedInUser} has created the task: ${task_name} [${today} ${hours}:${mins}:${seconds}]`
+    // Construct task notes string
+    let task_notes = ""
+    // If no user input for task
+    if (!task_notes_input) {
+        task_notes = `${loggedInUser} has created the task: ${task_name} [${today} ${hours}:${mins}:${seconds}]`
+    } else {
+        task_notes = `${loggedInUser} has created the task: ${task_name} [${today} ${hours}:${mins}:${seconds}]\n\n--------\n\n${loggedInUser} [${today} ${hours}:${mins}:${seconds}]: \n${task_notes_input}`
+    }
+
     let task_plan = "" // At task creation, there will be no plan
     let task_state = "open"
     let task_creator = loggedInUser
@@ -580,8 +589,8 @@ const updateTask = catchAsyncErrors(async (req, res) => {
         updated_task_notes = existing_notes + new_note
 
         message = `Task description was updated`
-       // sql = `UPDATE tasks SET task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
-        
+        // sql = `UPDATE tasks SET task_description = '${task_description}', task_owner = '${task_owner}', task_notes = '${updated_task_notes}' WHERE task_id = '${task_id}'`
+
         db.query(`UPDATE tasks SET task_description = ?, task_owner = ?, task_notes = ? WHERE task_id = ?`, [task_description, task_owner, updated_task_notes, task_id], (err, results) => {
             if (err) {
                 res.status(400).send({
