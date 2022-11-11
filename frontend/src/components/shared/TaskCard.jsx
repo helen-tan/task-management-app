@@ -392,10 +392,9 @@ function TaskCard(props) {
                                     value={props.task.task_description}
                                     readOnly
                                 ></textarea>
-
                             </div>
                         </div>
-                        
+
                         {/* right side */}
                         <div className="w-1/2 p-3">
                             <div className="flex justify-between items-center mb-3">
@@ -439,12 +438,8 @@ function TaskCard(props) {
                                     </div>
                                 )}
                             </form>
-
                         </div>
-
                     </div>
-
-
                 </Modal>
 
                 {/* Edit Task Modal */}
@@ -455,157 +450,145 @@ function TaskCard(props) {
                     style={customStyles}
                     contentLabel="Edit Task Details"
                 >
-                    <div className="flex justify-between mb-5">
-                        <div>
-                            <h2 className="font-bold text-2xl">Edit Task - {props.task.task_name}</h2>
-                            <p className="text-sm text-gray-500">{props.task.task_id}</p>
+                    <div className="flex">
+                        {/* left side */}
+                        <div className="w-1/2 p-3">
+                            <div className="flex justify-between mb-5">
+                                <div>
+                                    <h2 className="font-bold text-2xl">Edit Task - {props.task.task_name}</h2>
+                                    <p className="text-sm text-gray-500">{props.task.task_id}</p>
+                                </div>
+                            </div>
+
+                            {/* Display current Task data */}
+                            <div className="mb-10">
+                                <div className="flex w-8/12 justify-between mb-3">
+                                    <div className="font-semibold text-gray-400">Status </div>
+                                    <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
+                                </div>
+
+                                <div className="flex w-8/12 justify-between mb-3">
+                                    <div className="font-semibold text-gray-400">Plan </div>
+                                    {(props.task.task_plan.length < 1) ?
+                                        <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
+                                        :
+                                        (editTaskCount === 0) ?
+                                            <div className="px-1 ml-3" style={{
+                                                border: `2px solid ${planColor}`,
+                                                borderRadius: '5px',
+                                                backgroundColor: `${planColor}`
+                                            }}>
+                                                {props.task.task_plan}
+                                            </div>
+                                            :
+                                            <div className="px-1 ml-3" style={{
+                                                border: `2px solid ${newTaskPlanColor}`,
+                                                borderRadius: '5px',
+                                                backgroundColor: `${newTaskPlanColor}`
+                                            }}>
+                                                {/*Name of Plan */}
+                                                {(editTaskCount === 0) ? props.task.task_plan : newTaskPlanName}
+                                            </div>
+                                    }
+                                </div>
+
+                                <div className="flex w-8/12 justify-between mb-3">
+                                    <div className="font-semibold text-gray-400">Task Owner </div>
+                                    <p className="ml-3">
+                                        {(editTaskCount === 0) ? props.task.task_owner : newTaskOwner}
+                                    </p>
+                                </div>
+
+                                <div className="flex w-8/12 justify-between mb-3">
+                                    <div className="font-semibold text-gray-400">Created by </div>
+                                    <p className="ml-3">{props.task.task_creator}</p>
+                                </div>
+
+                                <div className="flex w-8/12 justify-between mb-3">
+                                    <div className="font-semibold text-gray-400">Created On </div>
+                                    <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
+
+                            {/* Edit Task form - plan, description only */}
+                            <form onSubmit={handleEditTaskSubmit}>
+                                <div className="form-group">
+                                    {/* Change Plan color input - Dropdown to show available plans*/}
+                                    <label htmlFor="edit-task-plan" className="font-semibold">Change Plan:</label>
+                                    <select
+                                        id="edit-task-plan"
+                                        value={editTaskPlanInput}
+                                        onChange={(e) => setEditTaskPlanInput(e.target.value)}
+                                        className="disabled:bg-zinc-300"
+                                        disabled={!(props.loggedInUserGroups.includes("projectmanager"))}
+                                    >
+                                        <option value="" disabled>Choose a plan...</option>
+                                        {props.plans.map((plan) => (
+                                            <option key={plan.plan_mvp_name} style={{
+                                                backgroundColor: `${plan.plan_color}`
+                                            }}>
+                                                {plan.plan_mvp_name}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    {/*Task Description input */}
+                                    <label htmlFor="edit-task-description" className="font-semibold">Description:</label>
+                                    <textarea
+                                        id="edit-task-description"
+                                        cols="30"
+                                        rows="5"
+                                        placeholder="Say a few words about the task..."
+                                        value={editTaskDescriptionInput}
+                                        onChange={(e) => setEditTaskDescriptionInput(e.target.value)}
+                                    ></textarea>
+                                </div>
+                                <button className="btn btn-sm btn-block mb-14" type="submit">Submit</button>
+                            </form>
                         </div>
-                        <button onClick={closeEditTaskModal}><strong>X</strong></button>
+
+                        {/* right side */}
+                        <div className="w-1/2 p-3">
+                            {/* Notes section */}
+                            <div className="flex justify-between items-center mb-3">
+                                <p className="font-bold text-2xl">Notes </p>
+                                <button onClick={closeEditTaskModal}><strong>X</strong></button>
+                            </div>
+
+                            {/* Form to add notes */}
+                            <form onSubmit={handleNewNoteSubmit}>
+                                <div className="form-group">
+                                    {/* <label htmlFor="update-task-notes" className="font-semibold">Add a note</label> */}
+                                    <textarea
+                                        id="update-task_notes3"
+                                        cols="30"
+                                        rows="10"
+                                        value={(newNoteCount === 0) ? originalNotes : newNotes}
+                                        disabled
+                                        style={{ overflowY: 'scroll' }}
+                                    >
+                                    </textarea>
+                                    <textarea
+                                        id="update-task-notes4"
+                                        cols="30"
+                                        rows="3"
+                                        placeholder="Say something..."
+                                        value={newNoteInput}
+                                        onChange={(e) => setNewNoteInput(e.target.value)}
+                                    ></textarea>
+                                </div>
+
+                                <div className="flex justify-end">
+                                    <button className="btn btn-sm gap-2" type="submit">
+                                        <BsPencilSquare />
+                                        Add Note
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
-                    {/* Display current Task data */}
-                    <div className="mb-10">
-                        <div className="flex w-8/12 justify-between mb-3">
-                            <div className="font-semibold text-gray-400">Status </div>
-                            <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">{props.task.task_state}</div>
-                        </div>
-
-                        <div className="flex w-8/12 justify-between mb-3">
-                            <div className="font-semibold text-gray-400">Plan </div>
-                            {(props.task.task_plan.length < 1) ?
-                                <div className="border-solid border border-slate-500 rounded text-slate-500 px-1 ml-3">Not Assigned Yet</div>
-                                :
-                                (editTaskCount === 0) ?
-                                    <div className="px-1 ml-3" style={{
-                                        border: `2px solid ${planColor}`,
-                                        borderRadius: '5px',
-                                        backgroundColor: `${planColor}`
-                                    }}>
-                                        {props.task.task_plan}
-                                    </div>
-                                    :
-                                    <div className="px-1 ml-3" style={{
-                                        border: `2px solid ${newTaskPlanColor}`,
-                                        borderRadius: '5px',
-                                        backgroundColor: `${newTaskPlanColor}`
-                                    }}>
-                                        {/*Name of Plan */}
-                                        {(editTaskCount === 0) ? props.task.task_plan : newTaskPlanName}
-                                    </div>
-                            }
-                        </div>
-
-                        <div className="flex w-8/12 justify-between mb-3">
-                            <div className="font-semibold text-gray-400">Task Owner </div>
-                            <p className="ml-3">
-                                {(editTaskCount === 0) ? props.task.task_owner : newTaskOwner}
-                            </p>
-                        </div>
-
-                        <div className="flex w-8/12 justify-between mb-3">
-                            <div className="font-semibold text-gray-400">Created by </div>
-                            <p className="ml-3">{props.task.task_creator}</p>
-                        </div>
-
-                        <div className="flex w-8/12 justify-between mb-3">
-                            <div className="font-semibold text-gray-400">Created On </div>
-                            <div className="ml-3">{props.task.task_createdate.split("T")[0]}</div>
-                        </div>
-                    </div>
-
-
-
-                    {/* Edit Task form - plan, description only */}
-                    <form onSubmit={handleEditTaskSubmit}>
-                        <div className="form-group">
-                            {/* Change Plan color input - Dropdown to show available plans*/}
-                            <label htmlFor="edit-task-plan" className="font-semibold">Change Plan:</label>
-                            <select
-                                id="edit-task-plan"
-                                value={editTaskPlanInput}
-                                onChange={(e) => setEditTaskPlanInput(e.target.value)}
-                                className="disabled:bg-zinc-300"
-                                disabled={!(props.loggedInUserGroups.includes("projectmanager"))}
-                            >
-                                <option value="" disabled>Choose a plan...</option>
-                                {props.plans.map((plan) => (
-                                    <option key={plan.plan_mvp_name} style={{
-                                        backgroundColor: `${plan.plan_color}`
-                                    }}>
-                                        {plan.plan_mvp_name}
-                                    </option>
-                                ))}
-                            </select>
-
-                            {/*Task Description input */}
-                            <label htmlFor="edit-task-description" className="font-semibold">Description:</label>
-                            <textarea
-                                id="edit-task-description"
-                                cols="30"
-                                rows="5"
-                                placeholder="Say a few words about the task..."
-                                value={editTaskDescriptionInput}
-                                onChange={(e) => setEditTaskDescriptionInput(e.target.value)}
-                            ></textarea>
-                        </div>
-                        <button className="btn btn-sm btn-block mb-14" type="submit">Submit</button>
-                    </form>
-
-                    {/* Notes section */}
-
-                    <div className="bg-slate-300 mb-5 mt-5" style={{ height: "0.5px" }}></div>
-
-                    {/* <div className="flex flex-col mb-3">
-                        <p className="font-bold text-2xl mb-3">Notes </p>
-                        <div className="h-60 p-2" style={{ overflowY: 'scroll' }}>
-                            {(newNoteCount === 0) ?
-                                originalNotes.map((note, index) => (
-                                    <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
-                                        {note}
-                                    </div>
-                                ))
-                                :
-                                newNotes.map((note, index) => (
-                                    <div key={index} className="note-shadow bg-yellow-100 rounded p-3 mb-2">
-                                        {note}
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div> */}
-
-                    <p className="font-bold text-2xl mb-3">Notes </p>
-
-                    {/* Form to add notes */}
-                    <form onSubmit={handleNewNoteSubmit}>
-                        <div className="form-group">
-                            {/* <label htmlFor="update-task-notes" className="font-semibold">Add a note</label> */}
-                            <textarea
-                                id="update-task_notes3"
-                                cols="30"
-                                rows="10"
-                                value={(newNoteCount === 0) ? originalNotes : newNotes}
-                                disabled
-                                style={{ overflowY: 'scroll' }}
-                            >
-                            </textarea>
-                            <textarea
-                                id="update-task-notes4"
-                                cols="30"
-                                rows="3"
-                                placeholder="Say something..."
-                                value={newNoteInput}
-                                onChange={(e) => setNewNoteInput(e.target.value)}
-                            ></textarea>
-                        </div>
-
-                        <div className="flex justify-end">
-                            <button className="btn btn-sm gap-2" type="submit">
-                                <BsPencilSquare />
-                                Add Note
-                            </button>
-                        </div>
-                    </form>
                 </Modal>
             </div>
         )
