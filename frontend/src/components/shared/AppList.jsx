@@ -77,7 +77,7 @@ function AppList(props) {
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
-            width: '50%',
+            width: '80%',
             height: '90vh',
             borderRadius: ".5em",
             overflowY: "auto",
@@ -216,14 +216,14 @@ function AppList(props) {
 
                 <form onSubmit={handleAppCreateSubmit}>
                     <div className="form-group">
-                        <div className="mb-5 text-sm"><span className="text-rose-600">*</span> indicates a required field</div>
+                        <div className="mb-5 text-xs"><span className="text-rose-600">*</span> indicates a required field</div>
 
                         <div className="flex flex-col md:flex-row justify-between gap-1">
                             {/*App Name input */}
                             <div className="w-full">
-                                <label htmlFor="create-app-name" className="font-semibold">Application Name <span className="text-rose-600">*</span></label>
+                                <label htmlFor="create-app-name" className="font-semibold text-sm">Application Name <span className="text-rose-600">*</span></label>
                                 <input
-                                    className="form-control"
+                                    className="form-control text-xs"
                                     onChange={(e) => setCreateAppNameInput(e.target.value)}
                                     type="text"
                                     placeholder="Enter a new app name here"
@@ -233,9 +233,9 @@ function AppList(props) {
                             </div>
                             {/*R_number input */}
                             <div className="w-full">
-                                <label htmlFor="create-app-rnum" className="font-semibold">R Number <span className="text-rose-600">*</span></label>
+                                <label htmlFor="create-app-rnum" className="font-semibold text-sm">R Number <span className="text-rose-600">*</span></label>
                                 <input
-                                    className="form-control"
+                                    className="form-control text-xs"
                                     onChange={(e) => setCreateAppRnumInput(e.target.value)}
                                     type="number"
                                     placeholder="Enter a number to identify your app"
@@ -243,105 +243,108 @@ function AppList(props) {
                                     id="create-app-rnum"
                                 />
                             </div>
-                        </div>
-
-                        {/*Start & End Date input */}
-                        <div className="flex flex-col md:flex-row justify-between gap-1">
+                            {/*Start & End Date input */}
                             <div className="w-full">
-                                <label htmlFor="create-app-startdate" className="font-semibold">Start Date <span className="text-rose-600">*</span></label>
+                                <label htmlFor="create-app-startdate" className="font-semibold text-sm">Start Date <span className="text-rose-600">*</span></label>
                                 <input
                                     onChange={(e) => setCreateAppStartdateInput(e.target.value)}
                                     type="date"
+                                    className="text-xs"
                                     value={createAppStartdateInput}
                                     id="create-app-startdate"
                                 />
                             </div>
                             <div className="w-full">
-                                <label htmlFor="create-app-enddate" className="font-semibold">End Date <span className="text-rose-600">*</span></label>
+                                <label htmlFor="create-app-enddate" className="font-semibold text-sm">End Date <span className="text-rose-600">*</span></label>
                                 <input
                                     onChange={(e) => setCreateAppEnddateInput(e.target.value)}
                                     type="date"
+                                    className="text-xs"
                                     value={createAppEnddateInput}
                                     id="create-app-enddate"
                                 />
                             </div>
                         </div>
 
-                        {/*Description input */}
-                        <label htmlFor="create-app-description" className="font-semibold">Description</label>
-                        <textarea
-                            id="create-app-description"
-                            cols="30"
-                            rows="5"
-                            placeholder="Say a few words about the application..."
-                            value={createAppDescriptionInput}
-                            onChange={(e) => setCreateAppDescriptionInput(e.target.value)}
-                        ></textarea>
-
-
-                        <div className="font-bold text-base mb-5">Groups permitted to:</div>
-
-                        {/*App_permit_create */}
-                        <div className="w-full">
-                            <label htmlFor="create-app-permitcreate" className="font-semibold">Create Tasks (App_permit_Create) <span className="text-rose-600">*</span></label>
-                            <select id="create-app-permitcreate" value={createAppPermitCreate} onChange={(e) => setCreateAppPermitCreate(e.target.value)}>
-                                <option value="" disabled>Choose a group...</option>
-                                {groupOptions.map((groupOption) => (
-                                    <option key={groupOption.group_name}>{groupOption.group_name}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="flex flex-col md:flex-row justify-between gap-1">
-                            {/*App_permit_open */}
-                            <div className="w-full">
-                                <label htmlFor="create-app-permitopen" className="font-semibold">Shift Tasks to To-do (App_permit_Open) <span className="text-rose-600">*</span></label>
-                                <select id="create-app-permitopen" value={createAppPermitOpen} onChange={(e) => setCreateAppPermitOpen(e.target.value)}>
-                                    <option value="" disabled>Choose a group...</option>
-                                    {groupOptions.map((groupOption) => (
-                                        <option key={groupOption.group_name}>{groupOption.group_name}</option>
-                                    ))}
-                                </select>
+                        <div className="flex gap-1">
+                            <div className="w-1/2">
+                                {/*Description input */}
+                                <label htmlFor="create-app-description" className="font-semibold text-sm">Description</label>
+                                <textarea
+                                    id="create-app-description"
+                                    cols="30"
+                                    rows="10"
+                                    className="text-xs"
+                                    placeholder="Say a few words about the application..."
+                                    value={createAppDescriptionInput}
+                                    onChange={(e) => setCreateAppDescriptionInput(e.target.value)}
+                                ></textarea>
                             </div>
 
-                            {/*App_permit_toDoList */}
-                            <div className="w-full">
-                                <label htmlFor="create-app-permittodolist" className="font-semibold">Shift Tasks to Doing (App_permit_toDoList) <span className="text-rose-600">*</span></label>
-                                <select id="create-app-permittodolist" value={createAppPermitTodolist} onChange={(e) => setCreateAppPermitTodolist(e.target.value)}>
-                                    <option value="" disabled>Choose a group...</option>
-                                    {groupOptions.map((groupOption) => (
-                                        <option key={groupOption.group_name}>{groupOption.group_name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
+                            <div className="w-1/2">
+                                {/*App_permit_create */}
+                                <div className="w-full">
+                                    <label htmlFor="create-app-permitcreate" className="font-semibold text-sm">App_permit_Create <span className="text-rose-600">*</span></label>
+                                    <select id="create-app-permitcreate" className="text-xs" value={createAppPermitCreate} onChange={(e) => setCreateAppPermitCreate(e.target.value)}>
+                                        <option value="" disabled>Choose a group...</option>
+                                        {groupOptions.map((groupOption) => (
+                                            <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                        <div className="flex flex-col md:flex-row justify-between gap-1">
-                            {/*App_permit_Doing */}
-                            <div className="w-full">
-                                <label htmlFor="create-app-permitdoing" className="font-semibold">Shift Tasks to Done (App_permit_Doing) <span className="text-rose-600">*</span></label>
-                                <select id="create-app-permitdoing" value={createAppPermitDoing} onChange={(e) => setCreateAppPermitDoing(e.target.value)}>
-                                    <option value="" disabled>Choose a group...</option>
-                                    {groupOptions.map((groupOption) => (
-                                        <option key={groupOption.group_name}>{groupOption.group_name}</option>
-                                    ))}
-                                </select>
-                            </div>
+                                <div className="flex gap-1">
+                                    {/*App_permit_open */}
+                                    <div className="w-full">
+                                        <label htmlFor="create-app-permitopen" className="font-semibold text-sm">App_permit_Open<span className="text-rose-600">*</span></label>
+                                        <select id="create-app-permitopen" className="text-xs" value={createAppPermitOpen} onChange={(e) => setCreateAppPermitOpen(e.target.value)}>
+                                            <option value="" disabled>Choose a group...</option>
+                                            {groupOptions.map((groupOption) => (
+                                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
 
-                            {/*App_permit_Done */}
-                            <div className="w-full">
-                                <label htmlFor="create-app-permitdone" className="font-semibold">Close Tasks (App_permit_Done) <span className="text-rose-600">*</span></label>
-                                <select id="create-app-permitdone" value={createAppPermitDone} onChange={(e) => setCreateAppPermitDone(e.target.value)}>
-                                    <option value="" disabled>Choose a group...</option>
-                                    {groupOptions.map((groupOption) => (
-                                        <option key={groupOption.group_name}>{groupOption.group_name}</option>
-                                    ))}
-                                </select>
+                                    {/*App_permit_toDoList */}
+                                    <div className="w-full">
+                                        <label htmlFor="create-app-permittodolist" className="font-semibold text-sm">App_permit_toDoList <span className="text-rose-600">*</span></label>
+                                        <select id="create-app-permittodolist" className="text-xs" value={createAppPermitTodolist} onChange={(e) => setCreateAppPermitTodolist(e.target.value)}>
+                                            <option value="" disabled>Choose a group...</option>
+                                            {groupOptions.map((groupOption) => (
+                                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-1">
+                                    {/*App_permit_Doing */}
+                                    <div className="w-full">
+                                        <label htmlFor="create-app-permitdoing" className="font-semibold text-sm">App_permit_Doing <span className="text-rose-600">*</span></label>
+                                        <select id="create-app-permitdoing" className="text-xs" value={createAppPermitDoing} onChange={(e) => setCreateAppPermitDoing(e.target.value)}>
+                                            <option value="" disabled>Choose a group...</option>
+                                            {groupOptions.map((groupOption) => (
+                                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/*App_permit_Done */}
+                                    <div className="w-full">
+                                        <label htmlFor="create-app-permitdone" className="font-semibold text-sm">App_permit_Done <span className="text-rose-600">*</span></label>
+                                        <select id="create-app-permitdone" className="text-xs" value={createAppPermitDone} onChange={(e) => setCreateAppPermitDone(e.target.value)}>
+                                            <option value="" disabled>Choose a group...</option>
+                                            {groupOptions.map((groupOption) => (
+                                                <option key={groupOption.group_name}>{groupOption.group_name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <button className="btn btn-sm btn-block mt-3" type="submit">Submit</button>
+                    <button className="btn btn-sm btn-block" type="submit">Submit</button>
                 </form>
 
             </Modal>
