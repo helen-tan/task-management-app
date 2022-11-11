@@ -352,7 +352,8 @@ function SideMenu(props) {
 
                     <form onSubmit={handleTaskCreateSubmit}>
                         <div className="form-group">
-                            <label htmlFor="create-task-name" className="font-semibold">Task Name:</label>
+                            <div className="mb-5 text-sm"><span className="text-rose-600">*</span> indicates a required field</div>
+                            <label htmlFor="create-task-name" className="font-semibold">Task Name <span className="text-rose-600">*</span></label> 
                             <input
                                 className="form-control"
                                 onChange={(e) => setCreateTaskNameInput(e.target.value)}
