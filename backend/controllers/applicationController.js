@@ -164,13 +164,13 @@ const updateApplication = catchAsyncErrors((req,res) => {
         app_permit_done
     } = req.body
 
-    // If empty fields were sent
-    if (app_description.length < 1 && app_startdate.length < 1 && app_enddate.length < 1 && app_permit_create.length < 1 && 
-        app_permit_open.length < 1 && app_permit_todolist.length < 1 && app_permit_doing.length < 1 && app_permit_done.length < 1) {
+    // If empty required fields were sent
+    if (app_startdate.length < 1 || app_enddate.length < 1 || app_permit_create.length < 1 || 
+        app_permit_open.length < 1 || app_permit_todolist.length < 1 || app_permit_doing.length < 1 || app_permit_done.length < 1) {
         console.log("In empty fields were sent")
         return res.status(200).send({
             success: false,
-            message: 'No changes were detected'
+            message: 'Please fill all required fields'
         })
     }
 
