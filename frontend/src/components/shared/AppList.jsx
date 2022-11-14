@@ -229,7 +229,13 @@ function AppList(props) {
                                     placeholder="Enter a new app name here"
                                     value={createAppNameInput}
                                     id="create-app-name"
+                                    style={{ marginBottom: "0" }}
                                 />
+                                <ul className="list-disc text-xs text-gray-400 ml-5 my-1">
+                                    <li>Only letters and numbers allowed</li>
+                                    <li>Min 2, Max 20 chars</li>
+                                    <li>No spacings and special characters allowed</li>
+                                </ul>
                             </div>
                             {/*R_number input */}
                             <div className="w-full">
@@ -242,7 +248,12 @@ function AppList(props) {
                                     placeholder="Enter a number to identify your app"
                                     value={createAppRnumInput}
                                     id="create-app-rnum"
+                                    style={{ marginBottom: "0" }}
                                 />
+                                <ul className="list-disc text-xs text-gray-400 ml-5 my-1">
+                                    <li>Only positive whole numbers allowed</li>
+                                    <li>Min 1, Max 20,000</li>
+                                </ul>
                             </div>
                             {/*Start & End Date input */}
                             <div className="w-full">
