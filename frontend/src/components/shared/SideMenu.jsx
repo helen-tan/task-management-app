@@ -264,8 +264,15 @@ function SideMenu(props) {
                                 placeholder="Enter a new plan name here"
                                 value={createPlanNameInput}
                                 id="create-plan-name"
+                                style={{ marginBottom: 0 }}
                                 required
                             />
+                            <ul className="list-disc text-xs text-gray-400 ml-5 mt-1 mb-4">
+                                <li>Only letters and numbers allowed</li>
+                                <li>Underscores(_) and dots(.) are allowed</li>
+                                <li>No spacings allowed</li>
+                                <li>Min 2, Max 20 characters</li>
+                            </ul>
 
                             {/*Start & End Date input */}
                             <div className="flex flex-col md:flex-row justify-between gap-1">
