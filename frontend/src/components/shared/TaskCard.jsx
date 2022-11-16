@@ -294,12 +294,12 @@ function TaskCard(props) {
                     <div className="small-text text-gray-500">{props.task.task_id}</div>
                     {props.loggedInUserGroups.includes(props.permittedGroup) && (
                         <div className="flex text-2xl">
-                            {(props.task.task_state !== "open" && props.task.task_state !== "todo" && props.task.task_state !== "closed") && (
+                            {(props.task.task_state !== "open" && props.task.task_state !== "todo" && props.task.task_state !== "close") && (
                                 <button onClick={() => demoteProgress(props.task.task_state)}>
                                     <MdArrowLeft />
                                 </button>
                             )}
-                            {(props.task.task_state !== "closed") && (
+                            {(props.task.task_state !== "close") && (
                                 <button onClick={() => promoteProgress(props.task.task_state)}>
                                     <MdArrowRight />
                                 </button>

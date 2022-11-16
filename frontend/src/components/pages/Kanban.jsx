@@ -244,7 +244,7 @@ function Kanban() {
                         {/* Closed */}
                         <div className="border border-slate-300 rounded overflow-y-auto">
                             {tasks.map((task) => {
-                                if (task.task_state === "closed") {
+                                if (task.task_state === "close") {
                                     return <TaskCard
                                         key={task.task_id}
                                         task={task}
