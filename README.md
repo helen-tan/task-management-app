@@ -15,3 +15,13 @@ A Kanban board app to help visualize work, built with the **React, NodeJS, expre
 * [Postman](https://www.postman.com/) - A HTTP client with a graphical user interface for API testing. It can send and receive HTTP requests and responses
 * [Git](https://git-scm.com/) - Distributed version control system: tracking changes in any set of files
 * GitHub - code hosting platform
+
+## Demo
+
+![](frontend/src/assets/admin-add-user.gif)
+![](frontend/src/assets/user-edit-profile.gif)
+!()[frontend/src/assets/pl-createapp-createtask.gif]
+![](frontend/src/assets/pm-createassignplan.gif)
+![](frontend/src/assets/pm-promote-todo.gif)
+![](frontend/src/assets/tm-promote-doing.gif)
+![](frontend/src/assets/tm-promotedone-demotedoing.gif)
