@@ -17,11 +17,35 @@ A Kanban board app to help visualize work, built with the **React, NodeJS, expre
 * GitHub - code hosting platform
 
 ## Demo
-
+* **An admin can create a user**
 ![](frontend/src/assets/admin-add-user.gif)
+
+</br>
+
+* **Users can edit their email and passwords**
 ![](frontend/src/assets/user-edit-profile.gif)
-!()[frontend/src/assets/pl-createapp-createtask.gif]
+
+</br>
+
+* **A Project Lead can create an application, navigate into the Kanban board for the application, and create tasks**
+![](frontend/src/assets/pl-createapp-createtask.gif)
+
+</br>
+
+* **A Project Manager can create plans and assign them to existing tasks**
 ![](frontend/src/assets/pm-createassignplan.gif)
+
+</br>
+
+* **A Project Manager can promote a task to "to-do"**
 ![](frontend/src/assets/pm-promote-todo.gif)
+
+</br>
+
+* **A Team Member can pick up a task and promote it to "doing"**
 ![](frontend/src/assets/tm-promote-doing.gif)
+
+</br>
+
+* **A Team Member can either promote the task in "doing" to "done", or demote it to "todo"**
 ![](frontend/src/assets/tm-promotedone-demotedoing.gif)
