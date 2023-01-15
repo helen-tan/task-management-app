@@ -1,6 +1,8 @@
 # Task Management System
 A Kanban board app to help visualize work, built with the **React, NodeJS, express and MySQL**. Made as part of the basic training for Software Engineers at ST Engineering.
 
+Click <a href="#demo">here</a> for short demo. 
+
 ## Built with
 * [ReactJS](https://reactjs.org/docs/getting-started.html) - Client-side framework for highly reactive user interface
 * [Tailwind CSS](https://tailwindcss.com/) - for utility-first CSS classes and responsive styling
@@ -16,7 +18,15 @@ A Kanban board app to help visualize work, built with the **React, NodeJS, expre
 * [Git](https://git-scm.com/) - Distributed version control system: tracking changes in any set of files
 * GitHub - code hosting platform
 
+## Features
+* Login system
+* User Management for admin users
+* Kanban board for task management
+* RESTful API 
+
 ## Demo
+<div id="demo"></div>
+
 * **An admin can create a user**
 ![](frontend/src/assets/admin-add-user.gif)
 
